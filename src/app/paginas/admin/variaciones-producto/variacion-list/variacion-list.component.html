@@ -1,0 +1,1110 @@
+<!-- Header -->
+<div class="bg-white shadow-sm border-b border-gray-200">
+  <div class="px-4 py-6 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">
+          Variaciones de Productos
+        </h1>
+        <p class="mt-1 text-sm text-gray-500">
+          Gestiona las variaciones de tus productos
+        </p>
+      </div>
+      <div class="flex items-center space-x-3">
+        <button
+          type="button"
+          (click)="showStatistics.set(!showStatistics())"
+          class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+            ></path>
+          </svg>
+          Estadísticas
+        </button>
+        <button
+          type="button"
+          (click)="createVariacion()"
+          class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4v16m8-8H4"
+            ></path>
+          </svg>
+          Nueva Variación
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Estadísticas -->
+@if (showStatistics()) {
+<div class="bg-white border-b border-gray-200">
+  <div class="px-4 py-6 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-6">
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <div
+                class="w-8 h-8 bg-indigo-500 rounded-md flex items-center justify-center"
+              >
+                <svg
+                  class="w-5 h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+              <dl>
+                <dt class="text-sm font-medium text-gray-500 truncate">
+                  Total
+                </dt>
+                <dd class="text-lg font-medium text-gray-900">
+                  {{ totalVariaciones() }}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <div
+                class="w-8 h-8 bg-green-500 rounded-md flex items-center justify-center"
+              >
+                <svg
+                  class="w-5 h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+              <dl>
+                <dt class="text-sm font-medium text-gray-500 truncate">
+                  Activas
+                </dt>
+                <dd class="text-lg font-medium text-gray-900">
+                  {{ variacionesActivas() }}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <div
+                class="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center"
+              >
+                <svg
+                  class="w-5 h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+              <dl>
+                <dt class="text-sm font-medium text-gray-500 truncate">
+                  Con Stock
+                </dt>
+                <dd class="text-lg font-medium text-gray-900">
+                  {{ variacionesConStock() }}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <div
+                class="w-8 h-8 bg-red-500 rounded-md flex items-center justify-center"
+              >
+                <svg
+                  class="w-5 h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+              <dl>
+                <dt class="text-sm font-medium text-gray-500 truncate">
+                  Sin Stock
+                </dt>
+                <dd class="text-lg font-medium text-gray-900">
+                  {{ variacionesSinStock() }}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <div
+                class="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center"
+              >
+                <svg
+                  class="w-5 h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+              <dl>
+                <dt class="text-sm font-medium text-gray-500 truncate">
+                  Stock Total
+                </dt>
+                <dd class="text-lg font-medium text-gray-900">
+                  {{ stockTotal() }}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <div
+                class="w-8 h-8 bg-purple-500 rounded-md flex items-center justify-center"
+              >
+                <svg
+                  class="w-5 h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+              <dl>
+                <dt class="text-sm font-medium text-gray-500 truncate">
+                  Con Descuento
+                </dt>
+                <dd class="text-lg font-medium text-gray-900">
+                  {{ variacionesConDescuento() }}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Filtros -->
+<div class="bg-white border-b border-gray-200">
+  <div class="px-4 py-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center space-x-4">
+        <button
+          type="button"
+          (click)="showFilters.set(!showFilters())"
+          class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.707A1 1 0 013 7V4z"
+            ></path>
+          </svg>
+          Filtros
+        </button>
+
+        <!-- Filtros rápidos -->
+        <div class="flex items-center space-x-2">
+          <button
+            type="button"
+            (click)="filterByEstadoStock(null)"
+            [class]="
+              filterForm.get('con_stock')?.value === ''
+                ? 'bg-indigo-100 text-indigo-800'
+                : 'bg-gray-100 text-gray-800'
+            "
+            class="inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium hover:bg-indigo-200 transition-colors"
+          >
+            Todos
+          </button>
+          <button
+            type="button"
+            (click)="filterByEstadoStock(true)"
+            [class]="
+              filterForm.get('con_stock')?.value === 'true'
+                ? 'bg-green-100 text-green-800'
+                : 'bg-gray-100 text-gray-800'
+            "
+            class="inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium hover:bg-green-200 transition-colors"
+          >
+            Con Stock
+          </button>
+          <button
+            type="button"
+            (click)="filterByEstadoStock(false)"
+            [class]="
+              filterForm.get('con_stock')?.value === 'false'
+                ? 'bg-red-100 text-red-800'
+                : 'bg-gray-100 text-gray-800'
+            "
+            class="inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium hover:bg-red-200 transition-colors"
+          >
+            Sin Stock
+          </button>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        @if (hasSelection) {
+        <div class="flex items-center space-x-2">
+          <span class="text-sm text-gray-500"
+            >{{ selectedVariaciones().length }} seleccionadas</span
+          >
+          <button
+            type="button"
+            (click)="bulkToggleActivo()"
+            class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Cambiar Estado
+          </button>
+          <button
+            type="button"
+            (click)="bulkDelete()"
+            class="inline-flex items-center px-2.5 py-1.5 border border-red-300 shadow-sm text-xs font-medium rounded text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          >
+            Eliminar
+          </button>
+          <button
+            type="button"
+            (click)="clearSelection()"
+            class="inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Limpiar
+          </button>
+        </div>
+        }
+
+        <button
+          type="button"
+          (click)="refresh()"
+          class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            ></path>
+          </svg>
+          Actualizar
+        </button>
+      </div>
+    </div>
+
+    <!-- Panel de filtros expandible -->
+    @if (showFilters()) {
+    <form
+      [formGroup]="filterForm"
+      class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
+    >
+      <div>
+        <label for="producto_id" class="block text-sm font-medium text-gray-700"
+          >Producto</label
+        >
+        <select
+          id="producto_id"
+          formControlName="producto_id"
+          class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+        >
+          <option value="">Todos los productos</option>
+          @for (producto of productos(); track producto.id) {
+          <option [value]="producto.id">{{ producto.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label for="search" class="block text-sm font-medium text-gray-700"
+          >Buscar SKU</label
+        >
+        <input
+          type="text"
+          id="search"
+          formControlName="search"
+          placeholder="Buscar por SKU..."
+          class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+        />
+      </div>
+
+      <div>
+        <label for="precio_min" class="block text-sm font-medium text-gray-700"
+          >Precio Mínimo</label
+        >
+        <input
+          type="number"
+          id="precio_min"
+          formControlName="precio_min"
+          placeholder="0.00"
+          step="0.01"
+          class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+        />
+      </div>
+
+      <div>
+        <label for="precio_max" class="block text-sm font-medium text-gray-700"
+          >Precio Máximo</label
+        >
+        <input
+          type="number"
+          id="precio_max"
+          formControlName="precio_max"
+          placeholder="0.00"
+          step="0.01"
+          class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+        />
+      </div>
+
+      <div>
+        <label for="con_stock" class="block text-sm font-medium text-gray-700"
+          >Estado Stock</label
+        >
+        <select
+          id="con_stock"
+          formControlName="con_stock"
+          class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+        >
+          @for (option of estadoStockOptions; track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label for="activo" class="block text-sm font-medium text-gray-700"
+          >Estado</label
+        >
+        <select
+          id="activo"
+          formControlName="activo"
+          class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+        >
+          @for (option of activoOptions; track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label for="sort_by" class="block text-sm font-medium text-gray-700"
+          >Ordenar por</label
+        >
+        <select
+          id="sort_by"
+          formControlName="sort_by"
+          class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+        >
+          @for (option of sortFieldOptions; track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label for="sort_order" class="block text-sm font-medium text-gray-700"
+          >Dirección</label
+        >
+        <select
+          id="sort_order"
+          formControlName="sort_order"
+          class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+        >
+          @for (option of sortOrderOptions; track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="sm:col-span-2 lg:col-span-4 flex justify-end space-x-3">
+        <button
+          type="button"
+          (click)="clearFilters()"
+          class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          Limpiar Filtros
+        </button>
+      </div>
+    </form>
+    }
+  </div>
+</div>
+
+<!-- Loading -->
+@if (loading()) {
+<div class="flex justify-center items-center py-12">
+  <div
+    class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"
+  ></div>
+  <span class="ml-2 text-gray-600">Cargando variaciones...</span>
+</div>
+}
+
+<!-- Error -->
+@if (error()) {
+<div class="bg-red-50 border border-red-200 rounded-md p-4 m-4">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <svg
+        class="h-5 w-5 text-red-400"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+        ></path>
+      </svg>
+    </div>
+    <div class="ml-3">
+      <h3 class="text-sm font-medium text-red-800">
+        Error al cargar variaciones
+      </h3>
+      <div class="mt-2 text-sm text-red-700">
+        <p>{{ error() }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Tabla de variaciones -->
+@if (hasVariaciones() && !loading()) {
+<div class="bg-white shadow overflow-hidden sm:rounded-md">
+  <div class="px-4 py-3 border-b border-gray-200 sm:px-6">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <input
+          type="checkbox"
+          [checked]="isAllSelected"
+          (change)="isAllSelected ? clearSelection() : selectAllVariaciones()"
+          class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+        />
+        <span class="ml-3 text-sm text-gray-700">
+          Mostrando {{ pagination()?.from || 0 }} -
+          {{ pagination()?.to || 0 }} de {{ totalVariaciones() }} variaciones
+        </span>
+      </div>
+      <div class="flex items-center space-x-2">
+        <label for="per_page" class="text-sm text-gray-700">Mostrar:</label>
+        <select
+          id="per_page"
+          [ngModel]="filterForm.get('per_page')?.value"
+          (ngModelChange)="
+            filterForm.get('per_page')?.setValue($event); changePageSize()
+          "
+          class="text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+        >
+          @for (option of perPageOptions; track option) {
+          <option [value]="option">{{ option }}</option>
+          }
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <ul class="divide-y divide-gray-200">
+    @for (variacion of variaciones(); track trackByVariacionId($index,
+    variacion)) {
+    <li class="hover:bg-gray-50 transition-colors">
+      <div class="px-4 py-4 sm:px-6">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              [checked]="isSelected(variacion.id)"
+              (change)="toggleVariacionSelection(variacion.id)"
+              class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+            />
+            <div class="ml-4 flex-1">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                  <div>
+                    <p
+                      class="text-sm font-medium text-indigo-600 hover:text-indigo-500 cursor-pointer"
+                      (click)="viewVariacion(variacion.id)"
+                    >
+                      {{ variacion.sku }}
+                    </p>
+                    @if (variacion.producto) {
+                    <p
+                      class="text-sm text-gray-500 hover:text-gray-700 cursor-pointer"
+                      (click)="viewProducto(variacion.producto_id)"
+                    >
+                      {{ variacion.producto.nombre }}
+                    </p>
+                    }
+                  </div>
+
+                  <div class="flex flex-col">
+                    <span class="text-sm font-medium text-gray-900">
+                      {{ formatPrice(variacion.precio) }}
+                    </span>
+                    @if (variacion.precio_oferta && variacion.precio_oferta <
+                    variacion.precio) {
+                    <span class="text-sm text-green-600 font-medium">
+                      {{ formatPrice(variacion.precio_oferta) }}
+                      <span class="text-xs text-gray-500 ml-1">
+                        (-{{ variacion.descuento_porcentaje?.toFixed(1) }}%)
+                      </span>
+                    </span>
+                    }
+                  </div>
+
+                  <div class="flex flex-col items-center">
+                    <span class="text-sm font-medium text-gray-900">{{
+                      variacion.stock
+                    }}</span>
+                    <span
+                      [class]="getStockStatusClass(variacion)"
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                    >
+                      {{ getStockStatusText(variacion) }}
+                    </span>
+                  </div>
+
+                  <div>
+                    <span
+                      [class]="getActivoStatusClass(variacion.activo)"
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                    >
+                      {{ getActivoStatusText(variacion.activo) }}
+                    </span>
+                  </div>
+
+                  @if (variacion.atributos) {
+                  <div class="flex flex-wrap gap-1">
+                    @for (attr of variacion.atributos | keyvalue; track
+                    attr.key) {
+                    <span
+                      class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800"
+                    >
+                      {{ attr.key }}: {{ attr.value }}
+                    </span>
+                    }
+                  </div>
+                  }
+                </div>
+
+                <div class="flex items-center space-x-2">
+                  <button
+                    type="button"
+                    (click)="openStockModal(variacion)"
+                    class="inline-flex items-center p-1.5 border border-transparent rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    title="Gestionar Stock"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                      ></path>
+                    </svg>
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="toggleActivo(variacion)"
+                    [class]="
+                      variacion.activo
+                        ? 'bg-red-600 hover:bg-red-700 focus:ring-red-500'
+                        : 'bg-green-600 hover:bg-green-700 focus:ring-green-500'
+                    "
+                    class="inline-flex items-center p-1.5 border border-transparent rounded-full shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2"
+                    [title]="variacion.activo ? 'Desactivar' : 'Activar'"
+                  >
+                    @if (variacion.activo) {
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"
+                      ></path>
+                    </svg>
+                    } @else {
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      ></path>
+                    </svg>
+                    }
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="editVariacion(variacion.id)"
+                    class="inline-flex items-center p-1.5 border border-transparent rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    title="Editar"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      ></path>
+                    </svg>
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="deleteVariacion(variacion)"
+                    class="inline-flex items-center p-1.5 border border-transparent rounded-full shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                    title="Eliminar"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    }
+  </ul>
+
+  <!-- Paginación -->
+  @if (pagination() && lastPage() > 1) {
+  <div
+    class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
+  >
+    <div class="flex-1 flex justify-between sm:hidden">
+      <button
+        type="button"
+        (click)="prevPage()"
+        [disabled]="!hasPrevPage()"
+        [class]="
+          !hasPrevPage() ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'
+        "
+        class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white"
+      >
+        Anterior
+      </button>
+      <button
+        type="button"
+        (click)="nextPage()"
+        [disabled]="!hasNextPage()"
+        [class]="
+          !hasNextPage() ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'
+        "
+        class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white"
+      >
+        Siguiente
+      </button>
+    </div>
+    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+      <div>
+        <p class="text-sm text-gray-700">
+          Mostrando
+          <span class="font-medium">{{ pagination()?.from || 0 }}</span>
+          a
+          <span class="font-medium">{{ pagination()?.to || 0 }}</span>
+          de
+          <span class="font-medium">{{ totalVariaciones() }}</span>
+          resultados
+        </p>
+      </div>
+      <div>
+        <nav
+          class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+          aria-label="Pagination"
+        >
+          <button
+            type="button"
+            (click)="prevPage()"
+            [disabled]="!hasPrevPage()"
+            [class]="
+              !hasPrevPage()
+                ? 'opacity-50 cursor-not-allowed'
+                : 'hover:bg-gray-50'
+            "
+            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500"
+          >
+            <span class="sr-only">Anterior</span>
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+          </button>
+
+          @for (page of [].constructor(lastPage()); track $index) {
+          <button
+            type="button"
+            (click)="goToPage($index + 1)"
+            [class]="
+              currentPage() === $index + 1
+                ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
+                : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+            "
+            class="relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+          >
+            {{ $index + 1 }}
+          </button>
+          }
+
+          <button
+            type="button"
+            (click)="nextPage()"
+            [disabled]="!hasNextPage()"
+            [class]="
+              !hasNextPage()
+                ? 'opacity-50 cursor-not-allowed'
+                : 'hover:bg-gray-50'
+            "
+            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500"
+          >
+            <span class="sr-only">Siguiente</span>
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+          </button>
+        </nav>
+      </div>
+    </div>
+  </div>
+  }
+</div>
+} @else if (!loading()) {
+<div class="text-center py-12">
+  <svg
+    class="mx-auto h-12 w-12 text-gray-400"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+    ></path>
+  </svg>
+  <h3 class="mt-2 text-sm font-medium text-gray-900">No hay variaciones</h3>
+  <p class="mt-1 text-sm text-gray-500">
+    Comienza creando una nueva variación de producto.
+  </p>
+  <div class="mt-6">
+    <button
+      type="button"
+      (click)="createVariacion()"
+      class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+    >
+      <svg
+        class="w-4 h-4 mr-2"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 4v16m8-8H4"
+        ></path>
+      </svg>
+      Nueva Variación
+    </button>
+  </div>
+</div>
+}
+
+<!-- Modal de gestión de stock -->
+@if (showStockModal()) {
+<div
+  class="fixed inset-0 z-50 overflow-y-auto"
+  aria-labelledby="modal-title"
+  role="dialog"
+  aria-modal="true"
+>
+  <div
+    class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+  >
+    <div
+      class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+      (click)="closeStockModal()"
+    ></div>
+
+    <span
+      class="hidden sm:inline-block sm:align-middle sm:h-screen"
+      aria-hidden="true"
+      >&#8203;</span
+    >
+
+    <div
+      class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+    >
+      <form [formGroup]="stockForm" (ngSubmit)="updateStock()">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div
+              class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10"
+            >
+              <svg
+                class="h-6 w-6 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                ></path>
+              </svg>
+            </div>
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+              <h3
+                class="text-lg leading-6 font-medium text-gray-900"
+                id="modal-title"
+              >
+                Gestionar Stock
+              </h3>
+              @if (currentStockVariacion()) {
+              <div class="mt-2">
+                <p class="text-sm text-gray-500">
+                  Variación:
+                  <span class="font-medium">{{
+                    currentStockVariacion()?.sku
+                  }}</span>
+                </p>
+                <p class="text-sm text-gray-500">
+                  Stock actual:
+                  <span class="font-medium">{{
+                    currentStockVariacion()?.stock
+                  }}</span>
+                </p>
+              </div>
+              }
+
+              <div class="mt-4 space-y-4">
+                <div>
+                  <label
+                    for="operacion"
+                    class="block text-sm font-medium text-gray-700"
+                    >Operación</label
+                  >
+                  <select
+                    id="operacion"
+                    formControlName="operacion"
+                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                  >
+                    <option [value]="OperacionStock.SET">
+                      Establecer cantidad exacta
+                    </option>
+                    <option [value]="OperacionStock.ADD">
+                      Agregar al stock actual
+                    </option>
+                    <option [value]="OperacionStock.SUBTRACT">
+                      Reducir del stock actual
+                    </option>
+                  </select>
+                </div>
+
+                <div>
+                  <label
+                    for="stock"
+                    class="block text-sm font-medium text-gray-700"
+                    >Cantidad</label
+                  >
+                  <input
+                    type="number"
+                    id="stock"
+                    formControlName="stock"
+                    min="0"
+                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+          <button
+            type="submit"
+            [disabled]="stockForm.invalid"
+            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Actualizar Stock
+          </button>
+          <button
+            type="button"
+            (click)="closeStockModal()"
+            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+}

@@ -1,0 +1,372 @@
+<div
+  class="container mx-auto p-4 sm:p-6 lg:p-8 text-gray-800 dark:text-gray-200"
+>
+  <!-- Encabezado y botones de acción -->
+  <div
+    class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4"
+  >
+    <div>
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+        @if (categoria()) {
+        <span
+          >Editar Categoría: <strong>{{ categoria()?.nombre }}</strong></span
+        >
+        } @else {
+        <span>Cargando Categoría...</span>
+        }
+      </h1>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        Actualiza los detalles de la categoría y gestiona su imagen.
+      </p>
+    </div>
+    <div class="flex items-center gap-2">
+      <button
+        (click)="goBack()"
+        class="flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white dark:bg-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        Volver
+      </button>
+      <button
+        (click)="onSubmit()"
+        [disabled]="isSaving() || categoriaForm.invalid"
+        class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-lg shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+      >
+        <svg
+          *ngIf="isSaving()"
+          class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
+        </svg>
+        <span>{{ isSaving() ? "Guardando..." : "Guardar Cambios" }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenedor principal -->
+  <div class="bg-white dark:bg-gray-800 shadow-xl rounded-lg p-6">
+    <!-- Estado de Carga -->
+    @if (isLoading()) {
+    <div class="flex justify-center items-center p-8">
+      <div
+        class="animate-spin rounded-full h-16 w-16 border-b-2 border-indigo-500"
+      ></div>
+      <p class="ml-4 text-lg">Cargando datos de la categoría...</p>
+    </div>
+    }
+
+    <!-- Mensaje de Error -->
+    @if (error()) {
+    <div
+      class="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg relative mb-6"
+      role="alert"
+    >
+      <strong class="font-bold">Error: </strong>
+      <span class="block sm:inline">{{ error() }}</span>
+    </div>
+    }
+
+    <!-- Contenido del formulario y la imagen -->
+    @if (!isLoading() && categoria()) {
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Columna del Formulario (2/3) -->
+      <div class="lg:col-span-2">
+        <form
+          [formGroup]="categoriaForm"
+          (ngSubmit)="onSubmit()"
+          class="space-y-6"
+        >
+          <!-- Nombre, Orden y Activo -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="md:col-span-2">
+              <label
+                for="nombre"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >Nombre</label
+              >
+              <input
+                type="text"
+                id="nombre"
+                formControlName="nombre"
+                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                required
+              />
+            </div>
+            <div>
+              <label
+                for="orden"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >Orden</label
+              >
+              <input
+                type="number"
+                id="orden"
+                formControlName="orden"
+                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              />
+            </div>
+            <div>
+              <label
+                for="activo"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >Estado</label
+              >
+              <div class="mt-2 flex items-center">
+                <input
+                  id="activo-true"
+                  type="radio"
+                  [value]="true"
+                  formControlName="activo"
+                  class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+                />
+                <label
+                  for="activo-true"
+                  class="ml-2 mr-4 text-sm text-gray-900 dark:text-gray-100"
+                  >Activo</label
+                >
+                <input
+                  id="activo-false"
+                  type="radio"
+                  [value]="false"
+                  formControlName="activo"
+                  class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+                />
+                <label
+                  for="activo-false"
+                  class="ml-2 text-sm text-gray-900 dark:text-gray-100"
+                  >Inactivo</label
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Categoría Padre -->
+          <div>
+            <label
+              for="categoria_padre_id"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >Categoría Padre (Opcional)</label
+            >
+            <select
+              id="categoria_padre_id"
+              formControlName="categoria_padre_id"
+              class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            >
+              <option [ngValue]="null">
+                -- Ninguna (Categoría Principal) --
+              </option>
+              @for (cat of categoriasPadre(); track cat.id) {
+              <option [value]="cat.id">{{ cat.nombre }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Descripción -->
+          <div>
+            <label
+              for="descripcion"
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >Descripción</label
+            >
+            <textarea
+              id="descripcion"
+              formControlName="descripcion"
+              rows="4"
+              class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+            ></textarea>
+          </div>
+
+          <!-- SEO Meta Tags -->
+          <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+            <h3
+              class="text-lg font-medium leading-6 text-gray-900 dark:text-white"
+            >
+              SEO (Opcional)
+            </h3>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              Optimización para motores de búsqueda.
+            </p>
+            <div class="mt-4 space-y-4">
+              <div>
+                <label
+                  for="meta_title"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >Meta Título</label
+                >
+                <input
+                  type="text"
+                  id="meta_title"
+                  formControlName="meta_title"
+                  class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label
+                  for="meta_description"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >Meta Descripción</label
+                >
+                <textarea
+                  id="meta_description"
+                  formControlName="meta_description"
+                  rows="2"
+                  class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Columna de la Imagen (1/3) -->
+      <div class="lg:col-span-1">
+        <div
+          class="space-y-4 p-4 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg h-full flex flex-col justify-center"
+        >
+          <h3
+            class="text-lg font-medium leading-6 text-gray-900 dark:text-white text-center"
+          >
+            Imagen de la Categoría
+          </h3>
+
+          <!-- Vista previa de la imagen -->
+          <div
+            class="flex justify-center items-center h-48 bg-gray-100 dark:bg-gray-700/50 rounded-md overflow-hidden"
+          >
+            @if (imagePreview) {
+            <img
+              [src]="imagePreview"
+              alt="Vista previa"
+              class="h-full w-full object-cover"
+            />
+            } @else {
+            <div class="text-gray-400 text-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="mx-auto h-12 w-12"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1"
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+              <p class="mt-2 text-sm">Sin imagen</p>
+            </div>
+            }
+          </div>
+
+          <!-- Input para seleccionar archivo -->
+          <div>
+            <label for="file-upload" class="sr-only">Seleccionar imagen</label>
+            <input
+              id="file-upload"
+              name="file-upload"
+              type="file"
+              (change)="onFileSelected($event)"
+              accept="image/png, image/jpeg, image/gif, image/webp"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 dark:file:bg-indigo-900/50 file:text-indigo-700 dark:file:text-indigo-300 hover:file:bg-indigo-100 dark:hover:file:bg-indigo-900/80"
+            />
+          </div>
+
+          <!-- Botones de acción para la imagen -->
+          <div class="flex flex-col space-y-2">
+            <button
+              (click)="onUploadImage()"
+              [disabled]="!selectedFile || isUploading()"
+              class="w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              <svg
+                *ngIf="isUploading()"
+                class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              <span>{{
+                isUploading() ? "Subiendo..." : "Actualizar Imagen"
+              }}</span>
+            </button>
+            <button
+              (click)="onRemoveImage()"
+              [disabled]="!categoria()?.imagen || isDeletingImage()"
+              class="w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-red-700 bg-red-100 border border-red-200 rounded-md shadow-sm hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors dark:bg-red-900/30 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-900/60"
+            >
+              <svg
+                *ngIf="isDeletingImage()"
+                class="animate-spin -ml-1 mr-3 h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              <span>{{
+                isDeletingImage() ? "Eliminando..." : "Eliminar Imagen"
+              }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+</div>

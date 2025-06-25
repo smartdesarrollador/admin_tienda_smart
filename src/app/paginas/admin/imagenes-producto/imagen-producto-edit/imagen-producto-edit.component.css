@@ -1,0 +1,305 @@
+/* Estilos específicos para el componente de editar imagen de producto */
+
+/* Animaciones personalizadas */
+.comparison-enter {
+  animation: slideInDown 0.3s ease-out;
+}
+
+.comparison-leave {
+  animation: slideOutUp 0.3s ease-in;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOutUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+/* Estilos para el área de drag & drop */
+.drag-over {
+  @apply border-indigo-400 bg-indigo-50 border-solid;
+  animation: pulse 1s infinite;
+}
+
+/* Estilos para la barra de progreso */
+.progress-bar {
+  transition: width 0.3s ease-in-out;
+}
+
+/* Estilos para la vista previa de imagen */
+.image-preview {
+  @apply aspect-square bg-gray-100 rounded-lg overflow-hidden;
+}
+
+.image-preview img {
+  @apply w-full h-full object-cover;
+  transition: transform 0.3s ease;
+}
+
+.image-preview:hover img {
+  transform: scale(1.05);
+}
+
+/* Estilos para comparación de imágenes */
+.comparison-container {
+  position: relative;
+}
+
+.comparison-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.comparison-container:hover .comparison-overlay {
+  opacity: 1;
+}
+
+/* Estilos para campos con cambios */
+.field-changed {
+  @apply bg-amber-50 border-amber-300;
+}
+
+.field-changed:focus {
+  @apply ring-amber-500 border-amber-500;
+}
+
+/* Estilos para indicadores de cambios */
+.change-indicator {
+  position: relative;
+}
+
+.change-indicator::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  background-color: #f59e0b;
+  border-radius: 50%;
+}
+
+/* Estilos para texto tachado */
+.line-through {
+  text-decoration: line-through;
+  text-decoration-color: #9ca3af;
+  text-decoration-thickness: 1px;
+}
+
+/* Estilos para el sticky sidebar */
+.sticky-sidebar {
+  position: sticky;
+  top: 1.5rem;
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+}
+
+/* Estilos para el botón de submit deshabilitado */
+.btn-disabled {
+  @apply bg-gray-400 cursor-not-allowed opacity-50;
+}
+
+/* Estilos para el spinner de carga */
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Estilos para transiciones suaves */
+.smooth-transition {
+  transition: all 0.3s ease;
+}
+
+/* Estilos para el estado de hover en botones */
+.btn-hover {
+  transition: all 0.2s ease;
+}
+
+.btn-hover:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos para el indicador de cambios pendientes */
+.changes-indicator {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Estilos para la vista de comparación lado a lado */
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .comparison-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* Estilos para el overlay de carga */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* Estilos para badges de estado */
+.status-badge {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+  transition: all 0.2s ease;
+}
+
+.status-badge.principal {
+  @apply bg-green-100 text-green-800;
+}
+
+.status-badge.secundaria {
+  @apply bg-gray-100 text-gray-800;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .sticky-sidebar {
+    position: static;
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-grid {
+    @apply grid-cols-1;
+  }
+
+  .comparison-container {
+    margin-bottom: 1rem;
+  }
+
+  .action-buttons {
+    @apply flex-col space-y-3;
+  }
+
+  .action-buttons > div {
+    @apply w-full;
+  }
+
+  .action-buttons button {
+    @apply w-full;
+  }
+}
+
+/* Estilos para accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  .smooth-transition,
+  .btn-hover,
+  .image-preview img,
+  .comparison-overlay {
+    transition: none;
+  }
+
+  .changes-indicator,
+  .drag-over {
+    animation: none;
+  }
+}
+
+/* Estilos para modo oscuro (si se implementa en el futuro) */
+@media (prefers-color-scheme: dark) {
+  .loading-overlay {
+    background: rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* Estilos para focus visible (accesibilidad) */
+.focus-visible:focus {
+  @apply outline-none ring-2 ring-offset-2 ring-indigo-500;
+}
+
+/* Estilos para el estado de error */
+.error-state {
+  @apply border-red-300 bg-red-50;
+}
+
+.error-state:focus {
+  @apply ring-red-500 border-red-500;
+}
+
+/* Estilos para tooltips (si se agregan en el futuro) */
+.tooltip {
+  position: relative;
+}
+
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 20;
+}
+
+.tooltip:hover::after {
+  opacity: 1;
+}

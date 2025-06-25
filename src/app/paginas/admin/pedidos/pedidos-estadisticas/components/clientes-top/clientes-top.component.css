@@ -1,0 +1,569 @@
+/* Estilos para el componente ClientesTop */
+
+/* Animaciones de entrada */
+.clientes-container {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Efectos hover para clientes */
+.cliente-item {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.cliente-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.cliente-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.cliente-item:hover::before {
+  left: 100%;
+}
+
+/* Estilos para avatares */
+.avatar-container {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.avatar-container:hover {
+  transform: scale(1.05);
+}
+
+.avatar-container::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #3b82f6, #8b5cf6, #06b6d4);
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.avatar-container:hover::after {
+  opacity: 1;
+}
+
+/* Estados de cliente */
+.estado-vip {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+  animation: vipGlow 2s infinite alternate;
+}
+
+@keyframes vipGlow {
+  from {
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+  }
+  to {
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+  }
+}
+
+.estado-regular {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+}
+
+.estado-nuevo {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  animation: newClientePulse 2s infinite;
+}
+
+@keyframes newClientePulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.estado-inactivo {
+  background: #6b7280;
+  color: white;
+  opacity: 0.7;
+}
+
+/* Efectos para métricas */
+.metric-value {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.metric-value:hover {
+  transform: scale(1.05);
+}
+
+.metric-gastador {
+  color: #10b981;
+  font-weight: bold;
+}
+
+.metric-frecuente {
+  color: #3b82f6;
+  font-weight: bold;
+}
+
+.metric-ticket {
+  color: #8b5cf6;
+  font-weight: bold;
+}
+
+.metric-nuevo {
+  color: #f59e0b;
+  font-weight: bold;
+}
+
+/* Animaciones para tendencias */
+.trend-indicator {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.trend-up {
+  animation: trendUp 2s infinite;
+}
+
+.trend-down {
+  animation: trendDown 2s infinite;
+}
+
+.trend-stable {
+  animation: trendStable 3s infinite;
+}
+
+@keyframes trendUp {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes trendDown {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(2px);
+  }
+}
+
+@keyframes trendStable {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-1px);
+  }
+  75% {
+    transform: translateX(1px);
+  }
+}
+
+/* Barra de progreso de fidelidad */
+.fidelidad-progress {
+  position: relative;
+  overflow: hidden;
+  background: #e5e7eb;
+  border-radius: 9999px;
+  height: 8px;
+}
+
+.fidelidad-fill {
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  height: 100%;
+  border-radius: 9999px;
+  position: relative;
+  transition: width 0.8s ease;
+}
+
+.fidelidad-fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: progressShine 2s infinite;
+}
+
+@keyframes progressShine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Indicadores de mora */
+.mora-indicator {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.mora-alta {
+  color: #dc2626;
+  animation: moraAlert 1s infinite;
+}
+
+.mora-media {
+  color: #f59e0b;
+}
+
+.mora-baja {
+  color: #10b981;
+}
+
+@keyframes moraAlert {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Efectos para ranking badges */
+.ranking-badge {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.ranking-badge.first {
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  color: #92400e;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+  animation: goldShimmer 3s infinite;
+}
+
+.ranking-badge.second {
+  background: linear-gradient(135deg, #c0c0c0, #e5e7eb);
+  color: #374151;
+  box-shadow: 0 4px 12px rgba(192, 192, 192, 0.4);
+}
+
+.ranking-badge.third {
+  background: linear-gradient(135deg, #cd7f32, #f97316);
+  color: #9a3412;
+  box-shadow: 0 4px 12px rgba(205, 127, 50, 0.4);
+}
+
+@keyframes goldShimmer {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.ranking-badge:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Efectos para botones de vista */
+.view-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.view-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(59, 130, 246, 0.1),
+    transparent
+  );
+  transition: left 0.3s;
+}
+
+.view-button:hover::before {
+  left: 100%;
+}
+
+.view-button.active {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Efectos de carga */
+.loading-shimmer {
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Estilos para métricas de resumen */
+.summary-metric {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.summary-metric:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.summary-metric::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.summary-metric:hover::before {
+  transform: scaleX(1);
+}
+
+/* Efectos para información adicional */
+.info-adicional {
+  transition: all 0.3s ease;
+  opacity: 0.8;
+}
+
+.cliente-item:hover .info-adicional {
+  opacity: 1;
+}
+
+/* Estilos para frecuencia de compra */
+.frecuencia-indicator {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  background: #f3f4f6;
+  border-radius: 0.375rem;
+  transition: all 0.3s ease;
+}
+
+.frecuencia-indicator:hover {
+  background: #e5e7eb;
+  transform: scale(1.05);
+}
+
+.frecuencia-alta {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.frecuencia-media {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.frecuencia-baja {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Efectos para crédito disponible */
+.credito-indicator {
+  position: relative;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.credito-alto {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.credito-medio {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.credito-bajo {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .cliente-item {
+    padding: 1rem;
+  }
+
+  .ranking-badge {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.75rem;
+  }
+
+  .avatar-container {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .metric-value {
+    font-size: 1rem;
+  }
+
+  .fidelidad-progress {
+    height: 6px;
+  }
+}
+
+@media (max-width: 640px) {
+  .view-button {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .summary-metric {
+    padding: 0.75rem;
+  }
+
+  .info-adicional {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}
+
+/* Efectos especiales para clientes VIP */
+.cliente-vip {
+  position: relative;
+}
+
+.cliente-vip::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #8b5cf6, #3b82f6, #8b5cf6);
+  background-size: 200% 100%;
+  animation: vipBorder 3s infinite;
+}
+
+@keyframes vipBorder {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Tooltips */
+.tooltip {
+  position: relative;
+}
+
+.tooltip::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2937;
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: #1f2937;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.tooltip:hover::before,
+.tooltip:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-4px);
+}

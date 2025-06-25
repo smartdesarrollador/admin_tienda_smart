@@ -1,0 +1,620 @@
+<div class="categoria-list-container">
+  <!-- Header con título y acciones principales -->
+  <div
+    class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6"
+  >
+    <div class="mb-4 lg:mb-0">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+        Gestión de Categorías
+      </h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+        Total: {{ totalCategorias$ | async }} categorías
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-3">
+      <!-- Botón crear categoría -->
+      <a
+        routerLink="/admin/categorias/crear"
+        class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+      >
+        <svg
+          class="w-4 h-4 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+          ></path>
+        </svg>
+        Nueva Categoría
+      </a>
+
+      <!-- Botón mostrar/ocultar filtros -->
+      <button
+        (click)="toggleFilters()"
+        class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors"
+      >
+        <svg
+          class="w-4 h-4 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+          ></path>
+        </svg>
+        {{ showFilters() ? "Ocultar" : "Mostrar" }} Filtros
+      </button>
+    </div>
+  </div>
+
+  <!-- Panel de filtros colapsable -->
+  <div
+    class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mb-6 transition-all duration-200"
+    [class.hidden]="!showFilters()"
+  >
+    <div class="p-6">
+      <form
+        [formGroup]="filtrosForm"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+      >
+        <!-- Campo de búsqueda -->
+        <div class="lg:col-span-2">
+          <label
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          >
+            Buscar categorías
+          </label>
+          <div class="relative">
+            <input
+              type="text"
+              formControlName="search"
+              placeholder="Buscar por nombre o descripción..."
+              class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+            />
+            <svg
+              class="absolute left-3 top-2.5 w-4 h-4 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              ></path>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Filtro por estado -->
+        <div>
+          <label
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          >
+            Estado
+          </label>
+          <select
+            formControlName="activo"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+          >
+            <option value="">Todos los estados</option>
+            <option value="true">Activos</option>
+            <option value="false">Inactivos</option>
+          </select>
+        </div>
+
+        <!-- Elementos por página -->
+        <div>
+          <label
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          >
+            Por página
+          </label>
+          <select
+            formControlName="per_page"
+            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+          >
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+        </div>
+      </form>
+
+      <!-- Acciones de filtros -->
+      <div
+        class="flex justify-between items-center mt-4 pt-4 border-t border-gray-200 dark:border-gray-600"
+      >
+        <button
+          type="button"
+          (click)="resetFilters()"
+          class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+        >
+          Limpiar filtros
+        </button>
+
+        <!-- Acciones para selección múltiple -->
+        <div
+          class="flex items-center gap-3"
+          *ngIf="selectedCategories().length > 0"
+        >
+          <span class="text-sm text-gray-600 dark:text-gray-400">
+            {{ selectedCategories().length }} seleccionadas
+          </span>
+          <button
+            type="button"
+            (click)="eliminarSeleccionadas()"
+            class="text-sm text-red-600 hover:text-red-800 dark:text-red-400"
+          >
+            Eliminar seleccionadas
+          </button>
+          <button
+            type="button"
+            (click)="clearSelection()"
+            class="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400"
+          >
+            Limpiar selección
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading state -->
+  <div *ngIf="loading$ | async" class="flex items-center justify-center py-12">
+    <div class="flex items-center space-x-2 text-gray-600">
+      <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
+      </svg>
+      <span>Cargando categorías...</span>
+    </div>
+  </div>
+
+  <!-- Tabla de categorías -->
+  <div
+    *ngIf="!(loading$ | async)"
+    class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden"
+  >
+    <!-- Header de tabla con ordenamiento -->
+    <div
+      class="bg-gray-50 dark:bg-gray-700 px-6 py-3 border-b border-gray-200 dark:border-gray-600"
+    >
+      <div class="flex items-center">
+        <input
+          type="checkbox"
+          (change)="onSelectAllChange($event)"
+          class="h-4 w-4 text-blue-600 rounded border-gray-300 mr-4"
+        />
+        <div
+          class="grid grid-cols-12 gap-4 w-full text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+        >
+          <!-- Imagen -->
+          <div class="col-span-1">Imagen</div>
+
+          <!-- Nombre (sorteable) -->
+          <div class="col-span-3">
+            <button
+              (click)="setSortBy('nombre')"
+              class="flex items-center hover:text-gray-700 dark:hover:text-gray-200"
+            >
+              Nombre
+              <svg
+                class="ml-1 w-3 h-3"
+                [class.text-blue-600]="sortField() === 'nombre'"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  [attr.d]="
+                    sortField() === 'nombre' && sortDirection() === 'desc'
+                      ? 'M19 14l-7 7m0 0l-7-7m7 7V3'
+                      : 'M5 10l7-7m0 0l7 7m-7-7v18'
+                  "
+                ></path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Estado -->
+          <div class="col-span-1">Estado</div>
+
+          <!-- Orden (sorteable) -->
+          <div class="col-span-1">
+            <button
+              (click)="setSortBy('orden')"
+              class="flex items-center hover:text-gray-700 dark:hover:text-gray-200"
+            >
+              Orden
+              <svg
+                class="ml-1 w-3 h-3"
+                [class.text-blue-600]="sortField() === 'orden'"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  [attr.d]="
+                    sortField() === 'orden' && sortDirection() === 'desc'
+                      ? 'M19 14l-7 7m0 0l-7-7m7 7V3'
+                      : 'M5 10l7-7m0 0l7 7m-7-7v18'
+                  "
+                ></path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Subcategorías -->
+          <div class="col-span-1">Subcategorías</div>
+
+          <!-- Productos -->
+          <div class="col-span-1">Productos</div>
+
+          <!-- Fecha (sorteable) -->
+          <div class="col-span-2">
+            <button
+              (click)="setSortBy('created_at')"
+              class="flex items-center hover:text-gray-700 dark:hover:text-gray-200"
+            >
+              Fecha creación
+              <svg
+                class="ml-1 w-3 h-3"
+                [class.text-blue-600]="sortField() === 'created_at'"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  [attr.d]="
+                    sortField() === 'created_at' && sortDirection() === 'desc'
+                      ? 'M19 14l-7 7m0 0l-7-7m7 7V3'
+                      : 'M5 10l7-7m0 0l7 7m-7-7v18'
+                  "
+                ></path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Acciones -->
+          <div class="col-span-2">Acciones</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filas de categorías -->
+    <div class="divide-y divide-gray-200 dark:divide-gray-600">
+      <div
+        *ngFor="let categoria of categorias$ | async; trackBy: trackByCategoria"
+        class="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+      >
+        <div class="flex items-center">
+          <!-- Checkbox -->
+          <input
+            type="checkbox"
+            [checked]="isSelected(categoria.id)"
+            (change)="toggleCategorySelection(categoria.id)"
+            class="h-4 w-4 text-blue-600 rounded border-gray-300 mr-4"
+          />
+
+          <div class="grid grid-cols-12 gap-4 w-full items-center">
+            <!-- Imagen -->
+            <div class="col-span-1">
+              <div
+                class="w-10 h-10 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-600 flex items-center justify-center"
+              >
+                <img
+                  *ngIf="categoria.imagen"
+                  [src]="getFullImagePath(categoria.imagen)"
+                  [alt]="categoria.nombre"
+                  class="w-full h-full object-cover"
+                />
+                <svg
+                  *ngIf="!categoria.imagen"
+                  class="w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Nombre y descripción -->
+            <div class="col-span-3">
+              <div class="flex items-center">
+                <div class="flex-1">
+                  <div class="font-medium text-gray-900 dark:text-white">
+                    {{ categoria.nombre }}
+                  </div>
+                  <div
+                    class="text-sm text-gray-500 dark:text-gray-400 truncate max-w-xs"
+                    *ngIf="categoria.descripcion"
+                  >
+                    {{ categoria.descripcion }}
+                  </div>
+                  <div class="text-xs text-gray-400 mt-1">
+                    Slug: {{ categoria.slug }}
+                  </div>
+                </div>
+                <!-- Icono de jerarquía si tiene padre -->
+                <div *ngIf="categoria.categoria_padre_id" class="ml-2">
+                  <svg
+                    class="w-4 h-4 text-blue-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 7l5 5m0 0l-5 5m5-5H6"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Estado -->
+            <div class="col-span-1">
+              <span
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border"
+                [ngClass]="getStatusBadgeClass(categoria.activo)"
+              >
+                {{ categoria.activo ? "Activo" : "Inactivo" }}
+              </span>
+            </div>
+
+            <!-- Orden -->
+            <div class="col-span-1">
+              <span class="text-sm text-gray-900 dark:text-white font-mono">
+                {{ categoria.orden }}
+              </span>
+            </div>
+
+            <!-- Subcategorías -->
+            <div class="col-span-1">
+              <span
+                class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium"
+                [ngClass]="
+                  categoria.subcategorias_count &&
+                  categoria.subcategorias_count > 0
+                    ? 'bg-blue-100 text-blue-800'
+                    : 'bg-gray-100 text-gray-600'
+                "
+              >
+                {{ categoria.subcategorias_count || 0 }}
+              </span>
+            </div>
+
+            <!-- Productos -->
+            <div class="col-span-1">
+              <span
+                class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium"
+                [ngClass]="
+                  categoria.productos_count && categoria.productos_count > 0
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-gray-100 text-gray-600'
+                "
+              >
+                {{ categoria.productos_count || 0 }}
+              </span>
+            </div>
+
+            <!-- Fecha -->
+            <div class="col-span-2">
+              <div class="text-sm text-gray-900 dark:text-white">
+                {{ formatDate(categoria.created_at) }}
+              </div>
+              <div class="text-xs text-gray-500 dark:text-gray-400">
+                {{ formatDate(categoria.updated_at) }}
+              </div>
+            </div>
+
+            <!-- Acciones -->
+            <div class="col-span-2">
+              <div class="flex items-center space-x-2">
+                <!-- Ver detalles -->
+                <button
+                  [routerLink]="['/admin/categorias', categoria.id]"
+                  class="text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
+                  title="Ver detalles"
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    ></path>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    ></path>
+                  </svg>
+                </button>
+
+                <!-- Editar -->
+                <button
+                  [routerLink]="['/admin/categorias/editar', categoria.id]"
+                  class="text-gray-600 hover:text-yellow-600 dark:text-gray-400 dark:hover:text-yellow-400"
+                  title="Editar categoría"
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    ></path>
+                  </svg>
+                </button>
+
+                <!-- Eliminar -->
+                <button
+                  (click)="eliminarCategoria(categoria)"
+                  class="text-gray-600 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400"
+                  [class.opacity-50]="
+                    categoria.productos_count && categoria.productos_count > 0
+                  "
+                  [disabled]="
+                    categoria.productos_count && categoria.productos_count > 0
+                  "
+                  title="Eliminar categoría"
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="(categorias$ | async)?.length === 0" class="text-center py-12">
+      <svg
+        class="mx-auto h-12 w-12 text-gray-400"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+        ></path>
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">
+        No hay categorías
+      </h3>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        Comienza creando tu primera categoría.
+      </p>
+      <div class="mt-6">
+        <a
+          routerLink="/admin/categorias/crear"
+          class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            ></path>
+          </svg>
+          Nueva Categoría
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paginación -->
+  <div
+    *ngIf="
+      !(loading$ | async) &&
+      (categorias$ | async)?.length &&
+      (totalCategorias$ | async)! > perPage()
+    "
+    class="mt-6 flex items-center justify-between"
+  >
+    <div class="text-sm text-gray-700 dark:text-gray-300">
+      Mostrando página {{ currentPage() }} de
+      {{ getTotalPages() }}
+    </div>
+
+    <nav class="flex items-center space-x-2">
+      <button
+        (click)="previousPage()"
+        [disabled]="currentPage() <= 1"
+        class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+      >
+        Anterior
+      </button>
+
+      <span
+        class="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300"
+      >
+        {{ currentPage() }}
+      </span>
+
+      <button
+        (click)="nextPage()"
+        [disabled]="currentPage() >= getTotalPages()"
+        class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+      >
+        Siguiente
+      </button>
+    </nav>
+  </div>
+</div>

@@ -1,0 +1,342 @@
+<!-- Header principal -->
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+  <div class="px-6 py-4 border-b border-gray-200">
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-xl font-semibold text-gray-900">
+          Estadísticas y Análisis de Pedidos
+        </h2>
+        <p class="text-sm text-gray-500 mt-1">
+          Dashboard completo con métricas, KPIs y análisis detallado
+        </p>
+      </div>
+
+      <!-- Selector de período -->
+      <div class="flex items-center space-x-2">
+        <label class="text-sm font-medium text-gray-700">Período:</label>
+        <select
+          [value]="selectedPeriod()"
+          (change)="onPeriodChange($any($event).target.value)"
+          class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        >
+          <option value="7d">Últimos 7 días</option>
+          <option value="30d">Últimos 30 días</option>
+          <option value="90d">Últimos 90 días</option>
+          <option value="1y">Último año</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navegación por tabs -->
+  <div class="px-6">
+    <nav class="flex space-x-8" aria-label="Tabs">
+      <button
+        type="button"
+        (click)="onTabChange('resumen')"
+        [class.border-blue-500]="activeTab() === 'resumen'"
+        [class.text-blue-600]="activeTab() === 'resumen'"
+        [class.border-transparent]="activeTab() !== 'resumen'"
+        [class.text-gray-500]="activeTab() !== 'resumen'"
+        [class.hover:text-gray-700]="activeTab() !== 'resumen'"
+        [class.hover:border-gray-300]="activeTab() !== 'resumen'"
+        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200"
+      >
+        {{ getTabLabel("resumen") }}
+      </button>
+      <button
+        type="button"
+        (click)="onTabChange('kpis')"
+        [class.border-blue-500]="activeTab() === 'kpis'"
+        [class.text-blue-600]="activeTab() === 'kpis'"
+        [class.border-transparent]="activeTab() !== 'kpis'"
+        [class.text-gray-500]="activeTab() !== 'kpis'"
+        [class.hover:text-gray-700]="activeTab() !== 'kpis'"
+        [class.hover:border-gray-300]="activeTab() !== 'kpis'"
+        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200"
+      >
+        {{ getTabLabel("kpis") }}
+      </button>
+      <button
+        type="button"
+        (click)="onTabChange('productos')"
+        [class.border-blue-500]="activeTab() === 'productos'"
+        [class.text-blue-600]="activeTab() === 'productos'"
+        [class.border-transparent]="activeTab() !== 'productos'"
+        [class.text-gray-500]="activeTab() !== 'productos'"
+        [class.hover:text-gray-700]="activeTab() !== 'productos'"
+        [class.hover:border-gray-300]="activeTab() !== 'productos'"
+        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200"
+      >
+        {{ getTabLabel("productos") }}
+      </button>
+      <button
+        type="button"
+        (click)="onTabChange('clientes')"
+        [class.border-blue-500]="activeTab() === 'clientes'"
+        [class.text-blue-600]="activeTab() === 'clientes'"
+        [class.border-transparent]="activeTab() !== 'clientes'"
+        [class.text-gray-500]="activeTab() !== 'clientes'"
+        [class.hover:text-gray-700]="activeTab() !== 'clientes'"
+        [class.hover:border-gray-300]="activeTab() !== 'clientes'"
+        class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200"
+      >
+        {{ getTabLabel("clientes") }}
+      </button>
+    </nav>
+  </div>
+</div>
+
+<!-- Contenido de los tabs -->
+<div class="tab-content">
+  <!-- Tab Resumen General -->
+  @if (activeTab() === 'resumen') {
+  <div class="space-y-6">
+    <!-- Métricas generales -->
+    @if (estadisticas() && !isLoading()) {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Total pedidos -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center"
+            >
+              <svg
+                class="w-5 h-5 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">
+                Total Pedidos
+              </dt>
+              <dd class="text-lg font-medium text-gray-900">
+                {{ totalPedidos() }}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ingresos totales -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center"
+            >
+              <svg
+                class="w-5 h-5 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">
+                Ingresos Totales
+              </dt>
+              <dd class="text-lg font-medium text-gray-900">
+                {{ ingresosTotales() }}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ticket promedio -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center"
+            >
+              <svg
+                class="w-5 h-5 text-purple-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">
+                Ticket Promedio
+              </dt>
+              <dd class="text-lg font-medium text-gray-900">
+                {{ ticketPromedio() }}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tasa conversión -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center"
+            >
+              <svg
+                class="w-5 h-5 text-orange-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">
+                Tasa Conversión
+              </dt>
+              <dd class="text-lg font-medium text-gray-900">
+                {{ tasaConversion() }}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- Gráficos -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <app-ventas-chart [periodo]="selectedPeriod()"></app-ventas-chart>
+      <app-estados-chart [periodo]="selectedPeriod()"></app-estados-chart>
+    </div>
+  </div>
+  }
+
+  <!-- Tab Métricas KPI -->
+  @if (activeTab() === 'kpis') {
+  <div class="space-y-6">
+    <app-metricas-kpi [periodo]="selectedPeriod()"></app-metricas-kpi>
+  </div>
+  }
+
+  <!-- Tab Productos Top -->
+  @if (activeTab() === 'productos') {
+  <div class="space-y-6">
+    <app-productos-top
+      [periodo]="selectedPeriod()"
+      [limite]="10"
+    ></app-productos-top>
+  </div>
+  }
+
+  <!-- Tab Clientes Top -->
+  @if (activeTab() === 'clientes') {
+  <div class="space-y-6">
+    <app-clientes-top
+      [periodo]="selectedPeriod()"
+      [limite]="10"
+    ></app-clientes-top>
+  </div>
+  }
+</div>
+
+<!-- Estado de carga global -->
+@if (isLoading()) {
+<div class="flex items-center justify-center py-12">
+  <div class="flex items-center space-x-3">
+    <svg
+      class="animate-spin w-6 h-6 text-blue-600"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        class="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        stroke-width="4"
+      ></circle>
+      <path
+        class="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      ></path>
+    </svg>
+    <span class="text-gray-600">Cargando estadísticas...</span>
+  </div>
+</div>
+}
+
+<!-- Error global -->
+@if (error()) {
+<div class="bg-red-50 border border-red-200 rounded-md p-4">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <svg
+        class="h-5 w-5 text-red-400"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+        ></path>
+      </svg>
+    </div>
+    <div class="ml-3">
+      <h3 class="text-sm font-medium text-red-800">
+        Error al cargar estadísticas
+      </h3>
+      <div class="mt-2 text-sm text-red-700">
+        <p>{{ error() }}</p>
+      </div>
+      <div class="mt-4">
+        <button
+          type="button"
+          (click)="refreshData()"
+          class="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+        >
+          Reintentar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}

@@ -1,0 +1,522 @@
+<!-- Contenido del listado de atributos se añadirá aquí -->
+
+<div class="container mx-auto p-4 sm:p-6 lg:p-8 font-sans">
+  <!-- Encabezado y botón de Crear -->
+  <header class="mb-8">
+    <div class="flex flex-col sm:flex-row justify-between items-center">
+      <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-4 sm:mb-0">
+        Gestión de Atributos
+      </h1>
+      <button
+        (click)="goToCreateAtributo()"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center space-x-2"
+      >
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+          ></path>
+        </svg>
+        <span>Crear Atributo</span>
+      </button>
+    </div>
+    <p class="text-gray-600 dark:text-gray-400 mt-2">
+      Administra los atributos de productos, como color, talla, material, etc.
+    </p>
+  </header>
+
+  <!-- Sección de Filtros -->
+  <section
+    class="mb-8 p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700"
+  >
+    <h2 class="text-xl font-semibold text-gray-700 dark:text-white mb-6">
+      Filtrar Atributos
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Filtro por Nombre -->
+      <div>
+        <label
+          for="filtroNombre"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+          >Nombre</label
+        >
+        <input
+          type="text"
+          id="filtroNombre"
+          [ngModel]="filtros().nombre"
+          (ngModelChange)="onSearchChange($event)"
+          placeholder="Buscar por nombre..."
+          class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white transition-colors"
+        />
+      </div>
+
+      <!-- Filtro por Tipo -->
+      <div>
+        <label
+          for="filtroTipo"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+          >Tipo</label
+        >
+        <select
+          id="filtroTipo"
+          [ngModel]="filtros().tipo"
+          (ngModelChange)="onFilterChange('tipo', $event)"
+          class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white transition-colors"
+        >
+          <option *ngFor="let tipo of tiposDeAtributo" [value]="tipo.value">
+            {{ tipo.label }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Filtro por Filtrable -->
+      <div>
+        <label
+          for="filtroFiltrable"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+          >Filtrable</label
+        >
+        <select
+          id="filtroFiltrable"
+          [ngModel]="filtros().filtrable"
+          (ngModelChange)="
+            onFilterChange(
+              'filtrable',
+              $event === null ? null : $event === 'true'
+            )
+          "
+          class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white transition-colors"
+        >
+          <option
+            *ngFor="let opcion of opcionesBooleanas"
+            [ngValue]="opcion.value"
+          >
+            {{ opcion.label }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Filtro por Visible -->
+      <div>
+        <label
+          for="filtroVisible"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+          >Visible en tienda</label
+        >
+        <select
+          id="filtroVisible"
+          [ngModel]="filtros().visible"
+          (ngModelChange)="
+            onFilterChange(
+              'visible',
+              $event === null ? null : $event === 'true'
+            )
+          "
+          class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white transition-colors"
+        >
+          <option
+            *ngFor="let opcion of opcionesBooleanas"
+            [ngValue]="opcion.value"
+          >
+            {{ opcion.label }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="mt-6 flex justify-end space-x-3">
+      <button
+        (click)="clearFilters()"
+        class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white dark:bg-gray-600 dark:text-gray-200 border border-gray-300 dark:border-gray-500 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-500 transition-colors shadow-sm"
+      >
+        Limpiar Filtros
+      </button>
+      <!-- El botón de aplicar no es estrictamente necesario si los filtros se aplican al cambiar -->
+    </div>
+  </section>
+
+  <!-- Estado de Carga -->
+  <div *ngIf="isLoading()" class="flex justify-center items-center h-64">
+    <div
+      class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"
+    ></div>
+    <p class="ml-4 text-xl text-gray-600 dark:text-gray-400">
+      Cargando atributos...
+    </p>
+  </div>
+
+  <!-- Estado de Error -->
+  <div
+    *ngIf="error() && !isLoading()"
+    class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 dark:border-red-400 text-red-700 dark:text-red-200 p-6 rounded-lg shadow-md mb-6"
+  >
+    <div class="flex items-center">
+      <svg
+        class="w-6 h-6 mr-3 text-red-500"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        ></path>
+      </svg>
+      <div>
+        <p class="font-semibold">Error al cargar los atributos</p>
+        <p class="text-sm">{{ error() }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla de Atributos -->
+  <div
+    *ngIf="!isLoading() && !error() && atributos().length > 0"
+    class="overflow-x-auto bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700"
+  >
+    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+      <thead class="bg-gray-50 dark:bg-gray-700/50">
+        <tr>
+          <th
+            scope="col"
+            class="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+          >
+            ID
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+          >
+            Nombre
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+          >
+            Tipo
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-4 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+          >
+            Valores
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-4 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+          >
+            Filtrable
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-4 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+          >
+            Visible
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+          >
+            Actualizado
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-4 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+          >
+            Acciones
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700"
+      >
+        <tr
+          *ngFor="let atributo of atributos(); trackBy: trackAtributoById"
+          class="hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-colors duration-150"
+        >
+          <td
+            class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100"
+          >
+            {{ atributo.id }}
+          </td>
+          <td
+            class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200"
+          >
+            <div class="font-semibold">{{ atributo.nombre }}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">
+              Slug: {{ atributo.slug }}
+            </div>
+          </td>
+          <td
+            class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300"
+          >
+            <span
+              class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
+              [ngClass]="{
+                'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200':
+                  atributo.tipo_detallado.codigo === 'texto',
+                'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200':
+                  atributo.tipo_detallado.codigo === 'color',
+                'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200':
+                  atributo.tipo_detallado.codigo === 'numero',
+                'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200':
+                  atributo.tipo_detallado.codigo === 'tamaño',
+                'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200':
+                  atributo.tipo_detallado.codigo === 'booleano'
+              }"
+            >
+              <i class="material-icons text-sm mr-1">{{
+                atributo.tipo_detallado.icono
+              }}</i>
+              <!-- Asumiendo Material Icons -->
+              {{ atributo.tipo_detallado.nombre }}
+            </span>
+          </td>
+          <td
+            class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-300 text-center"
+          >
+            <span class="text-indigo-600 dark:text-indigo-400 font-semibold">{{
+              atributo.valores_count || 0
+            }}</span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-center">
+            <span
+              class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
+              [ngClass]="{
+                'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200':
+                  atributo.filtrable,
+                'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200':
+                  !atributo.filtrable
+              }"
+            >
+              {{ atributo.filtrable ? "Sí" : "No" }}
+            </span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-center">
+            <span
+              class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
+              [ngClass]="{
+                'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200':
+                  atributo.visible,
+                'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200':
+                  !atributo.visible
+              }"
+            >
+              {{ atributo.visible ? "Sí" : "No" }}
+            </span>
+          </td>
+          <td
+            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400"
+          >
+            {{ atributo.updated_at | date : "dd/MM/yyyy HH:mm" }}
+          </td>
+          <td
+            class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center space-x-2"
+          >
+            <button
+              (click)="editAtributo(atributo.id)"
+              class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors p-1 rounded-md hover:bg-indigo-100 dark:hover:bg-indigo-700/50"
+              title="Editar"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                ></path>
+              </svg>
+            </button>
+            <button
+              (click)="deleteAtributo(atributo)"
+              class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 transition-colors p-1 rounded-md hover:bg-red-100 dark:hover:bg-red-700/50"
+              title="Eliminar"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                ></path>
+              </svg>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Estado Vacío -->
+  <div
+    *ngIf="!isLoading() && !error() && atributos().length === 0"
+    class="text-center py-12"
+  >
+    <svg
+      class="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
+      <path
+        vector-effect="non-scaling-stroke"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+      />
+    </svg>
+    <h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-white">
+      No se encontraron atributos
+    </h3>
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+      Intenta ajustar tus filtros o crea un nuevo atributo para comenzar.
+    </p>
+    <div class="mt-6">
+      <button
+        (click)="goToCreateAtributo()"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-5 rounded-lg shadow-sm hover:shadow-md transition duration-300 ease-in-out flex items-center space-x-2 mx-auto"
+      >
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+          ></path>
+        </svg>
+        <span>Crear primer atributo</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Paginación -->
+  <footer
+    *ngIf="!isLoading() && !error() && totalItems() > 0 && totalPages() > 1"
+    class="mt-8 py-6 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0"
+  >
+    <div class="text-sm text-gray-700 dark:text-gray-400">
+      Mostrando
+      <span class="font-semibold text-gray-900 dark:text-white">{{
+        (currentPage() - 1) * itemsPerPage() + 1
+      }}</span>
+      a
+      <span class="font-semibold text-gray-900 dark:text-white">{{
+        currentPage() * itemsPerPage() > totalItems()
+          ? totalItems()
+          : currentPage() * itemsPerPage()
+      }}</span>
+      de
+      <span class="font-semibold text-gray-900 dark:text-white">{{
+        totalItems()
+      }}</span>
+      resultados
+    </div>
+
+    <div class="flex items-center space-x-3">
+      <label for="itemsPerPage" class="text-sm text-gray-700 dark:text-gray-400"
+        >Items por página:</label
+      >
+      <select
+        id="itemsPerPage"
+        [ngModel]="itemsPerPage()"
+        (change)="onItemsPerPageChange($event)"
+        class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm dark:bg-gray-700 dark:text-white"
+      >
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+        <option [value]="50">50</option>
+      </select>
+    </div>
+
+    <nav
+      class="inline-flex rounded-md shadow-sm -space-x-px"
+      aria-label="Pagination"
+    >
+      <button
+        (click)="onPageChange(currentPage() - 1)"
+        [disabled]="currentPage() === 1"
+        class="relative inline-flex items-center px-3 py-2 rounded-l-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+      >
+        <span class="sr-only">Anterior</span>
+        <svg
+          class="h-5 w-5"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+
+      <!-- Lógica de números de página (simplificada) -->
+      <ng-container *ngFor="let pageNum of getPageNumbers()">
+        <button
+          (click)="onPageChange(pageNum)"
+          [attr.aria-current]="pageNum === currentPage() ? 'page' : null"
+          [ngClass]="{
+            'bg-blue-50 border-blue-500 text-blue-600 dark:bg-blue-900 dark:border-blue-700 dark:text-blue-300 z-10':
+              pageNum === currentPage(),
+            'bg-white border-gray-300 text-gray-500 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700':
+              pageNum !== currentPage()
+          }"
+          class="relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-colors"
+        >
+          {{ pageNum }}
+        </button>
+      </ng-container>
+
+      <button
+        (click)="onPageChange(currentPage() + 1)"
+        [disabled]="currentPage() === totalPages() || totalPages() === 0"
+        class="relative inline-flex items-center px-3 py-2 rounded-r-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+      >
+        <span class="sr-only">Siguiente</span>
+        <svg
+          class="h-5 w-5"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+    </nav>
+  </footer>
+</div>

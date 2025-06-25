@@ -1,0 +1,60 @@
+/* Estilos específicos para el componente de crear imagen de producto */
+
+/* Animaciones personalizadas */
+.upload-area-hover {
+  @apply border-indigo-400 bg-indigo-50;
+}
+
+/* Estilos para el área de drag & drop */
+.drag-over {
+  @apply border-indigo-400 bg-indigo-50 border-solid;
+}
+
+/* Estilos para la barra de progreso */
+.progress-bar {
+  transition: width 0.3s ease-in-out;
+}
+
+/* Estilos para la vista previa de imagen */
+.image-preview {
+  @apply aspect-square bg-gray-100 rounded-lg overflow-hidden;
+}
+
+.image-preview img {
+  @apply w-full h-full object-cover;
+}
+
+/* Estilos para campos con error */
+.field-error {
+  @apply border-red-300 focus:ring-red-500 focus:border-red-500;
+}
+
+/* Estilos para el botón de submit deshabilitado */
+.btn-disabled {
+  @apply bg-gray-400 cursor-not-allowed opacity-50;
+}
+
+/* Estilos para el spinner de carga */
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .form-grid {
+    @apply grid-cols-1;
+  }
+
+  .preview-sticky {
+    @apply static;
+  }
+}

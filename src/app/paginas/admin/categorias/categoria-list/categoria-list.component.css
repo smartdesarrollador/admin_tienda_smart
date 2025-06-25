@@ -1,0 +1,105 @@
+/* Contenedor principal */
+.categoria-list-container {
+  @apply min-h-screen bg-gray-50 dark:bg-gray-900 p-4 lg:p-6;
+}
+
+/* Animaciones para transiciones suaves */
+.transition-colors {
+  transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+/* Estilo para botones hover */
+.hover-shadow {
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.hover-shadow:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Estados de carga mejorados */
+.loading-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Grid responsive personalizado */
+@media (max-width: 768px) {
+  .categoria-list-container .grid-cols-12 {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .categoria-list-container .col-span-1,
+  .categoria-list-container .col-span-2,
+  .categoria-list-container .col-span-3 {
+    width: 100%;
+  }
+}
+
+/* Mejoras para dark mode */
+@media (prefers-color-scheme: dark) {
+  .categoria-list-container {
+    color-scheme: dark;
+  }
+}
+
+/* Estilos para elementos interactivos */
+.interactive-element {
+  @apply transition-all duration-200 ease-in-out;
+}
+
+.interactive-element:hover {
+  @apply transform scale-105;
+}
+
+/* Indicadores de estado */
+.status-indicator {
+  @apply relative;
+}
+
+.status-indicator::before {
+  content: "";
+  @apply absolute -top-1 -right-1 w-2 h-2 rounded-full;
+}
+
+.status-indicator.active::before {
+  @apply bg-green-400;
+}
+
+.status-indicator.inactive::before {
+  @apply bg-red-400;
+}
+
+/* Scroll personalizado para la tabla */
+.table-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(156 163 175) transparent;
+}
+
+.table-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.table-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.table-scroll::-webkit-scrollbar-thumb {
+  background-color: rgb(156 163 175);
+  border-radius: 3px;
+}
+
+.table-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(107 114 128);
+}

@@ -1,0 +1,360 @@
+<div class="metodo-pago-selector">
+  <!-- Header -->
+  <div class="pago-header">
+    <h3 class="pago-title">
+      <svg
+        class="pago-icon"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+        />
+      </svg>
+      Método de Pago
+    </h3>
+    <p class="pago-subtitle">Selecciona cómo deseas realizar el pago</p>
+  </div>
+
+  <!-- Métodos de pago disponibles -->
+  <div class="metodos-grid">
+    @for (metodo of metodosPago(); track metodo.id) {
+    <div
+      class="metodo-card"
+      [class.selected]="metodoPagoControl.value === metodo.id"
+      (click)="seleccionarMetodo(metodo)"
+    >
+      <div class="metodo-header">
+        <div class="metodo-icon-container">
+          <svg class="metodo-icon" viewBox="0 0 24 24">
+            <path
+              [attr.d]="obtenerIconoMetodo(metodo.tipo)"
+              fill="currentColor"
+            />
+          </svg>
+        </div>
+
+        <div class="metodo-info">
+          <h4 class="metodo-nombre">{{ metodo.nombre }}</h4>
+          <p class="metodo-descripcion">{{ metodo.descripcion }}</p>
+        </div>
+
+        <div class="metodo-selector">
+          <input
+            type="radio"
+            [formControl]="metodoPagoControl"
+            [value]="metodo.id"
+            [id]="'metodo-' + metodo.id"
+          />
+        </div>
+      </div>
+
+      @if (metodo.comision_porcentaje || metodo.comision_fija) {
+      <div class="metodo-comision">
+        <span class="comision-label">Comisión:</span>
+        @if (metodo.comision_porcentaje) {
+        <span class="comision-valor">{{ metodo.comision_porcentaje }}%</span>
+        } @if (metodo.comision_fija) {
+        <span class="comision-valor">{{
+          formatearMoneda(metodo.comision_fija)
+        }}</span>
+        }
+      </div>
+      }
+    </div>
+    }
+  </div>
+
+  <!-- Formulario de datos adicionales -->
+  @if (mostrarFormularioDatos() && metodoSeleccionado()) {
+  <div class="datos-adicionales-section">
+    <h4 class="datos-title">Información de Pago</h4>
+
+    <form [formGroup]="datosAdicionales" class="datos-form">
+      <!-- Datos para tarjeta -->
+      @if (metodoSeleccionado()?.tipo === 'tarjeta') {
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="numero_tarjeta" class="form-label"
+            >Número de Tarjeta</label
+          >
+          <input
+            type="text"
+            id="numero_tarjeta"
+            formControlName="numero_tarjeta"
+            placeholder="1234 5678 9012 3456"
+            class="form-input"
+            maxlength="19"
+            (input)="formatearTarjeta($any($event.target).value)"
+          />
+          @if (datosAdicionales.get('numero_tarjeta')?.invalid &&
+          datosAdicionales.get('numero_tarjeta')?.touched) {
+          <span class="form-error">Número de tarjeta inválido</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="nombre_titular" class="form-label"
+            >Nombre del Titular</label
+          >
+          <input
+            type="text"
+            id="nombre_titular"
+            formControlName="nombre_titular"
+            placeholder="Nombre completo"
+            class="form-input"
+          />
+          @if (datosAdicionales.get('nombre_titular')?.invalid &&
+          datosAdicionales.get('nombre_titular')?.touched) {
+          <span class="form-error">Nombre del titular requerido</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="fecha_expiracion" class="form-label"
+            >Fecha de Expiración</label
+          >
+          <input
+            type="text"
+            id="fecha_expiracion"
+            formControlName="fecha_expiracion"
+            placeholder="MM/AA"
+            class="form-input"
+            maxlength="5"
+          />
+          @if (datosAdicionales.get('fecha_expiracion')?.invalid &&
+          datosAdicionales.get('fecha_expiracion')?.touched) {
+          <span class="form-error">Formato: MM/AA</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="cvv" class="form-label">CVV</label>
+          <input
+            type="text"
+            id="cvv"
+            formControlName="cvv"
+            placeholder="123"
+            class="form-input"
+            maxlength="4"
+          />
+          @if (datosAdicionales.get('cvv')?.invalid &&
+          datosAdicionales.get('cvv')?.touched) {
+          <span class="form-error">CVV inválido</span>
+          }
+        </div>
+      </div>
+      }
+
+      <!-- Datos para transferencia -->
+      @if (metodoSeleccionado()?.tipo === 'transferencia') {
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="banco" class="form-label">Banco</label>
+          <select id="banco" formControlName="banco" class="form-select">
+            <option value="">Selecciona un banco</option>
+            <option value="bancolombia">Bancolombia</option>
+            <option value="banco_bogota">Banco de Bogotá</option>
+            <option value="bbva">BBVA</option>
+            <option value="davivienda">Davivienda</option>
+            <option value="banco_popular">Banco Popular</option>
+            <option value="colpatria">Colpatria</option>
+            <option value="av_villas">AV Villas</option>
+            <option value="banco_caja_social">Banco Caja Social</option>
+          </select>
+          @if (datosAdicionales.get('banco')?.invalid &&
+          datosAdicionales.get('banco')?.touched) {
+          <span class="form-error">Selecciona un banco</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="tipo_cuenta" class="form-label">Tipo de Cuenta</label>
+          <select
+            id="tipo_cuenta"
+            formControlName="tipo_cuenta"
+            class="form-select"
+          >
+            <option value="">Selecciona el tipo</option>
+            <option value="ahorros">Ahorros</option>
+            <option value="corriente">Corriente</option>
+          </select>
+          @if (datosAdicionales.get('tipo_cuenta')?.invalid &&
+          datosAdicionales.get('tipo_cuenta')?.touched) {
+          <span class="form-error">Selecciona el tipo de cuenta</span>
+          }
+        </div>
+
+        <div class="form-group form-group-full">
+          <label for="numero_cuenta" class="form-label">Número de Cuenta</label>
+          <input
+            type="text"
+            id="numero_cuenta"
+            formControlName="numero_cuenta"
+            placeholder="Número de cuenta bancaria"
+            class="form-input"
+          />
+          @if (datosAdicionales.get('numero_cuenta')?.invalid &&
+          datosAdicionales.get('numero_cuenta')?.touched) {
+          <span class="form-error">Número de cuenta requerido</span>
+          }
+        </div>
+      </div>
+      }
+
+      <!-- Datos para PSE -->
+      @if (metodoSeleccionado()?.id === 'pse') {
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="banco_pse" class="form-label">Banco</label>
+          <select id="banco_pse" formControlName="banco" class="form-select">
+            <option value="">Selecciona tu banco</option>
+            <option value="bancolombia">Bancolombia</option>
+            <option value="banco_bogota">Banco de Bogotá</option>
+            <option value="bbva">BBVA</option>
+            <option value="davivienda">Davivienda</option>
+            <option value="banco_popular">Banco Popular</option>
+            <option value="colpatria">Colpatria</option>
+            <option value="av_villas">AV Villas</option>
+            <option value="banco_caja_social">Banco Caja Social</option>
+          </select>
+          @if (datosAdicionales.get('banco')?.invalid &&
+          datosAdicionales.get('banco')?.touched) {
+          <span class="form-error">Selecciona tu banco</span>
+          }
+        </div>
+      </div>
+      }
+
+      <!-- Datos para pagos digitales -->
+      @if (metodoSeleccionado()?.tipo === 'digital' && metodoSeleccionado()?.id
+      !== 'pse') {
+      <div class="form-grid">
+        <div class="form-group form-group-full">
+          <label for="referencia_pago" class="form-label">
+            @if (metodoSeleccionado()?.id === 'nequi') { Número de Celular Nequi
+            } @else { Referencia de Pago }
+          </label>
+          <input
+            type="text"
+            id="referencia_pago"
+            formControlName="referencia_pago"
+            [placeholder]="
+              metodoSeleccionado()?.id === 'nequi'
+                ? '3001234567'
+                : 'Referencia o código'
+            "
+            class="form-input"
+          />
+          @if (datosAdicionales.get('referencia_pago')?.invalid &&
+          datosAdicionales.get('referencia_pago')?.touched) {
+          <span class="form-error">Este campo es requerido</span>
+          }
+        </div>
+      </div>
+      }
+
+      <!-- Subir comprobante (opcional para algunos métodos) -->
+      @if (metodoSeleccionado()?.tipo === 'transferencia' ||
+      metodoSeleccionado()?.tipo === 'digital') {
+      <div class="form-group form-group-full">
+        <label for="comprobante" class="form-label"
+          >Comprobante de Pago (Opcional)</label
+        >
+        <input
+          type="file"
+          id="comprobante"
+          accept="image/*,.pdf"
+          (change)="onFileSelected($event)"
+          class="form-file"
+        />
+        <p class="form-help">Formatos permitidos: JPG, PNG, PDF (máx. 5MB)</p>
+      </div>
+      }
+    </form>
+  </div>
+  }
+
+  <!-- Resumen de pago -->
+  @if (metodoSeleccionado()) {
+  <div class="resumen-pago">
+    <h4 class="resumen-title">Resumen del Pago</h4>
+
+    <div class="resumen-content">
+      <div class="resumen-linea">
+        <span class="resumen-label">Subtotal:</span>
+        <span class="resumen-valor">{{ formatearMoneda(total) }}</span>
+      </div>
+
+      @if (comisionCalculada() > 0) {
+      <div class="resumen-linea comision">
+        <span class="resumen-label">
+          Comisión {{ metodoSeleccionado()?.nombre }}:
+        </span>
+        <span class="resumen-valor">{{
+          formatearMoneda(comisionCalculada())
+        }}</span>
+      </div>
+      }
+
+      <div class="resumen-linea total">
+        <span class="resumen-label">Total a Pagar:</span>
+        <span class="resumen-valor">{{
+          formatearMoneda(totalConComision())
+        }}</span>
+      </div>
+    </div>
+
+    <div class="metodo-seleccionado-info">
+      <div class="metodo-seleccionado-header">
+        <svg class="metodo-seleccionado-icon" viewBox="0 0 24 24">
+          <path
+            [attr.d]="obtenerIconoMetodo(metodoSeleccionado()?.tipo || '')"
+            fill="currentColor"
+          />
+        </svg>
+        <span class="metodo-seleccionado-nombre">{{
+          metodoSeleccionado()?.nombre
+        }}</span>
+      </div>
+
+      @if (!metodoSeleccionado()?.requiere_datos_adicionales) {
+      <div class="pago-instrucciones">
+        <p class="instrucciones-text">
+          @if (metodoSeleccionado()?.id === 'efectivo') { El pago se realizará
+          en efectivo al momento de la entrega. } @else { Procederás al pago una
+          vez confirmado el pedido. }
+        </p>
+      </div>
+      }
+    </div>
+  </div>
+  }
+
+  <!-- Estado sin selección -->
+  @if (!metodoSeleccionado()) {
+  <div class="estado-sin-seleccion">
+    <svg
+      class="estado-icon"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+      />
+    </svg>
+    <h4 class="estado-titulo">Selecciona un método de pago</h4>
+    <p class="estado-mensaje">
+      Elige cómo deseas realizar el pago para continuar con tu pedido.
+    </p>
+  </div>
+  }
+</div>

@@ -1,0 +1,364 @@
+<!-- Cliente seleccionado -->
+@if (selectedCliente) {
+<div class="selected-client-card">
+  <div class="client-info">
+    <div class="client-avatar">
+      {{ getClientInitials(selectedCliente) }}
+    </div>
+    <div class="client-details">
+      <h4>{{ formatClientName(selectedCliente) }}</h4>
+      <p>{{ selectedCliente.email }}</p>
+      @if (selectedCliente.rol) {
+      <p class="text-xs text-gray-500">{{ selectedCliente.rol }}</p>
+      }
+    </div>
+  </div>
+  <button
+    type="button"
+    (click)="clearSelection()"
+    class="clear-button"
+    title="Cambiar cliente"
+  >
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M6 18L18 6M6 6l12 12"
+      ></path>
+    </svg>
+  </button>
+</div>
+} @else {
+<!-- Búsqueda de cliente -->
+<div class="client-search-container">
+  <div class="search-input-container">
+    <div class="relative">
+      <input
+        type="text"
+        placeholder="Buscar cliente por nombre, email o teléfono..."
+        class="search-input"
+        [value]="searchTerm()"
+        (input)="onSearchChange($event)"
+        (focus)="showResults.set(true)"
+        (blur)="onClickOutside()"
+      />
+      <div class="search-icon">
+        @if (isSearching()) {
+        <svg
+          class="animate-spin w-4 h-4 text-gray-400"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
+        </svg>
+        } @else {
+        <svg
+          class="w-4 h-4 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          ></path>
+        </svg>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Resultados de búsqueda -->
+  @if (showResults()) {
+  <div class="search-results">
+    <!-- Resultados de búsqueda -->
+    @if (hasSearchTerm()) { @if (isSearching()) {
+    <div class="search-loading">
+      <svg
+        class="animate-spin w-5 h-5 text-blue-500"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
+      </svg>
+      <span>Buscando clientes...</span>
+    </div>
+    } @else if (hasResults()) {
+    <div class="results-section">
+      <h5 class="results-title">Resultados de búsqueda</h5>
+      @for (cliente of searchResults(); track trackByClientId($index, cliente))
+      {
+      <button
+        type="button"
+        class="client-item"
+        (click)="selectCliente(cliente)"
+      >
+        <div class="client-avatar-small">
+          {{ getClientInitials(cliente) }}
+        </div>
+        <div class="client-info-small">
+          <div class="client-name">{{ formatClientName(cliente) }}</div>
+          <div class="client-email">{{ cliente.email }}</div>
+        </div>
+        <svg
+          class="w-4 h-4 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"
+          ></path>
+        </svg>
+      </button>
+      }
+    </div>
+    } @else if (showNoResults()) {
+    <div class="no-results">
+      <svg
+        class="w-8 h-8 text-gray-300 mb-2"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+        ></path>
+      </svg>
+      <p class="text-sm text-gray-500 mb-3">No se encontraron clientes</p>
+      <button
+        type="button"
+        class="create-client-button"
+        (click)="showQuickCreate()"
+      >
+        <svg
+          class="w-4 h-4 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+          ></path>
+        </svg>
+        Crear nuevo cliente
+      </button>
+    </div>
+    } } @else {
+    <!-- Clientes recientes -->
+    @if (recentClients().length > 0) {
+    <div class="results-section">
+      <h5 class="results-title">Clientes recientes</h5>
+      @for (cliente of recentClients(); track trackByClientId($index, cliente))
+      {
+      <button
+        type="button"
+        class="client-item"
+        (click)="selectCliente(cliente)"
+      >
+        <div class="client-avatar-small">
+          {{ getClientInitials(cliente) }}
+        </div>
+        <div class="client-info-small">
+          <div class="client-name">{{ formatClientName(cliente) }}</div>
+          <div class="client-email">{{ cliente.email }}</div>
+        </div>
+        <svg
+          class="w-4 h-4 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"
+          ></path>
+        </svg>
+      </button>
+      }
+    </div>
+    }
+
+    <!-- Opción para crear cliente -->
+    <div class="create-option">
+      <button
+        type="button"
+        class="create-client-button-full"
+        (click)="showQuickCreate()"
+      >
+        <svg
+          class="w-5 h-5 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+          ></path>
+        </svg>
+        Crear nuevo cliente
+      </button>
+    </div>
+    }
+  </div>
+  }
+</div>
+}
+
+<!-- Modal de creación rápida -->
+@if (showCreateForm()) {
+<div class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Crear Nuevo Cliente</h3>
+      <button type="button" (click)="hideQuickCreate()" class="modal-close">
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          ></path>
+        </svg>
+      </button>
+    </div>
+
+    <form
+      #quickForm="ngForm"
+      (ngSubmit)="createQuickClient(quickForm.value)"
+      class="modal-body"
+    >
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="name" class="form-label">Nombre completo *</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            ngModel
+            required
+            class="form-input"
+            placeholder="Nombre del cliente"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="email" class="form-label">Email *</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            ngModel
+            required
+            class="form-input"
+            placeholder="email@ejemplo.com"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="telefono" class="form-label">Teléfono</label>
+          <input
+            type="tel"
+            id="telefono"
+            name="telefono"
+            ngModel
+            class="form-input"
+            placeholder="999 999 999"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="documento" class="form-label">Documento</label>
+          <input
+            type="text"
+            id="documento"
+            name="documento"
+            ngModel
+            class="form-input"
+            placeholder="DNI o RUC"
+          />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" (click)="hideQuickCreate()" class="btn-secondary">
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          [disabled]="!quickForm.valid || isLoading()"
+          class="btn-primary"
+        >
+          @if (isLoading()) {
+          <svg
+            class="animate-spin w-4 h-4 mr-2"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          Creando... } @else { Crear Cliente }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+}

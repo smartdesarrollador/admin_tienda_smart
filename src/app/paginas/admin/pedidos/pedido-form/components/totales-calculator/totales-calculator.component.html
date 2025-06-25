@@ -1,0 +1,102 @@
+<div class="totales-container">
+  <div class="totales-header">
+    <h4 class="totales-title">Resumen del Pedido</h4>
+  </div>
+
+  <div class="totales-body">
+    <!-- Subtotal -->
+    <div class="total-line">
+      <span class="total-label">Subtotal</span>
+      <span class="total-value">{{ subtotalFormatted() }}</span>
+    </div>
+
+    <!-- Descuentos -->
+    @if (hasDescuentos()) {
+    <div class="total-line discount-line">
+      <span class="total-label">
+        Descuentos @if (getDescuentoPorcentaje() > 0) {
+        <span class="percentage"
+          >(-{{ getDescuentoPorcentaje().toFixed(1) }}%)</span
+        >
+        }
+      </span>
+      <span class="total-value discount-value"
+        >-{{ descuentoTotalFormatted() }}</span
+      >
+    </div>
+
+    @if (showDetails) { @if (totales.descuentoCupon > 0) {
+    <div class="total-line-detail">
+      <span class="detail-label">• Cupón de descuento</span>
+      <span class="detail-value"
+        >-{{ formatCurrency(totales.descuentoCupon) }}</span
+      >
+    </div>
+    } @if (totales.descuentoItems > 0) {
+    <div class="total-line-detail">
+      <span class="detail-label">• Descuentos en productos</span>
+      <span class="detail-value"
+        >-{{ formatCurrency(totales.descuentoItems) }}</span
+      >
+    </div>
+    } } }
+
+    <!-- Impuestos -->
+    @if (hasImpuestos()) {
+    <div class="total-line">
+      <span class="total-label">
+        Impuestos (IGV) @if (getImpuestoPorcentaje() > 0) {
+        <span class="percentage"
+          >({{ getImpuestoPorcentaje().toFixed(1) }}%)</span
+        >
+        }
+      </span>
+      <span class="total-value">{{ impuestosFormatted() }}</span>
+    </div>
+    }
+
+    <!-- Envío -->
+    @if (hasEnvio()) {
+    <div class="total-line">
+      <span class="total-label">Costo de envío</span>
+      <span class="total-value">{{ envioFormatted() }}</span>
+    </div>
+    } @else {
+    <div class="total-line">
+      <span class="total-label">Costo de envío</span>
+      <span class="total-value free-shipping">¡Gratis!</span>
+    </div>
+    }
+
+    <!-- Separador -->
+    <div class="total-separator"></div>
+
+    <!-- Total final -->
+    <div class="total-line total-final">
+      <span class="total-label-final">Total a pagar</span>
+      <span class="total-value-final">{{ totalFormatted() }}</span>
+    </div>
+  </div>
+
+  <!-- Información adicional -->
+  @if (showDetails && !readonly) {
+  <div class="totales-footer">
+    <div class="info-note">
+      <svg
+        class="w-4 h-4 text-blue-500"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        ></path>
+      </svg>
+      <span>Los precios incluyen impuestos aplicables</span>
+    </div>
+  </div>
+  }
+</div>

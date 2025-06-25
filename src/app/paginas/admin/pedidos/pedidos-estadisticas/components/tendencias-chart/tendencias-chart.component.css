@@ -1,0 +1,99 @@
+/* Estilos base del componente */
+:host {
+  display: block;
+}
+
+/* Animaciones para las cards de tendencias */
+.tendencia-card {
+  transition: all 0.3s ease;
+  transform: translateY(0);
+}
+
+.tendencia-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Efectos para gráficos */
+.chart-container {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-container:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Animaciones para métricas de tendencia */
+.metric-trend {
+  transition: all 0.3s ease;
+}
+
+.metric-trend.positive {
+  color: #059669;
+  animation: trend-up 2s infinite;
+}
+
+.metric-trend.negative {
+  color: #dc2626;
+  animation: trend-down 2s infinite;
+}
+
+@keyframes trend-up {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes trend-down {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(2px);
+  }
+}
+
+/* Estilos para tabla de datos */
+.data-table {
+  transition: all 0.3s ease;
+}
+
+.data-table tbody tr:hover {
+  background-color: #f9fafb;
+  transform: scale(1.01);
+}
+
+/* Efectos de shimmer para carga */
+.loading-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .tendencia-card {
+    margin-bottom: 1rem;
+  }
+
+  .chart-container {
+    height: 250px;
+  }
+}

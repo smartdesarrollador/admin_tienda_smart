@@ -1,0 +1,283 @@
+<!-- Contenedor principal -->
+<div class="container mx-auto p-4 sm:p-6 lg:p-8 font-sans">
+  <!-- Encabezado -->
+  <header class="mb-8">
+    <div class="flex flex-col sm:flex-row justify-between items-center">
+      <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-4 sm:mb-0">
+        Crear Nuevo Atributo
+      </h1>
+      <button
+        routerLink="/admin/atributos"
+        class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 flex items-center space-x-2"
+      >
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10 19l-7-7m0 0l7-7m-7 7h18"
+          ></path>
+        </svg>
+        <span>Volver al Listado</span>
+      </button>
+    </div>
+    <p class="text-gray-600 dark:text-gray-400 mt-2">
+      Define un nuevo atributo que podrá ser asignado a los productos.
+    </p>
+  </header>
+
+  <!-- Formulario -->
+  <form
+    [formGroup]="atributoForm"
+    (ngSubmit)="onSubmit()"
+    class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700"
+  >
+    <!-- Mensaje de error general -->
+    <div
+      *ngIf="hasGeneralError()"
+      class="mb-6 bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 dark:border-red-400 text-red-700 dark:text-red-300 p-4 rounded-md shadow"
+    >
+      <p class="font-medium">Error:</p>
+      <p>{{ generalError() }}</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+      <!-- Campo Nombre -->
+      <div class="md:col-span-1">
+        <label
+          for="nombre"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5"
+        >
+          Nombre del Atributo <span class="text-red-500">*</span>
+        </label>
+        <div class="relative">
+          <input
+            type="text"
+            id="nombre"
+            formControlName="nombre"
+            (input)="onNombreChange($event)"
+            placeholder="Ej: Color, Talla, Material"
+            class="w-full px-4 py-2.5 border rounded-lg shadow-sm transition-colors duration-150 ease-in-out"
+            [ngClass]="{
+              'border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white':
+                !getControlError('nombre', 'required') &&
+                !getControlError('nombre', 'minlength') &&
+                !getControlError('nombre', 'maxlength') &&
+                !getControlError('nombre', 'nombreNoDisponible'),
+              'border-red-500 dark:border-red-500 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white':
+                getControlError('nombre', 'required') ||
+                getControlError('nombre', 'minlength') ||
+                getControlError('nombre', 'maxlength') ||
+                getControlError('nombre', 'nombreNoDisponible')
+            }"
+          />
+          <div
+            *ngIf="checkingNombre()"
+            class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"
+          >
+            <svg
+              class="animate-spin h-5 w-5 text-gray-400"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+          </div>
+          <div
+            *ngIf="
+              !checkingNombre() &&
+              nombreDisponible() === true &&
+              atributoForm.get('nombre')?.value.length >= 3
+            "
+            class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"
+          >
+            <svg
+              class="h-5 w-5 text-green-500"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div
+            *ngIf="
+              !checkingNombre() &&
+              nombreDisponible() === false &&
+              atributoForm.get('nombre')?.value.length >= 3
+            "
+            class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"
+          >
+            <svg
+              class="h-5 w-5 text-red-500"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 101.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+        </div>
+        <div
+          *ngIf="getControlError('nombre', 'required')"
+          class="mt-1.5 text-xs text-red-600 dark:text-red-400"
+        >
+          El nombre es obligatorio.
+        </div>
+        <div
+          *ngIf="getControlError('nombre', 'minlength')"
+          class="mt-1.5 text-xs text-red-600 dark:text-red-400"
+        >
+          El nombre debe tener al menos 3 caracteres.
+        </div>
+        <div
+          *ngIf="getControlError('nombre', 'maxlength')"
+          class="mt-1.5 text-xs text-red-600 dark:text-red-400"
+        >
+          El nombre no debe exceder los 100 caracteres.
+        </div>
+        <div
+          *ngIf="
+            getControlError('nombre', 'nombreNoDisponible') && !checkingNombre()
+          "
+          class="mt-1.5 text-xs text-red-600 dark:text-red-400"
+        >
+          Este nombre ya está en uso. Por favor, elige otro.
+        </div>
+      </div>
+
+      <!-- Campo Tipo de Atributo -->
+      <div class="md:col-span-1">
+        <label
+          for="tipo"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5"
+        >
+          Tipo de Atributo <span class="text-red-500">*</span>
+        </label>
+        <select
+          id="tipo"
+          formControlName="tipo"
+          class="w-full px-4 py-2.5 border rounded-lg shadow-sm transition-colors duration-150 ease-in-out"
+          [ngClass]="{
+            'border-gray-300 dark:border-gray-600 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white':
+              !getControlError('tipo', 'required'),
+            'border-red-500 dark:border-red-500 focus:ring-red-500 focus:border-red-500 dark:bg-gray-700 dark:text-white':
+              getControlError('tipo', 'required')
+          }"
+        >
+          <option *ngFor="let tipo of tiposDeAtributo" [value]="tipo.value">
+            {{ tipo.label }}
+          </option>
+        </select>
+        <div
+          *ngIf="getControlError('tipo', 'required')"
+          class="mt-1.5 text-xs text-red-600 dark:text-red-400"
+        >
+          El tipo de atributo es obligatorio.
+        </div>
+      </div>
+
+      <!-- Checkbox Filtrable -->
+      <div class="md:col-span-1 flex items-center mt-2">
+        <input
+          type="checkbox"
+          id="filtrable"
+          formControlName="filtrable"
+          class="h-5 w-5 text-indigo-600 border-gray-300 dark:border-gray-600 rounded focus:ring-indigo-500 dark:bg-gray-700 dark:checked:bg-indigo-600 dark:focus:ring-offset-gray-800 shadow-sm"
+        />
+        <label
+          for="filtrable"
+          class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300"
+        >
+          Permitir filtrar por este atributo en la tienda
+        </label>
+      </div>
+
+      <!-- Checkbox Visible -->
+      <div class="md:col-span-1 flex items-center mt-2">
+        <input
+          type="checkbox"
+          id="visible"
+          formControlName="visible"
+          class="h-5 w-5 text-indigo-600 border-gray-300 dark:border-gray-600 rounded focus:ring-indigo-500 dark:bg-gray-700 dark:checked:bg-indigo-600 dark:focus:ring-offset-gray-800 shadow-sm"
+        />
+        <label
+          for="visible"
+          class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300"
+        >
+          Visible en la ficha de producto
+        </label>
+      </div>
+    </div>
+
+    <!-- Botones de Acción -->
+    <div
+      class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-end space-y-4 sm:space-y-0 sm:space-x-4"
+    >
+      <button
+        type="button"
+        routerLink="/admin/atributos"
+        class="w-full sm:w-auto px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition-colors duration-150 ease-in-out"
+      >
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        [disabled]="
+          isSubmitting() || atributoForm.invalid || nombreDisponible() === false
+        "
+        class="w-full sm:w-auto px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150 ease-in-out flex items-center justify-center"
+      >
+        <svg
+          *ngIf="isSubmitting()"
+          class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
+        </svg>
+        {{ isSubmitting() ? "Guardando..." : "Crear Atributo" }}
+      </button>
+    </div>
+  </form>
+</div>

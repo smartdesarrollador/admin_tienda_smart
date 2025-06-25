@@ -1,0 +1,36 @@
+/* Estilos específicos del componente cupon-create */
+/* La mayoría de los estilos se manejan a través de Tailwind CSS */
+
+/* Personalización adicional si es necesaria */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Efectos de transición para campos de formulario */
+input:focus,
+select:focus,
+textarea:focus {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Efectos hover para botones */
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+button {
+  transition: all 0.2s ease-in-out;
+}

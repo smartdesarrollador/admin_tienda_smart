@@ -1,0 +1,568 @@
+<!-- Panel de acciones principales -->
+<div class="bg-white shadow rounded-lg border border-gray-200">
+  <div class="px-6 py-4 border-b border-gray-200">
+    <h3 class="text-lg font-medium text-gray-900 flex items-center">
+      <svg
+        class="w-5 h-5 mr-2 text-gray-400"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"
+        ></path>
+      </svg>
+      Acciones del Pedido
+    </h3>
+  </div>
+
+  <div class="p-6">
+    <!-- Acciones principales -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      @for (accion of accionesPrincipales(); track trackByActionId($index,
+      accion)) {
+      <button
+        type="button"
+        class="relative group flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
+        [class.opacity-50]="isActionDisabled(accion)"
+        [class.cursor-not-allowed]="isActionDisabled(accion)"
+        [disabled]="isActionDisabled(accion)"
+        (click)="executeAction(accion)"
+      >
+        <div
+          class="w-12 h-12 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-200"
+          [class]="
+            accion.color.includes('blue')
+              ? 'bg-blue-100'
+              : accion.color.includes('gray')
+              ? 'bg-gray-100'
+              : accion.color.includes('green')
+              ? 'bg-green-100'
+              : accion.color.includes('purple')
+              ? 'bg-purple-100'
+              : accion.color.includes('indigo')
+              ? 'bg-indigo-100'
+              : accion.color.includes('yellow')
+              ? 'bg-yellow-100'
+              : accion.color.includes('red')
+              ? 'bg-red-100'
+              : 'bg-gray-100'
+          "
+        >
+          <svg
+            class="w-6 h-6"
+            [class]="accion.color"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              [attr.d]="accion.icon"
+            ></path>
+          </svg>
+        </div>
+        <span class="text-sm font-medium text-gray-900 text-center">
+          {{ accion.label }}
+        </span>
+        <span class="text-xs text-gray-500 text-center mt-1">
+          {{ accion.description }}
+        </span>
+
+        @if (isLoading) {
+        <div
+          class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center rounded-lg"
+        >
+          <div
+            class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"
+          ></div>
+        </div>
+        }
+      </button>
+      }
+    </div>
+
+    <!-- Acciones secundarias -->
+    @if (accionesSecundarias().length > 0) {
+    <div class="border-t border-gray-200 pt-6">
+      <h4 class="text-sm font-medium text-gray-700 mb-4">
+        Acciones adicionales
+      </h4>
+      <div class="flex flex-wrap gap-2">
+        @for (accion of accionesSecundarias(); track trackByActionId($index,
+        accion)) {
+        <button
+          type="button"
+          class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+          [class.opacity-50]="isActionDisabled(accion)"
+          [class.cursor-not-allowed]="isActionDisabled(accion)"
+          [disabled]="isActionDisabled(accion)"
+          (click)="executeAction(accion)"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            [class]="accion.color"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              [attr.d]="accion.icon"
+            ></path>
+          </svg>
+          {{ accion.label }}
+        </button>
+        }
+      </div>
+    </div>
+    }
+  </div>
+</div>
+
+<!-- Modal de cambio de estado -->
+@if (showEstadoModal()) {
+<div class="fixed inset-0 z-50 overflow-y-auto">
+  <div
+    class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+  >
+    <div
+      class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+      (click)="closeEstadoModal()"
+    ></div>
+
+    <div
+      class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+    >
+      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <div class="sm:flex sm:items-start">
+          <div
+            class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10"
+          >
+            <svg
+              class="h-6 w-6 text-blue-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              ></path>
+            </svg>
+          </div>
+          <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+              Cambiar Estado del Pedido
+            </h3>
+
+            <div class="space-y-4">
+              <!-- Selector de estado -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Nuevo Estado
+                </label>
+                <select
+                  class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                  [value]="nuevoEstado()"
+                  (change)="nuevoEstado.set($any($event.target).value)"
+                >
+                  @for (estado of estadosDisponibles(); track estado.value) {
+                  <option [value]="estado.value">{{ estado.label }}</option>
+                  }
+                </select>
+              </div>
+
+              <!-- Motivo del cambio -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Motivo del cambio (opcional)
+                </label>
+                <textarea
+                  rows="3"
+                  class="shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+                  placeholder="Describe el motivo del cambio de estado..."
+                  [value]="motivoCambio()"
+                  (input)="motivoCambio.set($any($event.target).value)"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+        <button
+          type="button"
+          class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+          (click)="confirmCambioEstado()"
+        >
+          Cambiar Estado
+        </button>
+        <button
+          type="button"
+          class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+          (click)="closeEstadoModal()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Modal de configuración de impresión -->
+@if (showImpresionModal()) {
+<div class="fixed inset-0 z-50 overflow-y-auto">
+  <div
+    class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+  >
+    <div
+      class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+      (click)="closeImpresionModal()"
+    ></div>
+
+    <div
+      class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+    >
+      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <div class="sm:flex sm:items-start">
+          <div
+            class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-gray-100 sm:mx-0 sm:h-10 sm:w-10"
+          >
+            <svg
+              class="h-6 w-6 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+              ></path>
+            </svg>
+          </div>
+          <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+              Configuración de Impresión
+            </h3>
+
+            <div class="space-y-4">
+              <!-- Formato -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Formato
+                </label>
+                <select
+                  class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                  [value]="configImpresion().formato"
+                  (change)="onFormatoChange($event)"
+                >
+                  <option value="A4">A4</option>
+                  <option value="carta">Carta</option>
+                  <option value="ticket">Ticket</option>
+                </select>
+              </div>
+
+              <!-- Número de copias -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Número de copias
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  max="10"
+                  class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                  [value]="configImpresion().copias"
+                  (input)="onCopiasChange($event)"
+                />
+              </div>
+
+              <!-- Opciones de contenido -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Incluir en la impresión
+                </label>
+                <div class="space-y-2">
+                  <label class="flex items-center">
+                    <input
+                      type="checkbox"
+                      class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                      [checked]="configImpresion().incluirDetalles"
+                      (change)="onIncluirDetallesChange($event)"
+                    />
+                    <span class="ml-2 text-sm text-gray-700"
+                      >Detalles del pedido</span
+                    >
+                  </label>
+                  <label class="flex items-center">
+                    <input
+                      type="checkbox"
+                      class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                      [checked]="configImpresion().incluirPagos"
+                      (change)="onIncluirPagosChange($event)"
+                    />
+                    <span class="ml-2 text-sm text-gray-700"
+                      >Información de pagos</span
+                    >
+                  </label>
+                  <label class="flex items-center">
+                    <input
+                      type="checkbox"
+                      class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                      [checked]="configImpresion().incluirCuotas"
+                      (change)="onIncluirCuotasChange($event)"
+                    />
+                    <span class="ml-2 text-sm text-gray-700"
+                      >Plan de cuotas</span
+                    >
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+        <button
+          type="button"
+          class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:ml-3 sm:w-auto sm:text-sm"
+          (click)="confirmImpresion()"
+        >
+          Imprimir
+        </button>
+        <button
+          type="button"
+          class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+          (click)="closeImpresionModal()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Modal de configuración de notificación -->
+@if (showNotificacionModal()) {
+<div class="fixed inset-0 z-50 overflow-y-auto">
+  <div
+    class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+  >
+    <div
+      class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+      (click)="closeNotificacionModal()"
+    ></div>
+
+    <div
+      class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+    >
+      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <div class="sm:flex sm:items-start">
+          <div
+            class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-purple-100 sm:mx-0 sm:h-10 sm:w-10"
+          >
+            <svg
+              class="h-6 w-6 text-purple-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              ></path>
+            </svg>
+          </div>
+          <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+              Enviar Notificación
+            </h3>
+
+            <div class="space-y-4">
+              <!-- Tipo de notificación -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Tipo de notificación
+                </label>
+                <select
+                  class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                  [value]="configNotificacion().tipo"
+                  (change)="onTipoNotificacionChange($event)"
+                >
+                  <option value="email">Email</option>
+                  <option value="sms">SMS</option>
+                  <option value="whatsapp">WhatsApp</option>
+                </select>
+              </div>
+
+              <!-- Mensaje -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Mensaje
+                </label>
+                <textarea
+                  rows="4"
+                  class="shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+                  placeholder="Escribe el mensaje a enviar..."
+                  [value]="configNotificacion().mensaje"
+                  (input)="onMensajeChange($event)"
+                ></textarea>
+              </div>
+
+              <!-- Adjuntos -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Adjuntar documentos
+                </label>
+                <div class="space-y-2">
+                  <label class="flex items-center">
+                    <input
+                      type="checkbox"
+                      class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                      [checked]="configNotificacion().incluirFactura"
+                      (change)="onIncluirFacturaChange($event)"
+                    />
+                    <span class="ml-2 text-sm text-gray-700">Factura</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input
+                      type="checkbox"
+                      class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                      [checked]="configNotificacion().incluirGuiaEnvio"
+                      (change)="onIncluirGuiaEnvioChange($event)"
+                    />
+                    <span class="ml-2 text-sm text-gray-700"
+                      >Guía de envío</span
+                    >
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+        <button
+          type="button"
+          class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-purple-600 text-base font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm"
+          (click)="confirmNotificacion()"
+        >
+          Enviar
+        </button>
+        <button
+          type="button"
+          class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+          (click)="closeNotificacionModal()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Modal de confirmación general -->
+@if (showConfirmModal() && selectedAction()) {
+<div class="fixed inset-0 z-50 overflow-y-auto">
+  <div
+    class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+  >
+    <div
+      class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+      (click)="closeConfirmModal()"
+    ></div>
+
+    <div
+      class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+    >
+      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <div class="sm:flex sm:items-start">
+          <div
+            class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full sm:mx-0 sm:h-10 sm:w-10"
+            [class]="
+              selectedAction()!.color.includes('red')
+                ? 'bg-red-100'
+                : selectedAction()!.color.includes('yellow')
+                ? 'bg-yellow-100'
+                : 'bg-blue-100'
+            "
+          >
+            <svg
+              class="h-6 w-6"
+              [class]="
+                selectedAction()!.color.includes('red')
+                  ? 'text-red-600'
+                  : selectedAction()!.color.includes('yellow')
+                  ? 'text-yellow-600'
+                  : 'text-blue-600'
+              "
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                [attr.d]="selectedAction()!.icon"
+              ></path>
+            </svg>
+          </div>
+          <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">
+              {{ selectedAction()!.label }}
+            </h3>
+            <div class="mt-2">
+              <p class="text-sm text-gray-500">
+                ¿Estás seguro de que deseas
+                {{ selectedAction()!.description.toLowerCase() }}? Esta acción
+                no se puede deshacer.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+        <button
+          type="button"
+          class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+          [class]="
+            selectedAction()!.color.includes('red')
+              ? 'bg-red-600 hover:bg-red-700 focus:ring-red-500'
+              : selectedAction()!.color.includes('yellow')
+              ? 'bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500'
+              : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500'
+          "
+          (click)="confirmAction()"
+        >
+          Confirmar
+        </button>
+        <button
+          type="button"
+          class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+          (click)="closeConfirmModal()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}

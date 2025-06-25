@@ -1,0 +1,322 @@
+<!-- Header principal -->
+<div class="bg-white shadow-sm border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center py-6">
+      <div class="flex items-center space-x-4">
+        <button
+          type="button"
+          (click)="goBack()"
+          class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            ></path>
+          </svg>
+          Volver
+        </button>
+
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">
+            @if (pedido(); as pedido) { Pedido #{{ pedido.id }} } @else {
+            Detalle del Pedido }
+          </h1>
+          <p class="text-sm text-gray-500 mt-1">
+            Información completa del pedido y sus transacciones
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <button
+          type="button"
+          (click)="refreshPedido()"
+          [disabled]="isLoading()"
+          class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            [class.animate-spin]="isLoading()"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            ></path>
+          </svg>
+          Actualizar
+        </button>
+
+        @if (pedido()) {
+        <button
+          type="button"
+          (click)="editPedido()"
+          class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+            ></path>
+          </svg>
+          Editar
+        </button>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Estados de carga y error -->
+@if (isLoading()) {
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="flex items-center justify-center py-12">
+    <div class="flex items-center space-x-3">
+      <svg
+        class="animate-spin w-6 h-6 text-blue-600"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
+      </svg>
+      <span class="text-gray-600">Cargando información del pedido...</span>
+    </div>
+  </div>
+</div>
+} @if (error()) {
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="bg-red-50 border border-red-200 rounded-md p-4">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <svg
+          class="h-5 w-5 text-red-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+          ></path>
+        </svg>
+      </div>
+      <div class="ml-3">
+        <h3 class="text-sm font-medium text-red-800">Error al cargar</h3>
+        <div class="mt-2 text-sm text-red-700">
+          <p>{{ error() }}</p>
+        </div>
+        <div class="mt-4">
+          <button
+            type="button"
+            (click)="refreshPedido()"
+            class="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          >
+            Reintentar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Contenido principal -->
+@if (pedido(); as pedido) {
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Header del pedido -->
+  <div class="mb-8">
+    <app-pedido-header
+      [pedido]="pedido"
+      (actionTriggered)="onHeaderAction($event)"
+    ></app-pedido-header>
+  </div>
+
+  <!-- Navegación por tabs -->
+  <div class="border-b border-gray-200 mb-8">
+    <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+      @for (tab of tabs; track trackByTabId($index, tab)) {
+      <button
+        type="button"
+        (click)="setActiveTab(tab.id)"
+        class="group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200"
+        [class]="
+          activeTab() === tab.id
+            ? 'border-blue-500 text-blue-600'
+            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+        "
+      >
+        <svg
+          class="w-5 h-5 mr-2"
+          [class]="
+            activeTab() === tab.id
+              ? 'text-blue-500'
+              : 'text-gray-400 group-hover:text-gray-500'
+          "
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            [attr.d]="tab.icon"
+          ></path>
+        </svg>
+        {{ tab.label }}
+      </button>
+      }
+    </nav>
+  </div>
+
+  <!-- Contenido de las tabs -->
+  <div class="space-y-8">
+    <!-- Tab: Información General -->
+    @if (activeTab() === 'general') {
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Información principal -->
+      <div class="lg:col-span-2 space-y-6">
+        @if (hasItems()) {
+        <app-items-detail [pedido]="pedido"></app-items-detail>
+        }
+      </div>
+
+      <!-- Sidebar con acciones -->
+      <div class="space-y-6">
+        <app-acciones-pedido
+          [pedido]="pedido"
+          (accionExecuted)="onPedidoAction($event)"
+        ></app-acciones-pedido>
+      </div>
+    </div>
+    }
+
+    <!-- Tab: Productos -->
+    @if (activeTab() === 'items') {
+    <div>
+      @if (hasItems()) {
+      <app-items-detail [pedido]="pedido"></app-items-detail>
+      } @else {
+      <div class="text-center py-12">
+        <svg
+          class="mx-auto h-12 w-12 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+          ></path>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">Sin productos</h3>
+        <p class="mt-1 text-sm text-gray-500">
+          Este pedido no tiene productos asociados.
+        </p>
+      </div>
+      }
+    </div>
+    }
+
+    <!-- Tab: Pagos -->
+    @if (activeTab() === 'pagos') {
+    <div>
+      @if (hasPagos()) {
+      <app-pagos-section [pedido]="pedido"></app-pagos-section>
+      } @else {
+      <div class="text-center py-12">
+        <svg
+          class="mx-auto h-12 w-12 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+          ></path>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">Sin pagos</h3>
+        <p class="mt-1 text-sm text-gray-500">
+          Este pedido no tiene pagos registrados.
+        </p>
+      </div>
+      }
+    </div>
+    }
+
+    <!-- Tab: Cuotas -->
+    @if (activeTab() === 'cuotas') {
+    <div>
+      @if (hasCuotas()) {
+      <app-cuotas-section [pedido]="pedido"></app-cuotas-section>
+      } @else {
+      <div class="text-center py-12">
+        <svg
+          class="mx-auto h-12 w-12 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+          ></path>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">Sin cuotas</h3>
+        <p class="mt-1 text-sm text-gray-500">
+          Este pedido no maneja pagos a crédito.
+        </p>
+      </div>
+      }
+    </div>
+    }
+
+    <!-- Tab: Timeline -->
+    @if (activeTab() === 'timeline') {
+    <div>
+      <app-pedido-timeline [pedido]="pedido"></app-pedido-timeline>
+    </div>
+    }
+  </div>
+</div>
+}

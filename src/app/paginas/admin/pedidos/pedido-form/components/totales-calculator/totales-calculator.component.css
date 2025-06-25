@@ -1,0 +1,250 @@
+/* Contenedor principal */
+.totales-container {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.totales-header {
+  background: #1f2937;
+  color: white;
+  padding: 1rem 1.5rem;
+}
+
+.totales-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.totales-body {
+  padding: 1.5rem;
+}
+
+/* Líneas de totales */
+.total-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.total-line:last-child {
+  border-bottom: none;
+}
+
+.total-label {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.total-value {
+  font-size: 0.875rem;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+/* Línea de descuento */
+.discount-line {
+  background: #fef2f2;
+  margin: 0 -1.5rem;
+  padding: 0.5rem 1.5rem;
+  border-left: 4px solid #ef4444;
+}
+
+.discount-value {
+  color: #dc2626;
+}
+
+/* Detalles de descuentos */
+.total-line-detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0 0.25rem 1rem;
+  font-size: 0.75rem;
+}
+
+.detail-label {
+  color: #64748b;
+  font-style: italic;
+}
+
+.detail-value {
+  color: #dc2626;
+  font-weight: 500;
+}
+
+/* Porcentajes */
+.percentage {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 400;
+  margin-left: 0.25rem;
+}
+
+/* Envío gratis */
+.free-shipping {
+  color: #059669;
+  font-weight: 600;
+  position: relative;
+}
+
+.free-shipping::before {
+  content: "🎉";
+  margin-right: 0.25rem;
+}
+
+/* Separador */
+.total-separator {
+  height: 2px;
+  background: linear-gradient(to right, #e2e8f0, #cbd5e1, #e2e8f0);
+  margin: 1rem 0;
+  border-radius: 1px;
+}
+
+/* Total final */
+.total-final {
+  background: #f0f9ff;
+  margin: 0 -1.5rem;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-top: 2px solid #0ea5e9;
+  border-bottom: 2px solid #0ea5e9;
+}
+
+.total-label-final {
+  font-size: 1.125rem;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.total-value-final {
+  font-size: 1.5rem;
+  color: #0ea5e9;
+  font-weight: 800;
+}
+
+/* Footer */
+.totales-footer {
+  background: #f8fafc;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.info-note {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* Estados responsive */
+@media (max-width: 640px) {
+  .totales-body {
+    padding: 1rem;
+  }
+
+  .totales-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .totales-title {
+    font-size: 0.875rem;
+  }
+
+  .total-label,
+  .total-value {
+    font-size: 0.75rem;
+  }
+
+  .total-label-final {
+    font-size: 1rem;
+  }
+
+  .total-value-final {
+    font-size: 1.25rem;
+  }
+
+  .discount-line,
+  .total-final {
+    margin: 0 -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Animaciones */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.total-line {
+  animation: slideIn 0.3s ease-out;
+}
+
+.total-final {
+  animation: slideIn 0.5s ease-out;
+}
+
+/* Estados hover */
+.totales-container:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+/* Variantes de color para diferentes estados */
+.totales-container.success {
+  border-color: #10b981;
+}
+
+.totales-container.success .totales-header {
+  background: #10b981;
+}
+
+.totales-container.warning {
+  border-color: #f59e0b;
+}
+
+.totales-container.warning .totales-header {
+  background: #f59e0b;
+}
+
+.totales-container.error {
+  border-color: #ef4444;
+}
+
+.totales-container.error .totales-header {
+  background: #ef4444;
+}
+
+/* Efectos especiales */
+.total-value-final {
+  text-shadow: 0 1px 2px rgba(14, 165, 233, 0.1);
+}
+
+.discount-line::before {
+  content: "💰";
+  margin-right: 0.5rem;
+}
+
+/* Utilidades */
+.text-right {
+  text-align: right;
+}
+
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas,
+    "Liberation Mono", Menlo, monospace;
+}

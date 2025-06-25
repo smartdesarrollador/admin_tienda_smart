@@ -1,0 +1,398 @@
+<!-- El template está incluido en el componente TypeScript -->
+
+<!-- Header del componente -->
+<div class="bg-white rounded-lg shadow-sm border border-gray-200">
+  <!-- Header con controles -->
+  <div class="px-6 py-4 border-b border-gray-200">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900">
+          Métricas KPI del Negocio
+        </h3>
+        <p class="text-sm text-gray-500 mt-1">
+          Indicadores clave de rendimiento y objetivos estratégicos
+        </p>
+      </div>
+
+      <!-- Controles de categoría -->
+      <div class="flex items-center space-x-2">
+        <div class="flex bg-gray-100 rounded-lg p-1">
+          <button
+            type="button"
+            (click)="onCategoryChange('todos')"
+            [class.bg-white]="activeCategory() === 'todos'"
+            [class.shadow-sm]="activeCategory() === 'todos'"
+            [class.text-gray-900]="activeCategory() === 'todos'"
+            [class.text-gray-600]="activeCategory() !== 'todos'"
+            class="px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 hover:text-gray-900"
+          >
+            Todos
+          </button>
+          <button
+            type="button"
+            (click)="onCategoryChange('ventas')"
+            [class.bg-white]="activeCategory() === 'ventas'"
+            [class.shadow-sm]="activeCategory() === 'ventas'"
+            [class.text-gray-900]="activeCategory() === 'ventas'"
+            [class.text-gray-600]="activeCategory() !== 'ventas'"
+            class="px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 hover:text-gray-900"
+          >
+            Ventas
+          </button>
+          <button
+            type="button"
+            (click)="onCategoryChange('operaciones')"
+            [class.bg-white]="activeCategory() === 'operaciones'"
+            [class.shadow-sm]="activeCategory() === 'operaciones'"
+            [class.text-gray-900]="activeCategory() === 'operaciones'"
+            [class.text-gray-600]="activeCategory() !== 'operaciones'"
+            class="px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 hover:text-gray-900"
+          >
+            Operaciones
+          </button>
+          <button
+            type="button"
+            (click)="onCategoryChange('clientes')"
+            [class.bg-white]="activeCategory() === 'clientes'"
+            [class.shadow-sm]="activeCategory() === 'clientes'"
+            [class.text-gray-900]="activeCategory() === 'clientes'"
+            [class.text-gray-600]="activeCategory() !== 'clientes'"
+            class="px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 hover:text-gray-900"
+          >
+            Clientes
+          </button>
+          <button
+            type="button"
+            (click)="onCategoryChange('financiero')"
+            [class.bg-white]="activeCategory() === 'financiero'"
+            [class.shadow-sm]="activeCategory() === 'financiero'"
+            [class.text-gray-900]="activeCategory() === 'financiero'"
+            [class.text-gray-600]="activeCategory() !== 'financiero'"
+            class="px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 hover:text-gray-900"
+          >
+            Financiero
+          </button>
+        </div>
+
+        <!-- Botón de actualizar -->
+        <button
+          type="button"
+          (click)="refreshData()"
+          [disabled]="isLoading()"
+          class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+        >
+          <svg
+            class="w-4 h-4"
+            [class.animate-spin]="isLoading()"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resumen general -->
+  @if (kpisData() && !isLoading()) {
+  <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+    <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
+      <!-- Score general -->
+      <div class="text-center">
+        <div class="text-2xl font-bold" [class]="scoreColor()">
+          {{ scoreGeneral() }}%
+        </div>
+        <div class="text-xs text-gray-500">Score General</div>
+      </div>
+
+      <!-- KPIs en objetivo -->
+      <div class="text-center">
+        <div class="text-xl font-bold text-green-600">
+          {{ kpisEnObjetivo() }}
+        </div>
+        <div class="text-xs text-gray-500">En Objetivo</div>
+      </div>
+
+      <!-- KPIs por debajo -->
+      <div class="text-center">
+        <div class="text-xl font-bold text-yellow-600">
+          {{ kpisPorDebajo() }}
+        </div>
+        <div class="text-xs text-gray-500">Por Debajo</div>
+      </div>
+
+      <!-- KPIs críticos -->
+      <div class="text-center">
+        <div class="text-xl font-bold text-red-600">
+          {{ kpisCriticos() }}
+        </div>
+        <div class="text-xs text-gray-500">Críticos</div>
+      </div>
+
+      <!-- Total KPIs -->
+      <div class="text-center">
+        <div class="text-xl font-bold text-gray-900">
+          {{ kpisActivos().length }}
+        </div>
+        <div class="text-xs text-gray-500">Total KPIs</div>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Estado de carga -->
+  @if (isLoading()) {
+  <div class="flex items-center justify-center py-12">
+    <div class="flex items-center space-x-3">
+      <svg
+        class="animate-spin w-6 h-6 text-blue-600"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
+      </svg>
+      <span class="text-gray-600">Cargando métricas KPI...</span>
+    </div>
+  </div>
+  }
+
+  <!-- Error -->
+  @if (error()) {
+  <div class="p-6">
+    <div class="bg-red-50 border border-red-200 rounded-md p-4">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg
+            class="h-5 w-5 text-red-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+            ></path>
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800">
+            Error al cargar métricas KPI
+          </h3>
+          <div class="mt-2 text-sm text-red-700">
+            <p>{{ error() }}</p>
+          </div>
+          <div class="mt-4">
+            <button
+              type="button"
+              (click)="refreshData()"
+              class="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              Reintentar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Grid de KPIs -->
+  @if (!isLoading() && !error() && kpisActivos().length > 0) {
+  <div class="p-6">
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+    >
+      @for (kpi of kpisActivos(); track kpi.id) {
+      <div
+        class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all duration-300 kpi-card"
+      >
+        <!-- Header del KPI -->
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center space-x-3">
+            <!-- Icono del KPI -->
+            <div
+              class="w-10 h-10 rounded-lg flex items-center justify-center"
+              [style.background-color]="kpi.color + '20'"
+            >
+              <svg
+                class="w-5 h-5"
+                [style.color]="kpi.color"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  [attr.d]="getKpiIcon(kpi.icono)"
+                ></path>
+              </svg>
+            </div>
+
+            <!-- Categoría badge -->
+            <span
+              class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+              [class.bg-blue-100]="kpi.categoria === 'ventas'"
+              [class.text-blue-800]="kpi.categoria === 'ventas'"
+              [class.bg-green-100]="kpi.categoria === 'operaciones'"
+              [class.text-green-800]="kpi.categoria === 'operaciones'"
+              [class.bg-purple-100]="kpi.categoria === 'clientes'"
+              [class.text-purple-800]="kpi.categoria === 'clientes'"
+              [class.bg-orange-100]="kpi.categoria === 'financiero'"
+              [class.text-orange-800]="kpi.categoria === 'financiero'"
+            >
+              {{ getCategoryLabel(kpi.categoria) }}
+            </span>
+          </div>
+
+          <!-- Estado del KPI -->
+          <div
+            class="w-3 h-3 rounded-full"
+            [class.bg-green-500]="
+              getKpiEstado(kpi.progreso_objetivo) === 'excelente'
+            "
+            [class.bg-yellow-500]="
+              getKpiEstado(kpi.progreso_objetivo) === 'bueno'
+            "
+            [class.bg-orange-500]="
+              getKpiEstado(kpi.progreso_objetivo) === 'regular'
+            "
+            [class.bg-red-500]="
+              getKpiEstado(kpi.progreso_objetivo) === 'critico'
+            "
+          ></div>
+        </div>
+
+        <!-- Nombre del KPI -->
+        <h4 class="text-sm font-medium text-gray-900 mb-2">
+          {{ kpi.nombre }}
+        </h4>
+
+        <!-- Valor actual -->
+        <div class="mb-3">
+          <div class="text-2xl font-bold text-gray-900">
+            {{ formatValue(kpi.valor_actual, kpi.tipo, kpi.unidad) }}
+          </div>
+          <div class="flex items-center mt-1">
+            <!-- Tendencia -->
+            <svg
+              class="w-4 h-4 mr-1"
+              [class]="getTendenciaColor(kpi.tendencia)"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                [attr.d]="getTendenciaIcon(kpi.tendencia)"
+              ></path>
+            </svg>
+            <span
+              class="text-sm font-medium"
+              [class]="getTendenciaColor(kpi.tendencia)"
+            >
+              {{ formatCambio(kpi.cambio_porcentual) }}
+            </span>
+            <span class="text-xs text-gray-500 ml-2">vs anterior</span>
+          </div>
+        </div>
+
+        <!-- Progreso hacia objetivo -->
+        <div class="mb-4">
+          <div
+            class="flex items-center justify-between text-xs text-gray-500 mb-1"
+          >
+            <span>Progreso al objetivo</span>
+            <span>{{ kpi.progreso_objetivo }}%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-2">
+            <div
+              class="h-2 rounded-full transition-all duration-500"
+              [class]="getProgresoColor(kpi.progreso_objetivo)"
+              [style.width.%]="kpi.progreso_objetivo"
+            ></div>
+          </div>
+          <div
+            class="flex items-center justify-between text-xs text-gray-500 mt-1"
+          >
+            <span
+              >Actual:
+              {{ formatValue(kpi.valor_actual, kpi.tipo, kpi.unidad) }}</span
+            >
+            <span
+              >Meta: {{ formatValue(kpi.objetivo, kpi.tipo, kpi.unidad) }}</span
+            >
+          </div>
+        </div>
+
+        <!-- Descripción -->
+        <p class="text-xs text-gray-500 mb-3">
+          {{ kpi.descripcion }}
+        </p>
+
+        <!-- Fórmula (si existe) -->
+        @if (kpi.formula) {
+        <div class="bg-gray-50 rounded-md p-2">
+          <div class="text-xs text-gray-600">
+            <span class="font-medium">Fórmula:</span>
+            <code class="text-xs text-gray-800 bg-gray-100 px-1 rounded">
+              {{ kpi.formula }}
+            </code>
+          </div>
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </div>
+  }
+
+  <!-- Estado vacío -->
+  @if (!isLoading() && !error() && kpisActivos().length === 0) {
+  <div class="text-center py-12">
+    <svg
+      class="mx-auto h-12 w-12 text-gray-400"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+      ></path>
+    </svg>
+    <h3 class="mt-2 text-sm font-medium text-gray-900">
+      No hay KPIs disponibles
+    </h3>
+    <p class="mt-1 text-sm text-gray-500">
+      No se encontraron métricas para la categoría seleccionada.
+    </p>
+  </div>
+  }
+</div>

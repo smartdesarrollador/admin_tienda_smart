@@ -1,0 +1,440 @@
+<!-- El template está incluido en el componente TypeScript -->
+
+<!-- Header del componente -->
+<div class="bg-white rounded-lg shadow-sm border border-gray-200">
+  <!-- Header con controles -->
+  <div class="px-6 py-4 border-b border-gray-200">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900">
+          Análisis de Clientes
+        </h3>
+        <p class="text-sm text-gray-500 mt-1">
+          Mejores clientes y análisis de fidelización
+        </p>
+      </div>
+
+      <!-- Controles de vista -->
+      <div class="flex items-center space-x-2">
+        <div class="flex bg-gray-100 rounded-lg p-1">
+          <button
+            type="button"
+            (click)="onViewChange('gastadores')"
+            [class.bg-white]="activeView() === 'gastadores'"
+            [class.shadow-sm]="activeView() === 'gastadores'"
+            [class.text-gray-900]="activeView() === 'gastadores'"
+            [class.text-gray-600]="activeView() !== 'gastadores'"
+            class="px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 hover:text-gray-900"
+          >
+            Más Gastadores
+          </button>
+          <button
+            type="button"
+            (click)="onViewChange('frecuentes')"
+            [class.bg-white]="activeView() === 'frecuentes'"
+            [class.shadow-sm]="activeView() === 'frecuentes'"
+            [class.text-gray-900]="activeView() === 'frecuentes'"
+            [class.text-gray-600]="activeView() !== 'frecuentes'"
+            class="px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 hover:text-gray-900"
+          >
+            Más Frecuentes
+          </button>
+          <button
+            type="button"
+            (click)="onViewChange('ticket')"
+            [class.bg-white]="activeView() === 'ticket'"
+            [class.shadow-sm]="activeView() === 'ticket'"
+            [class.text-gray-900]="activeView() === 'ticket'"
+            [class.text-gray-600]="activeView() !== 'ticket'"
+            class="px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 hover:text-gray-900"
+          >
+            Mejor Ticket
+          </button>
+          <button
+            type="button"
+            (click)="onViewChange('nuevos')"
+            [class.bg-white]="activeView() === 'nuevos'"
+            [class.shadow-sm]="activeView() === 'nuevos'"
+            [class.text-gray-900]="activeView() === 'nuevos'"
+            [class.text-gray-600]="activeView() !== 'nuevos'"
+            class="px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 hover:text-gray-900"
+          >
+            Nuevos
+          </button>
+        </div>
+
+        <!-- Botón de actualizar -->
+        <button
+          type="button"
+          (click)="refreshData()"
+          [disabled]="isLoading()"
+          class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+        >
+          <svg
+            class="w-4 h-4"
+            [class.animate-spin]="isLoading()"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resumen de métricas -->
+  @if (clientesData() && !isLoading()) {
+  <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+    <div class="grid grid-cols-2 lg:grid-cols-6 gap-4">
+      <!-- Total clientes activos -->
+      <div class="text-center">
+        <div class="text-xl font-bold text-gray-900">
+          {{ totalClientesActivos() }}
+        </div>
+        <div class="text-xs text-gray-500">Clientes Activos</div>
+      </div>
+
+      <!-- Ingresos clientes top -->
+      <div class="text-center">
+        <div class="text-xl font-bold text-green-600">
+          {{ ingresosClientesTop() }}
+        </div>
+        <div class="text-xs text-gray-500">Ingresos Top</div>
+      </div>
+
+      <!-- Ticket promedio -->
+      <div class="text-center">
+        <div class="text-xl font-bold text-blue-600">
+          {{ ticketPromedioGeneral() }}
+        </div>
+        <div class="text-xs text-gray-500">Ticket Promedio</div>
+      </div>
+
+      <!-- Clientes nuevos -->
+      <div class="text-center">
+        <div class="text-xl font-bold text-purple-600">
+          {{ clientesNuevosMes() }}
+        </div>
+        <div class="text-xs text-gray-500">Nuevos/Mes</div>
+      </div>
+
+      <!-- Tasa retención -->
+      <div class="text-center">
+        <div class="text-xl font-bold text-orange-600">
+          {{ tasaRetencion() }}
+        </div>
+        <div class="text-xs text-gray-500">Retención</div>
+      </div>
+
+      <!-- Valor vida promedio -->
+      <div class="text-center">
+        <div class="text-xl font-bold text-indigo-600">
+          {{ valorVidaPromedio() }}
+        </div>
+        <div class="text-xs text-gray-500">Valor Vida</div>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Estado de carga -->
+  @if (isLoading()) {
+  <div class="flex items-center justify-center py-12">
+    <div class="flex items-center space-x-3">
+      <svg
+        class="animate-spin w-6 h-6 text-blue-600"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
+      </svg>
+      <span class="text-gray-600">Cargando clientes...</span>
+    </div>
+  </div>
+  }
+
+  <!-- Error -->
+  @if (error()) {
+  <div class="p-6">
+    <div class="bg-red-50 border border-red-200 rounded-md p-4">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg
+            class="h-5 w-5 text-red-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+            ></path>
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800">
+            Error al cargar clientes
+          </h3>
+          <div class="mt-2 text-sm text-red-700">
+            <p>{{ error() }}</p>
+          </div>
+          <div class="mt-4">
+            <button
+              type="button"
+              (click)="refreshData()"
+              class="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              Reintentar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Lista de clientes -->
+  @if (!isLoading() && !error() && clientesActivos().length > 0) {
+  <div class="divide-y divide-gray-200">
+    @for (cliente of clientesActivos(); track cliente.id; let i = $index) {
+    <div class="p-6 hover:bg-gray-50 transition-colors duration-200">
+      <div class="flex items-center space-x-4">
+        <!-- Ranking -->
+        <div class="flex-shrink-0">
+          <div
+            class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
+            [class.bg-yellow-100]="i === 0"
+            [class.text-yellow-800]="i === 0"
+            [class.bg-gray-100]="i === 1"
+            [class.text-gray-800]="i === 1"
+            [class.bg-orange-100]="i === 2"
+            [class.text-orange-800]="i === 2"
+            [class.bg-blue-100]="i > 2"
+            [class.text-blue-800]="i > 2"
+          >
+            {{ i + 1 }}
+          </div>
+        </div>
+
+        <!-- Avatar del cliente -->
+        <div class="flex-shrink-0">
+          <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden">
+            @if (cliente.avatar_url) {
+            <img
+              [src]="cliente.avatar_url"
+              [alt]="cliente.name"
+              class="w-full h-full object-cover"
+              (error)="
+                handleImageError($event, '/assets/placeholder-avatar.png')
+              "
+            />
+            } @else {
+            <div
+              class="w-full h-full flex items-center justify-center text-gray-400"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </div>
+            }
+          </div>
+        </div>
+
+        <!-- Información del cliente -->
+        <div class="flex-1 min-w-0">
+          <div class="flex items-start justify-between">
+            <div class="flex-1">
+              <div class="flex items-center space-x-2">
+                <h4 class="text-sm font-medium text-gray-900 truncate">
+                  {{ cliente.name }}
+                </h4>
+                <!-- Estado del cliente -->
+                <span
+                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+                  [class]="getEstadoColor(cliente.estado_cliente)"
+                >
+                  {{ getEstadoText(cliente.estado_cliente) }}
+                </span>
+              </div>
+              <p class="text-xs text-gray-500 mt-1">{{ cliente.email }}</p>
+              <p class="text-xs text-gray-500">
+                Categoría favorita: {{ cliente.categoria_favorita }}
+              </p>
+
+              <!-- Información adicional -->
+              <div
+                class="flex items-center mt-2 space-x-4 text-xs text-gray-500"
+              >
+                <span
+                  >Última compra: {{ formatDate(cliente.ultima_compra) }}</span
+                >
+                <span
+                  >Hace
+                  {{ getDiasSinComprar(cliente.ultima_compra) }} días</span
+                >
+                @if (cliente.mora_actual > 0) {
+                <span [class]="getMoraColor(cliente.mora_actual)">
+                  Mora: {{ formatCurrency(cliente.mora_actual) }}
+                </span>
+                }
+              </div>
+            </div>
+
+            <!-- Métricas principales -->
+            <div class="flex-shrink-0 text-right ml-4">
+              @if (activeView() === 'gastadores') {
+              <div class="text-lg font-bold text-green-600">
+                {{ formatCurrency(cliente.total_gastado) }}
+              </div>
+              <div class="text-xs text-gray-500">total gastado</div>
+              } @else if (activeView() === 'frecuentes') {
+              <div class="text-lg font-bold text-blue-600">
+                {{ cliente.frecuencia_compra }}
+              </div>
+              <div class="text-xs text-gray-500">días promedio</div>
+              } @else if (activeView() === 'ticket') {
+              <div class="text-lg font-bold text-purple-600">
+                {{ formatCurrency(cliente.ticket_promedio) }}
+              </div>
+              <div class="text-xs text-gray-500">ticket promedio</div>
+              } @else if (activeView() === 'nuevos') {
+              <div class="text-lg font-bold text-orange-600">
+                {{ cliente.total_pedidos }}
+              </div>
+              <div class="text-xs text-gray-500">pedidos</div>
+              }
+            </div>
+          </div>
+
+          <!-- Métricas secundarias -->
+          <div class="flex items-center justify-between mt-3">
+            <div class="flex items-center space-x-4 text-xs text-gray-500">
+              <span>{{ cliente.total_pedidos }} pedidos</span>
+              <span
+                >{{ formatCurrency(cliente.ticket_promedio) }} promedio</span
+              >
+              <span>{{ cliente.puntos_fidelidad }} puntos</span>
+              @if (cliente.credito_disponible > 0) {
+              <span class="text-blue-600">
+                Crédito: {{ formatCurrency(cliente.credito_disponible) }}
+              </span>
+              }
+            </div>
+
+            <div class="flex items-center space-x-3">
+              <!-- Frecuencia de compra -->
+              <div class="flex items-center space-x-1">
+                <svg
+                  class="w-4 h-4 text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                <span class="text-xs text-gray-500">
+                  Cada {{ cliente.frecuencia_compra }} días
+                </span>
+              </div>
+
+              <!-- Tendencia -->
+              <div class="flex items-center space-x-1">
+                <svg
+                  class="w-4 h-4"
+                  [class]="getTendenciaColor(cliente.tendencia)"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    [attr.d]="getTendenciaIcon(cliente.tendencia)"
+                  ></path>
+                </svg>
+                <span
+                  class="text-xs font-medium"
+                  [class]="getTendenciaColor(cliente.tendencia)"
+                >
+                  {{ formatPercentage(cliente.cambio_porcentual) }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Barra de progreso de fidelidad -->
+          <div class="mt-3">
+            <div
+              class="flex items-center justify-between text-xs text-gray-500 mb-1"
+            >
+              <span>Puntos de fidelidad</span>
+              <span>{{ cliente.puntos_fidelidad }} / 5000</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div
+                class="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-500"
+                [style.width.%]="(cliente.puntos_fidelidad / 5000) * 100"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+  }
+
+  <!-- Estado vacío -->
+  @if (!isLoading() && !error() && clientesActivos().length === 0) {
+  <div class="text-center py-12">
+    <svg
+      class="mx-auto h-12 w-12 text-gray-400"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
+      ></path>
+    </svg>
+    <h3 class="mt-2 text-sm font-medium text-gray-900">
+      No hay clientes disponibles
+    </h3>
+    <p class="mt-1 text-sm text-gray-500">
+      No se encontraron clientes para el período seleccionado.
+    </p>
+  </div>
+  }
+</div>

@@ -1,0 +1,504 @@
+/* Contenedor principal */
+.metodo-pago-selector {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+/* Header */
+.pago-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.pago-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.pago-icon {
+  width: 24px;
+  height: 24px;
+  color: #3b82f6;
+}
+
+.pago-subtitle {
+  color: #6b7280;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Grid de métodos de pago */
+.metodos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.metodo-card {
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+  position: relative;
+}
+
+.metodo-card:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.metodo-card.selected {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.metodo-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.metodo-icon-container {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.metodo-card.selected .metodo-icon-container {
+  background: #dbeafe;
+}
+
+.metodo-icon {
+  width: 24px;
+  height: 24px;
+  color: #6b7280;
+}
+
+.metodo-card.selected .metodo-icon {
+  color: #3b82f6;
+}
+
+.metodo-info {
+  flex: 1;
+}
+
+.metodo-nombre {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+}
+
+.metodo-descripcion {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.metodo-selector {
+  flex-shrink: 0;
+}
+
+.metodo-selector input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #3b82f6;
+}
+
+.metodo-comision {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 12px;
+}
+
+.comision-label {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.comision-valor {
+  font-size: 12px;
+  font-weight: 600;
+  color: #f59e0b;
+  background: #fef3c7;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Sección de datos adicionales */
+.datos-adicionales-section {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.datos-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 20px 0;
+}
+
+.datos-form {
+  width: 100%;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group-full {
+  grid-column: 1 / -1;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.form-input,
+.form-select {
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-input.ng-invalid.ng-touched,
+.form-select.ng-invalid.ng-touched {
+  border-color: #ef4444;
+}
+
+.form-input.ng-invalid.ng-touched:focus,
+.form-select.ng-invalid.ng-touched:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.form-file {
+  padding: 8px 12px;
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #fafafa;
+}
+
+.form-file:hover {
+  border-color: #3b82f6;
+  background: #f0f9ff;
+}
+
+.form-error {
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 4px;
+}
+
+.form-help {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 4px 0 0 0;
+}
+
+/* Resumen de pago */
+.resumen-pago {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.resumen-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 20px 0;
+}
+
+.resumen-content {
+  margin-bottom: 20px;
+}
+
+.resumen-linea {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.resumen-linea:last-child {
+  border-bottom: none;
+}
+
+.resumen-linea.comision {
+  color: #f59e0b;
+}
+
+.resumen-linea.total {
+  font-weight: 600;
+  font-size: 16px;
+  color: #1f2937;
+  border-top: 2px solid #e2e8f0;
+  margin-top: 8px;
+  padding-top: 16px;
+}
+
+.resumen-label {
+  font-size: 14px;
+}
+
+.resumen-valor {
+  font-weight: 500;
+}
+
+.metodo-seleccionado-info {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.metodo-seleccionado-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.metodo-seleccionado-icon {
+  width: 20px;
+  height: 20px;
+  color: #3b82f6;
+}
+
+.metodo-seleccionado-nombre {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.pago-instrucciones {
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.instrucciones-text {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Estado sin selección */
+.estado-sin-seleccion {
+  text-align: center;
+  padding: 48px 24px;
+  color: #6b7280;
+}
+
+.estado-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 16px;
+  color: #9ca3af;
+}
+
+.estado-titulo {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 8px 0;
+}
+
+.estado-mensaje {
+  font-size: 14px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .metodo-pago-selector {
+    padding: 16px;
+  }
+
+  .metodos-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metodo-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .metodo-selector {
+    align-self: flex-end;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .resumen-linea {
+    font-size: 14px;
+  }
+
+  .datos-adicionales-section,
+  .resumen-pago {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pago-title {
+    font-size: 18px;
+  }
+
+  .metodo-card {
+    padding: 16px;
+  }
+
+  .metodo-header {
+    gap: 8px;
+  }
+
+  .metodo-icon-container {
+    width: 40px;
+    height: 40px;
+  }
+
+  .metodo-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .metodo-nombre {
+    font-size: 15px;
+  }
+
+  .metodo-descripcion {
+    font-size: 12px;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.datos-adicionales-section,
+.resumen-pago {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Estados de validación */
+.form-input.ng-valid.ng-touched {
+  border-color: #10b981;
+}
+
+.form-select.ng-valid.ng-touched {
+  border-color: #10b981;
+}
+
+/* Mejoras de accesibilidad */
+.metodo-card:focus-within {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-file:focus {
+  outline: none;
+}
+
+/* Estilos para radio buttons personalizados */
+.metodo-selector input[type="radio"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #d1d5db;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.metodo-selector input[type="radio"]:checked {
+  border-color: #3b82f6;
+  background: #3b82f6;
+}
+
+.metodo-selector input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+
+.metodo-selector input[type="radio"]:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}

@@ -1,0 +1,600 @@
+<!-- Header -->
+<div class="bg-white shadow-sm border-b border-gray-200">
+  <div class="px-4 py-6 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between">
+      <div>
+        <nav class="flex" aria-label="Breadcrumb">
+          <ol class="flex items-center space-x-4">
+            <li>
+              <div>
+                <a
+                  routerLink="/admin/variaciones-producto"
+                  class="text-gray-400 hover:text-gray-500"
+                >
+                  <svg
+                    class="flex-shrink-0 h-5 w-5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  <span class="sr-only">Volver</span>
+                </a>
+              </div>
+            </li>
+            <li>
+              <div class="flex items-center">
+                <svg
+                  class="flex-shrink-0 h-5 w-5 text-gray-300"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                <a
+                  routerLink="/admin/variaciones-producto"
+                  class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
+                >
+                  Variaciones
+                </a>
+              </div>
+            </li>
+            <li>
+              <div class="flex items-center">
+                <svg
+                  class="flex-shrink-0 h-5 w-5 text-gray-300"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                <span class="ml-4 text-sm font-medium text-gray-500">
+                  Nueva Variación
+                </span>
+              </div>
+            </li>
+          </ol>
+        </nav>
+        <h1 class="mt-2 text-2xl font-bold text-gray-900">
+          Crear Nueva Variación
+        </h1>
+        <p class="mt-1 text-sm text-gray-500">
+          Completa la información para crear una nueva variación de producto
+        </p>
+      </div>
+      <div class="flex items-center space-x-3">
+        <button
+          type="button"
+          (click)="togglePreview()"
+          class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+            ></path>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+            ></path>
+          </svg>
+          {{ showPreview() ? "Ocultar" : "Vista Previa" }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mensaje de éxito -->
+@if (success()) {
+<div class="bg-green-50 border border-green-200 rounded-md p-4 m-4">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <svg
+        class="h-5 w-5 text-green-400"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+        ></path>
+      </svg>
+    </div>
+    <div class="ml-3">
+      <h3 class="text-sm font-medium text-green-800">
+        ¡Variación creada exitosamente!
+      </h3>
+      <div class="mt-2 text-sm text-green-700">
+        <p>Redirigiendo al listado de variaciones...</p>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Mensaje de error -->
+@if (error()) {
+<div class="bg-red-50 border border-red-200 rounded-md p-4 m-4">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <svg
+        class="h-5 w-5 text-red-400"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+        ></path>
+      </svg>
+    </div>
+    <div class="ml-3">
+      <h3 class="text-sm font-medium text-red-800">Error al crear variación</h3>
+      <div class="mt-2 text-sm text-red-700">
+        <p>{{ error() }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Contenido principal -->
+<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Formulario principal -->
+    <div class="lg:col-span-2">
+      <form [formGroup]="variacionForm" (ngSubmit)="onSubmit()">
+        <!-- Información básica -->
+        <div class="bg-white shadow rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+              Información Básica
+            </h3>
+
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <!-- Producto -->
+              <div class="sm:col-span-2">
+                <label
+                  for="producto_id"
+                  class="block text-sm font-medium text-gray-700"
+                >
+                  Producto *
+                </label>
+                <select
+                  id="producto_id"
+                  formControlName="producto_id"
+                  [class]="
+                    isFieldInvalid('producto_id')
+                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                      : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                  "
+                  class="mt-1 block w-full pl-3 pr-10 py-2 text-base rounded-md shadow-sm sm:text-sm"
+                >
+                  <option value="">Selecciona un producto</option>
+                  @for (producto of productos(); track producto.id) {
+                  <option [value]="producto.id">
+                    {{ producto.nombre }} ({{ producto.sku }})
+                  </option>
+                  }
+                </select>
+                @if (isFieldInvalid('producto_id')) {
+                <p class="mt-2 text-sm text-red-600">
+                  {{ getFieldError("producto_id") }}
+                </p>
+                }
+              </div>
+
+              <!-- SKU -->
+              <div>
+                <label
+                  for="sku"
+                  class="block text-sm font-medium text-gray-700"
+                >
+                  SKU *
+                </label>
+                <input
+                  type="text"
+                  id="sku"
+                  formControlName="sku"
+                  placeholder="Ej: PROD-VAR-001"
+                  [class]="
+                    isFieldInvalid('sku')
+                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                      : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                  "
+                  class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm rounded-md"
+                />
+                @if (isFieldInvalid('sku')) {
+                <p class="mt-2 text-sm text-red-600">
+                  {{ getFieldError("sku") }}
+                </p>
+                }
+              </div>
+
+              <!-- Stock -->
+              <div>
+                <label
+                  for="stock"
+                  class="block text-sm font-medium text-gray-700"
+                >
+                  Stock *
+                </label>
+                <input
+                  type="number"
+                  id="stock"
+                  formControlName="stock"
+                  min="0"
+                  placeholder="0"
+                  [class]="
+                    isFieldInvalid('stock')
+                      ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                      : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                  "
+                  class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm rounded-md"
+                />
+                @if (isFieldInvalid('stock')) {
+                <p class="mt-2 text-sm text-red-600">
+                  {{ getFieldError("stock") }}
+                </p>
+                }
+              </div>
+
+              <!-- Precio -->
+              <div>
+                <label
+                  for="precio"
+                  class="block text-sm font-medium text-gray-700"
+                >
+                  Precio *
+                </label>
+                <div class="mt-1 relative rounded-md shadow-sm">
+                  <div
+                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                  >
+                    <span class="text-gray-500 sm:text-sm">S/</span>
+                  </div>
+                  <input
+                    type="number"
+                    id="precio"
+                    formControlName="precio"
+                    step="0.01"
+                    min="0.01"
+                    placeholder="0.00"
+                    [class]="
+                      isFieldInvalid('precio')
+                        ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                        : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                    "
+                    class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-8 pr-12 sm:text-sm rounded-md"
+                  />
+                </div>
+                @if (isFieldInvalid('precio')) {
+                <p class="mt-2 text-sm text-red-600">
+                  {{ getFieldError("precio") }}
+                </p>
+                }
+              </div>
+
+              <!-- Precio de oferta -->
+              <div>
+                <label
+                  for="precio_oferta"
+                  class="block text-sm font-medium text-gray-700"
+                >
+                  Precio de Oferta
+                </label>
+                <div class="mt-1 relative rounded-md shadow-sm">
+                  <div
+                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                  >
+                    <span class="text-gray-500 sm:text-sm">S/</span>
+                  </div>
+                  <input
+                    type="number"
+                    id="precio_oferta"
+                    formControlName="precio_oferta"
+                    step="0.01"
+                    min="0"
+                    placeholder="0.00"
+                    [class]="
+                      isFieldInvalid('precio_oferta')
+                        ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                        : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                    "
+                    class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-8 pr-12 sm:text-sm rounded-md"
+                  />
+                </div>
+                @if (isFieldInvalid('precio_oferta')) {
+                <p class="mt-2 text-sm text-red-600">
+                  {{ getFieldError("precio_oferta") }}
+                </p>
+                } @if (descuentoPorcentaje() > 0) {
+                <p class="mt-1 text-sm text-green-600">
+                  Descuento: {{ descuentoPorcentaje().toFixed(1) }}%
+                </p>
+                }
+              </div>
+            </div>
+
+            <!-- Estado activo -->
+            <div class="mt-6">
+              <div class="flex items-center">
+                <input
+                  id="activo"
+                  formControlName="activo"
+                  type="checkbox"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                />
+                <label for="activo" class="ml-2 block text-sm text-gray-900">
+                  Variación activa
+                </label>
+              </div>
+              <p class="mt-1 text-sm text-gray-500">
+                Las variaciones inactivas no se mostrarán en la tienda
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Atributos -->
+        @if (hasSelectedProducto() && atributos().length > 0) {
+        <div class="mt-6 bg-white shadow rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+              Atributos del Producto
+            </h3>
+
+            <div
+              formGroupName="atributos"
+              class="grid grid-cols-1 gap-6 sm:grid-cols-2"
+            >
+              @for (atributo of atributos(); track atributo.id) {
+              <div>
+                <label
+                  [for]="atributo.slug"
+                  class="block text-sm font-medium text-gray-700"
+                >
+                  {{ atributo.nombre }}
+                  @if (atributo.requerido) {
+                  <span class="text-red-500">*</span>
+                  }
+                </label>
+                @if (atributo.tipo === 'color') {
+                <input
+                  type="color"
+                  [id]="atributo.slug"
+                  [formControlName]="atributo.slug"
+                  class="mt-1 h-10 w-20 border border-gray-300 rounded-md"
+                />
+                } @else {
+                <input
+                  type="text"
+                  [id]="atributo.slug"
+                  [formControlName]="atributo.slug"
+                  [placeholder]="'Ingresa ' + atributo.nombre.toLowerCase()"
+                  class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                />
+                }
+              </div>
+              }
+            </div>
+          </div>
+        </div>
+        }
+
+        <!-- Botones de acción -->
+        <div class="mt-6 flex items-center justify-end space-x-4">
+          <button
+            type="button"
+            (click)="goBack()"
+            class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            (click)="resetForm()"
+            class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Limpiar
+          </button>
+          <button
+            type="submit"
+            [disabled]="!isFormValid() || loading()"
+            [class]="
+              !isFormValid() || loading()
+                ? 'opacity-50 cursor-not-allowed'
+                : 'hover:bg-indigo-700'
+            "
+            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            @if (loading()) {
+            <svg
+              class="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            Creando... } @else {
+            <svg
+              class="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 4v16m8-8H4"
+              ></path>
+            </svg>
+            Crear Variación }
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Panel lateral - Vista previa -->
+    <div class="lg:col-span-1">
+      @if (showPreview()) {
+      <div class="bg-white shadow rounded-lg sticky top-6">
+        <div class="px-4 py-5 sm:p-6">
+          <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+            Vista Previa
+          </h3>
+
+          @if (hasSelectedProducto()) {
+          <div class="space-y-4">
+            <!-- Producto seleccionado -->
+            <div>
+              <h4 class="text-sm font-medium text-gray-700">Producto</h4>
+              <p class="text-sm text-gray-900">
+                {{ selectedProducto()?.nombre }}
+              </p>
+              <p class="text-xs text-gray-500">{{ selectedProducto()?.sku }}</p>
+            </div>
+
+            <!-- SKU de la variación -->
+            @if (variacionForm.get('sku')?.value) {
+            <div>
+              <h4 class="text-sm font-medium text-gray-700">SKU Variación</h4>
+              <p class="text-sm text-gray-900">
+                {{ variacionForm.get("sku")?.value }}
+              </p>
+            </div>
+            }
+
+            <!-- Precios -->
+            @if (variacionForm.get('precio')?.value) {
+            <div>
+              <h4 class="text-sm font-medium text-gray-700">Precio</h4>
+              <div class="flex items-center space-x-2">
+                <span class="text-lg font-semibold text-gray-900">
+                  {{ formatPrice(variacionForm.get("precio")?.value) }}
+                </span>
+                @if (precioConDescuento()) {
+                <span class="text-sm text-green-600 font-medium">
+                  {{ formatPrice(precioConDescuento()!) }}
+                </span>
+                }
+              </div>
+              @if (descuentoPorcentaje() > 0) {
+              <p class="text-xs text-green-600">
+                Descuento: {{ descuentoPorcentaje().toFixed(1) }}%
+              </p>
+              }
+            </div>
+            }
+
+            <!-- Stock -->
+            @if (variacionForm.get('stock')?.value !== null) {
+            <div>
+              <h4 class="text-sm font-medium text-gray-700">Stock</h4>
+              <p class="text-sm text-gray-900">
+                {{ variacionForm.get("stock")?.value }} unidades
+              </p>
+            </div>
+            }
+
+            <!-- Estado -->
+            <div>
+              <h4 class="text-sm font-medium text-gray-700">Estado</h4>
+              <span
+                [class]="
+                  variacionForm.get('activo')?.value
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-red-100 text-red-800'
+                "
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+              >
+                {{ variacionForm.get("activo")?.value ? "Activa" : "Inactiva" }}
+              </span>
+            </div>
+
+            <!-- Atributos -->
+            @if (hasAtributosValues()) {
+            <div>
+              <h4 class="text-sm font-medium text-gray-700">Atributos</h4>
+              <div class="mt-2 space-y-1">
+                @for (attr of getAtributosEntries(); track attr.key) { @if
+                (attr.value) {
+                <div class="flex items-center justify-between">
+                  <span class="text-xs text-gray-500">{{ attr.key }}:</span>
+                  <span class="text-xs text-gray-900">{{ attr.value }}</span>
+                </div>
+                } }
+              </div>
+            </div>
+            }
+          </div>
+          } @else {
+          <div class="text-center py-6">
+            <svg
+              class="mx-auto h-12 w-12 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+              ></path>
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">
+              Selecciona un producto
+            </h3>
+            <p class="mt-1 text-sm text-gray-500">
+              Elige un producto para ver la vista previa de la variación
+            </p>
+          </div>
+          }
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>

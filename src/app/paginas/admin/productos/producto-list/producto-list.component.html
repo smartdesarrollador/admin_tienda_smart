@@ -1,0 +1,1296 @@
+<!-- Header con título y acciones principales -->
+<div class="bg-white shadow-sm border-b border-gray-200">
+  <div class="px-4 py-6 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">Productos</h1>
+        <p class="mt-1 text-sm text-gray-500">
+          Gestiona el catálogo de productos de tu tienda
+        </p>
+      </div>
+      <div class="mt-4 sm:mt-0 flex flex-col sm:flex-row gap-3">
+        <button
+          type="button"
+          (click)="showStatistics.set(!showStatistics())"
+          class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+            ></path>
+          </svg>
+          Estadísticas
+        </button>
+        <button
+          type="button"
+          (click)="refresh()"
+          class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            ></path>
+          </svg>
+          Actualizar
+        </button>
+        <button
+          type="button"
+          (click)="createProducto()"
+          class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            ></path>
+          </svg>
+          Nuevo Producto
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Panel de estadísticas -->
+@if (showStatistics()) {
+<div class="bg-gray-50 border-b border-gray-200">
+  <div class="px-4 py-6 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center"
+            >
+              <svg
+                class="w-5 h-5 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">
+                Total Productos
+              </dt>
+              <dd class="text-lg font-medium text-gray-900">
+                {{ totalProductos() }}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="w-8 h-8 bg-green-500 rounded-md flex items-center justify-center"
+            >
+              <svg
+                class="w-5 h-5 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">
+                Activos
+              </dt>
+              <dd class="text-lg font-medium text-gray-900">
+                {{ productosActivos() }}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center"
+            >
+              <svg
+                class="w-5 h-5 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">
+                Destacados
+              </dt>
+              <dd class="text-lg font-medium text-gray-900">
+                {{ productosDestacados() }}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="w-8 h-8 bg-red-500 rounded-md flex items-center justify-center"
+            >
+              <svg
+                class="w-5 h-5 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">
+                Sin Stock
+              </dt>
+              <dd class="text-lg font-medium text-gray-900">
+                {{ productosSinStock() }}
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Filtros y búsqueda -->
+<div class="bg-white border-b border-gray-200">
+  <div class="px-4 py-4 sm:px-6 lg:px-8">
+    <form [formGroup]="filterForm">
+      <div
+        class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"
+      >
+        <!-- Búsqueda rápida -->
+        <div class="flex-1 max-w-lg">
+          <div class="relative">
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            >
+              <svg
+                class="h-5 w-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                ></path>
+              </svg>
+            </div>
+            <input
+              type="text"
+              formControlName="nombre"
+              placeholder="Buscar productos por nombre..."
+              class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            />
+          </div>
+        </div>
+
+        <!-- Controles de vista y filtros -->
+        <div class="flex items-center gap-3">
+          <!-- Toggle de filtros -->
+          <button
+            type="button"
+            (click)="showFilters.set(!showFilters())"
+            class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            [class.bg-blue-50]="showFilters()"
+            [class.text-blue-700]="showFilters()"
+          >
+            <svg
+              class="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"
+              ></path>
+            </svg>
+            Filtros
+          </button>
+
+          <!-- Selector de elementos por página -->
+          <select
+            formControlName="per_page"
+            (change)="changePageSize()"
+            class="block w-20 pl-3 pr-8 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+          >
+            @for (option of perPageOptions; track option) {
+            <option [value]="option">{{ option }}</option>
+            }
+          </select>
+
+          <!-- Modo de vista -->
+          <div class="flex rounded-md shadow-sm">
+            <button
+              type="button"
+              (click)="viewMode.set('table')"
+              class="relative inline-flex items-center px-3 py-2 rounded-l-md border text-sm font-medium focus:z-10 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              [class.bg-blue-50]="viewMode() === 'table'"
+              [class.text-blue-700]="viewMode() === 'table'"
+              [class.border-blue-200]="viewMode() === 'table'"
+              [class.bg-white]="viewMode() !== 'table'"
+              [class.text-gray-500]="viewMode() !== 'table'"
+              [class.border-gray-300]="viewMode() !== 'table'"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                ></path>
+              </svg>
+            </button>
+            <button
+              type="button"
+              (click)="viewMode.set('grid')"
+              class="relative -ml-px inline-flex items-center px-3 py-2 rounded-r-md border text-sm font-medium focus:z-10 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+              [class.bg-blue-50]="viewMode() === 'grid'"
+              [class.text-blue-700]="viewMode() === 'grid'"
+              [class.border-blue-200]="viewMode() === 'grid'"
+              [class.bg-white]="viewMode() !== 'grid'"
+              [class.text-gray-500]="viewMode() !== 'grid'"
+              [class.border-gray-300]="viewMode() !== 'grid'"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel de filtros expandible -->
+      @if (showFilters()) {
+      <div class="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- SKU -->
+          <div>
+            <label
+              for="sku"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >SKU</label
+            >
+            <input
+              type="text"
+              id="sku"
+              formControlName="sku"
+              placeholder="Buscar por SKU"
+              class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            />
+          </div>
+
+          <!-- Marca -->
+          <div>
+            <label
+              for="marca"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Marca</label
+            >
+            <input
+              type="text"
+              id="marca"
+              formControlName="marca"
+              placeholder="Buscar por marca"
+              class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            />
+          </div>
+
+          <!-- Modelo -->
+          <div>
+            <label
+              for="modelo"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Modelo</label
+            >
+            <input
+              type="text"
+              id="modelo"
+              formControlName="modelo"
+              placeholder="Buscar por modelo"
+              class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            />
+          </div>
+
+          <!-- Precio mínimo -->
+          <div>
+            <label
+              for="precio_min"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Precio Mín.</label
+            >
+            <input
+              type="number"
+              id="precio_min"
+              formControlName="precio_min"
+              placeholder="0.00"
+              step="0.01"
+              min="0"
+              class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            />
+          </div>
+
+          <!-- Precio máximo -->
+          <div>
+            <label
+              for="precio_max"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Precio Máx.</label
+            >
+            <input
+              type="number"
+              id="precio_max"
+              formControlName="precio_max"
+              placeholder="0.00"
+              step="0.01"
+              min="0"
+              class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            />
+          </div>
+
+          <!-- Con stock -->
+          <div>
+            <label
+              for="con_stock"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Stock</label
+            >
+            <select
+              id="con_stock"
+              formControlName="con_stock"
+              class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            >
+              <option value="">Todos</option>
+              <option value="true">Con stock</option>
+              <option value="false">Sin stock</option>
+            </select>
+          </div>
+
+          <!-- Destacado -->
+          <div>
+            <label
+              for="destacado"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Destacado</label
+            >
+            <select
+              id="destacado"
+              formControlName="destacado"
+              class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            >
+              <option value="">Todos</option>
+              <option value="true">Destacados</option>
+              <option value="false">No destacados</option>
+            </select>
+          </div>
+
+          <!-- Activo -->
+          <div>
+            <label
+              for="activo"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Estado</label
+            >
+            <select
+              id="activo"
+              formControlName="activo"
+              class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            >
+              <option value="">Todos</option>
+              <option value="true">Activos</option>
+              <option value="false">Inactivos</option>
+            </select>
+          </div>
+
+          <!-- Ordenar por -->
+          <div>
+            <label
+              for="order_by"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Ordenar por</label
+            >
+            <select
+              id="order_by"
+              formControlName="order_by"
+              class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            >
+              @for (option of orderByOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Dirección -->
+          <div>
+            <label
+              for="order_direction"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Dirección</label
+            >
+            <select
+              id="order_direction"
+              formControlName="order_direction"
+              class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            >
+              @for (option of orderDirectionOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Botones de acción -->
+          <div class="md:col-span-2 lg:col-span-4 flex justify-end gap-3 pt-4">
+            <button
+              type="button"
+              (click)="clearFilters()"
+              class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Limpiar Filtros
+            </button>
+          </div>
+        </div>
+      </div>
+      }
+    </form>
+  </div>
+</div>
+
+<!-- Acciones masivas -->
+@if (hasSelection) {
+<div class="bg-blue-50 border-b border-blue-200">
+  <div class="px-4 py-3 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <span class="text-sm font-medium text-blue-900">
+          {{ selectedProducts().length }} producto(s) seleccionado(s)
+        </span>
+      </div>
+      <div class="flex items-center gap-3">
+        <button
+          type="button"
+          (click)="bulkToggleDestacado()"
+          class="inline-flex items-center px-3 py-2 border border-blue-300 rounded-md text-sm font-medium text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          Toggle Destacado
+        </button>
+        <button
+          type="button"
+          (click)="bulkToggleActivo()"
+          class="inline-flex items-center px-3 py-2 border border-blue-300 rounded-md text-sm font-medium text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          Toggle Activo
+        </button>
+        <button
+          type="button"
+          (click)="bulkDelete()"
+          class="inline-flex items-center px-3 py-2 border border-red-300 rounded-md text-sm font-medium text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+        >
+          Eliminar
+        </button>
+        <button
+          type="button"
+          (click)="clearSelection()"
+          class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Loading state -->
+@if (loading()) {
+<div class="flex justify-center items-center py-12">
+  <div
+    class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"
+  ></div>
+  <span class="ml-3 text-gray-600">Cargando productos...</span>
+</div>
+}
+
+<!-- Error state -->
+@if (error()) {
+<div class="bg-red-50 border border-red-200 rounded-md p-4 m-4">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <svg
+        class="h-5 w-5 text-red-400"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+        ></path>
+      </svg>
+    </div>
+    <div class="ml-3">
+      <h3 class="text-sm font-medium text-red-800">
+        Error al cargar productos
+      </h3>
+      <div class="mt-2 text-sm text-red-700">
+        <p>{{ error() }}</p>
+      </div>
+      <div class="mt-4">
+        <button
+          type="button"
+          (click)="refresh()"
+          class="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+        >
+          Reintentar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Contenido principal -->
+@if (!loading() && !error()) {
+<!-- Vista de tabla -->
+@if (viewMode() === 'table') {
+<div class="bg-white shadow overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            <input
+              type="checkbox"
+              [checked]="isAllSelected"
+              (change)="isAllSelected ? clearSelection() : selectAllProducts()"
+              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            Producto
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            SKU
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            Precio
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            Stock
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            Estado
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            Acciones
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        @for (producto of productos(); track trackByProductId($index, producto))
+        {
+        <tr
+          class="hover:bg-gray-50"
+          [class.bg-blue-50]="isSelected(producto.id)"
+        >
+          <td class="px-6 py-4 whitespace-nowrap">
+            <input
+              type="checkbox"
+              [checked]="isSelected(producto.id)"
+              (change)="toggleProductSelection(producto.id)"
+              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="flex items-center">
+              <div class="flex-shrink-0 h-12 w-12">
+                @if (producto.imagen_principal) {
+                <img
+                  class="h-12 w-12 rounded-lg object-cover"
+                  [src]="producto.imagen_principal"
+                  [alt]="producto.nombre"
+                />
+                } @else {
+                <div
+                  class="h-12 w-12 rounded-lg bg-gray-200 flex items-center justify-center"
+                >
+                  <svg
+                    class="h-6 w-6 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                </div>
+                }
+              </div>
+              <div class="ml-4">
+                <div class="text-sm font-medium text-gray-900">
+                  {{ producto.nombre }}
+                </div>
+                @if (producto.marca) {
+                <div class="text-sm text-gray-500">{{ producto.marca }}</div>
+                }
+              </div>
+            </div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+            {{ producto.sku }}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm text-gray-900">
+              {{ formatPrice(producto.precio) }}
+            </div>
+            @if (producto.precio_oferta) {
+            <div class="text-sm text-green-600">
+              Oferta: {{ formatPrice(producto.precio_oferta) }}
+            </div>
+            }
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span
+              class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+              [class.bg-green-100]="
+                getStockStatus(producto.stock) === 'success'
+              "
+              [class.text-green-800]="
+                getStockStatus(producto.stock) === 'success'
+              "
+              [class.bg-yellow-100]="
+                getStockStatus(producto.stock) === 'warning'
+              "
+              [class.text-yellow-800]="
+                getStockStatus(producto.stock) === 'warning'
+              "
+              [class.bg-red-100]="getStockStatus(producto.stock) === 'danger'"
+              [class.text-red-800]="getStockStatus(producto.stock) === 'danger'"
+            >
+              {{ producto.stock }} - {{ getStockStatusText(producto.stock) }}
+            </span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="flex items-center gap-2">
+              <span
+                class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                [class.bg-green-100]="producto.activo"
+                [class.text-green-800]="producto.activo"
+                [class.bg-red-100]="!producto.activo"
+                [class.text-red-800]="!producto.activo"
+              >
+                {{ producto.activo ? "Activo" : "Inactivo" }}
+              </span>
+              @if (producto.destacado) {
+              <span
+                class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800"
+              >
+                Destacado
+              </span>
+              }
+            </div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                (click)="viewProducto(producto.id)"
+                class="text-blue-600 hover:text-blue-900"
+                title="Ver producto"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  ></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  ></path>
+                </svg>
+              </button>
+              <button
+                type="button"
+                (click)="editProducto(producto.id)"
+                class="text-indigo-600 hover:text-indigo-900"
+                title="Editar producto"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  ></path>
+                </svg>
+              </button>
+              <button
+                type="button"
+                (click)="toggleDestacado(producto)"
+                class="hover:text-yellow-900"
+                [class.text-yellow-600]="producto.destacado"
+                [class.text-gray-400]="!producto.destacado"
+                title="Toggle destacado"
+              >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                  ></path>
+                </svg>
+              </button>
+              <button
+                type="button"
+                (click)="toggleActivo(producto)"
+                class="hover:text-green-900"
+                [class.text-green-600]="producto.activo"
+                [class.text-red-600]="!producto.activo"
+                title="Toggle activo"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+              </button>
+              <button
+                type="button"
+                (click)="deleteProducto(producto)"
+                class="text-red-600 hover:text-red-900"
+                title="Eliminar producto"
+              >
+                <svg
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+            <div class="flex flex-col items-center">
+              <svg
+                class="w-12 h-12 text-gray-400 mb-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                ></path>
+              </svg>
+              <p class="text-lg font-medium text-gray-900 mb-2">
+                No hay productos
+              </p>
+              <p class="text-gray-500 mb-4">
+                Comienza creando tu primer producto
+              </p>
+              <button
+                type="button"
+                (click)="createProducto()"
+                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Crear Producto
+              </button>
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+}
+
+<!-- Vista de grid -->
+@if (viewMode() === 'grid') {
+<div class="bg-white">
+  <div class="px-4 py-6 sm:px-6 lg:px-8">
+    @if (hasProductos()) {
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+    >
+      @for (producto of productos(); track trackByProductId($index, producto)) {
+      <div
+        class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200"
+        [class.ring-2]="isSelected(producto.id)"
+        [class.ring-blue-500]="isSelected(producto.id)"
+      >
+        <!-- Imagen del producto -->
+        <div class="relative">
+          @if (producto.imagen_principal) {
+          <img
+            class="w-full h-48 object-cover"
+            [src]="producto.imagen_principal"
+            [alt]="producto.nombre"
+          />
+          } @else {
+          <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+            <svg
+              class="w-12 h-12 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+              ></path>
+            </svg>
+          </div>
+          }
+
+          <!-- Checkbox de selección -->
+          <div class="absolute top-2 left-2">
+            <input
+              type="checkbox"
+              [checked]="isSelected(producto.id)"
+              (change)="toggleProductSelection(producto.id)"
+              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+          </div>
+
+          <!-- Badges de estado -->
+          <div class="absolute top-2 right-2 flex flex-col gap-1">
+            @if (producto.destacado) {
+            <span
+              class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800"
+            >
+              Destacado
+            </span>
+            } @if (!producto.activo) {
+            <span
+              class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800"
+            >
+              Inactivo
+            </span>
+            }
+          </div>
+        </div>
+
+        <!-- Contenido de la tarjeta -->
+        <div class="p-4">
+          <h3 class="text-lg font-medium text-gray-900 mb-2 line-clamp-2">
+            {{ producto.nombre }}
+          </h3>
+
+          @if (producto.marca) {
+          <p class="text-sm text-gray-500 mb-2">{{ producto.marca }}</p>
+          }
+
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <span class="text-lg font-bold text-gray-900">{{
+                formatPrice(producto.precio)
+              }}</span>
+              @if (producto.precio_oferta) {
+              <span class="text-sm text-green-600 ml-2">{{
+                formatPrice(producto.precio_oferta)
+              }}</span>
+              }
+            </div>
+            <span class="text-sm text-gray-500">SKU: {{ producto.sku }}</span>
+          </div>
+
+          <!-- Stock -->
+          <div class="mb-3">
+            <span
+              class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+              [class.bg-green-100]="
+                getStockStatus(producto.stock) === 'success'
+              "
+              [class.text-green-800]="
+                getStockStatus(producto.stock) === 'success'
+              "
+              [class.bg-yellow-100]="
+                getStockStatus(producto.stock) === 'warning'
+              "
+              [class.text-yellow-800]="
+                getStockStatus(producto.stock) === 'warning'
+              "
+              [class.bg-red-100]="getStockStatus(producto.stock) === 'danger'"
+              [class.text-red-800]="getStockStatus(producto.stock) === 'danger'"
+            >
+              Stock: {{ producto.stock }}
+            </span>
+          </div>
+
+          <!-- Acciones -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                (click)="viewProducto(producto.id)"
+                class="text-blue-600 hover:text-blue-900"
+                title="Ver producto"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  ></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  ></path>
+                </svg>
+              </button>
+              <button
+                type="button"
+                (click)="editProducto(producto.id)"
+                class="text-indigo-600 hover:text-indigo-900"
+                title="Editar producto"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                (click)="toggleDestacado(producto)"
+                class="hover:text-yellow-900"
+                [class.text-yellow-600]="producto.destacado"
+                [class.text-gray-400]="!producto.destacado"
+                title="Toggle destacado"
+              >
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                  ></path>
+                </svg>
+              </button>
+              <button
+                type="button"
+                (click)="deleteProducto(producto)"
+                class="text-red-600 hover:text-red-900"
+                title="Eliminar producto"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    } @else {
+    <div class="text-center py-12">
+      <svg
+        class="w-12 h-12 text-gray-400 mx-auto mb-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+        ></path>
+      </svg>
+      <p class="text-lg font-medium text-gray-900 mb-2">No hay productos</p>
+      <p class="text-gray-500 mb-4">Comienza creando tu primer producto</p>
+      <button
+        type="button"
+        (click)="createProducto()"
+        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        Crear Producto
+      </button>
+    </div>
+    }
+  </div>
+</div>
+}
+
+<!-- Paginación -->
+@if (pagination() && totalProductos() > 0) {
+<div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
+  <div class="flex items-center justify-between">
+    <div class="flex-1 flex justify-between sm:hidden">
+      <button
+        type="button"
+        (click)="prevPage()"
+        [disabled]="!hasPrevPage()"
+        class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Anterior
+      </button>
+      <button
+        type="button"
+        (click)="nextPage()"
+        [disabled]="!hasNextPage()"
+        class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Siguiente
+      </button>
+    </div>
+    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+      <div>
+        <p class="text-sm text-gray-700">
+          Mostrando
+          <span class="font-medium">{{ pagination()?.from }}</span>
+          a
+          <span class="font-medium">{{ pagination()?.to }}</span>
+          de
+          <span class="font-medium">{{ totalProductos() }}</span>
+          resultados
+        </p>
+      </div>
+      <div>
+        <nav
+          class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+          aria-label="Pagination"
+        >
+          <button
+            type="button"
+            (click)="prevPage()"
+            [disabled]="!hasPrevPage()"
+            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span class="sr-only">Anterior</span>
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              ></path>
+            </svg>
+          </button>
+
+          @for (link of pagination()?.links; track link.label) { @if (link.url
+          && link.label !== '&laquo; Previous' && link.label !== 'Next &raquo;')
+          {
+          <button
+            type="button"
+            (click)="goToPage(+link.label)"
+            class="relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+            [class.bg-blue-50]="link.active"
+            [class.border-blue-500]="link.active"
+            [class.text-blue-600]="link.active"
+            [class.bg-white]="!link.active"
+            [class.border-gray-300]="!link.active"
+            [class.text-gray-500]="!link.active"
+            [class.hover:bg-gray-50]="!link.active"
+          >
+            {{ link.label }}
+          </button>
+          } }
+
+          <button
+            type="button"
+            (click)="nextPage()"
+            [disabled]="!hasNextPage()"
+            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span class="sr-only">Siguiente</span>
+            <svg
+              class="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              ></path>
+            </svg>
+          </button>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+} }

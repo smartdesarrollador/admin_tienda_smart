@@ -1,0 +1,570 @@
+/* Estilos para el componente MetricasKpi */
+
+/* Animaciones de entrada */
+.kpi-container {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Efectos para cards de KPI */
+.kpi-card {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.kpi-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.kpi-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.kpi-card:hover::before {
+  left: 100%;
+}
+
+/* Efectos para iconos de KPI */
+.kpi-icon {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.kpi-card:hover .kpi-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Animaciones para valores */
+.kpi-value {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.kpi-value:hover {
+  transform: scale(1.05);
+}
+
+/* Efectos para barras de progreso */
+.progress-bar {
+  position: relative;
+  overflow: hidden;
+  background: #e5e7eb;
+  border-radius: 9999px;
+  height: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+  position: relative;
+  transition: width 0.8s ease;
+}
+
+.progress-fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: progressShine 2s infinite;
+}
+
+@keyframes progressShine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Estados de progreso */
+.progress-excelente {
+  background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.progress-bueno {
+  background: linear-gradient(90deg, #eab308, #ca8a04);
+}
+
+.progress-regular {
+  background: linear-gradient(90deg, #f97316, #ea580c);
+}
+
+.progress-critico {
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+}
+
+/* Efectos para tendencias */
+.trend-indicator {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.trend-up {
+  animation: trendUp 2s infinite;
+}
+
+.trend-down {
+  animation: trendDown 2s infinite;
+}
+
+.trend-stable {
+  animation: trendStable 3s infinite;
+}
+
+@keyframes trendUp {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes trendDown {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(2px);
+  }
+}
+
+@keyframes trendStable {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-1px);
+  }
+  75% {
+    transform: translateX(1px);
+  }
+}
+
+/* Efectos para badges de categoría */
+.category-badge {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.category-badge:hover {
+  transform: scale(1.05);
+}
+
+.category-ventas {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  color: #1e40af;
+}
+
+.category-operaciones {
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  color: #166534;
+}
+
+.category-clientes {
+  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+  color: #7c2d12;
+}
+
+.category-financiero {
+  background: linear-gradient(135deg, #fed7aa, #fdba74);
+  color: #9a3412;
+}
+
+/* Estados de KPI */
+.kpi-estado {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.estado-excelente {
+  background: #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+  animation: excellentPulse 2s infinite;
+}
+
+.estado-bueno {
+  background: #eab308;
+  box-shadow: 0 0 10px rgba(234, 179, 8, 0.5);
+}
+
+.estado-regular {
+  background: #f97316;
+  box-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+}
+
+.estado-critico {
+  background: #ef4444;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+  animation: criticalAlert 1s infinite;
+}
+
+@keyframes excellentPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes criticalAlert {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Efectos para botones de categoría */
+.category-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.category-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(59, 130, 246, 0.1),
+    transparent
+  );
+  transition: left 0.3s;
+}
+
+.category-button:hover::before {
+  left: 100%;
+}
+
+.category-button.active {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Efectos para score general */
+.score-general {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.score-excelente {
+  color: #10b981;
+  text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+  animation: scoreGlow 3s infinite;
+}
+
+.score-bueno {
+  color: #eab308;
+  text-shadow: 0 0 10px rgba(234, 179, 8, 0.3);
+}
+
+.score-regular {
+  color: #ef4444;
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+}
+
+@keyframes scoreGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+  }
+}
+
+/* Efectos para fórmulas */
+.formula-container {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.formula-container:hover {
+  background: #f1f5f9;
+  transform: scale(1.02);
+}
+
+.formula-code {
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  transition: all 0.3s ease;
+}
+
+.formula-code:hover {
+  background: #e2e8f0;
+  transform: scale(1.05);
+}
+
+/* Efectos de carga */
+.loading-shimmer {
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Efectos para métricas de resumen */
+.summary-metric {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.summary-metric:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.summary-metric::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.summary-metric:hover::before {
+  transform: scaleX(1);
+}
+
+/* Efectos para valores de KPI */
+.kpi-value-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.kpi-value-main {
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.kpi-value-container:hover .kpi-value-main {
+  transform: scale(1.05);
+}
+
+.kpi-value-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.1),
+    rgba(139, 92, 246, 0.1)
+  );
+  border-radius: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.kpi-value-container:hover .kpi-value-background {
+  opacity: 1;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .kpi-card {
+    padding: 1rem;
+  }
+
+  .kpi-value {
+    font-size: 1.5rem;
+  }
+
+  .progress-bar {
+    height: 6px;
+  }
+
+  .category-button {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .summary-metric {
+    padding: 0.75rem;
+  }
+
+  .kpi-icon {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .formula-container {
+    padding: 0.5rem;
+  }
+}
+
+/* Efectos especiales para KPIs críticos */
+.kpi-critico {
+  position: relative;
+  border: 2px solid #ef4444;
+}
+
+.kpi-critico::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #ef4444, #dc2626, #ef4444);
+  background-size: 200% 100%;
+  animation: criticalBorder 2s infinite;
+}
+
+@keyframes criticalBorder {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Tooltips */
+.tooltip {
+  position: relative;
+}
+
+.tooltip::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2937;
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: #1f2937;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.tooltip:hover::before,
+.tooltip:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+/* Efectos para grid de KPIs */
+.kpis-grid {
+  display: grid;
+  gap: 1.5rem;
+  animation: gridFadeIn 0.8s ease-out;
+}
+
+@keyframes gridFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Efectos para transiciones entre categorías */
+.category-transition {
+  animation: categoryChange 0.5s ease-in-out;
+}
+
+@keyframes categoryChange {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

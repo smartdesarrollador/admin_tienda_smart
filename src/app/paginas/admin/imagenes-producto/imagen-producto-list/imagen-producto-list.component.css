@@ -1,0 +1,215 @@
+/* Estilos personalizados para el componente de listado de imágenes */
+
+/* Animaciones personalizadas */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover effects para las tarjetas de imagen */
+.image-card {
+  transition: all 0.2s ease-in-out;
+}
+
+.image-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Efecto de zoom para las imágenes */
+.image-zoom {
+  transition: transform 0.3s ease-in-out;
+}
+
+.image-zoom:hover {
+  transform: scale(1.05);
+}
+
+/* Indicador de carga personalizado */
+.loading-spinner {
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Estilos para el estado de selección */
+.selected-overlay {
+  background: rgba(99, 102, 241, 0.1);
+  border: 2px solid rgb(99, 102, 241);
+}
+
+/* Transiciones suaves para los filtros */
+.filter-panel {
+  transition: all 0.3s ease-in-out;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.filter-panel.show {
+  max-height: 500px;
+}
+
+/* Estilos para los badges de tipo */
+.badge-tipo {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid;
+}
+
+/* Responsive grid personalizado */
+@media (min-width: 1536px) {
+  .grid-2xl {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}
+
+/* Estilos para el modo lista */
+.list-item {
+  transition: background-color 0.15s ease-in-out;
+}
+
+.list-item:hover {
+  background-color: rgb(249, 250, 251);
+}
+
+/* Estilos para los botones de acción */
+.action-button {
+  transition: all 0.15s ease-in-out;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+}
+
+.action-button:hover {
+  transform: scale(1.1);
+}
+
+/* Estilos para el estado vacío */
+.empty-state {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Estilos para la paginación */
+.pagination-button {
+  transition: all 0.15s ease-in-out;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background-color: rgb(243, 244, 246);
+  transform: translateY(-1px);
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Estilos para el checkbox indeterminado */
+input[type="checkbox"]:indeterminate {
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M4 8h8'/%3e%3c/svg%3e");
+}
+
+/* Estilos para el overlay de carga */
+.loading-overlay {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(2px);
+}
+
+/* Estilos para los tooltips */
+[title] {
+  position: relative;
+}
+
+/* Estilos para el drag and drop (futuro) */
+.draggable {
+  cursor: move;
+}
+
+.drag-over {
+  border: 2px dashed rgb(99, 102, 241);
+  background-color: rgba(99, 102, 241, 0.05);
+}
+
+/* Estilos para el modo oscuro (futuro) */
+@media (prefers-color-scheme: dark) {
+  .dark-mode {
+    background-color: rgb(17, 24, 39);
+    color: rgb(243, 244, 246);
+  }
+}
+
+/* Estilos para la accesibilidad */
+.focus-visible:focus {
+  outline: 2px solid rgb(99, 102, 241);
+  outline-offset: 2px;
+}
+
+/* Estilos para el estado de error */
+.error-state {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* Estilos para las transiciones de vista */
+.view-transition {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Optimizaciones de rendimiento */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+/* Estilos para el scroll suave */
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Estilos para el skeleton loading (futuro) */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

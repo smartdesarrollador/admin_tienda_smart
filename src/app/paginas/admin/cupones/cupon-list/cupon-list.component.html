@@ -1,0 +1,445 @@
+<div
+  class="container mx-auto p-4 sm:p-6 lg:p-8 font-sans bg-gray-50 dark:bg-gray-900 min-h-screen"
+>
+  <!-- Encabezado y Botón de Crear -->
+  <header class="mb-6 flex flex-col sm:flex-row justify-between items-center">
+    <h1
+      class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-4 sm:mb-0"
+    >
+      Gestión de Cupones
+    </h1>
+    <button
+      (click)="navigateToCreate()"
+      class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 flex items-center"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5 mr-2"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+          clip-rule="evenodd"
+        />
+      </svg>
+      Crear Nuevo Cupón
+    </button>
+  </header>
+
+  <!-- Alerta de Error -->
+  @if (error()) {
+  <!-- <app-alert
+    [message]="error()!"
+    type="error"
+    (dismissed)="error.set(null)"
+  ></app-alert> -->
+  <div
+    class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+    role="alert"
+  >
+    <strong class="font-bold">Error:</strong>
+    <span class="block sm:inline">{{ error() }}</span>
+    <span
+      class="absolute top-0 bottom-0 right-0 px-4 py-3"
+      (click)="error.set(null)"
+    >
+      <svg
+        class="fill-current h-6 w-6 text-red-500"
+        role="button"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+      >
+        <title>Close</title>
+        <path
+          d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"
+        />
+      </svg>
+    </span>
+  </div>
+  }
+
+  <!-- Filtros -->
+  <form
+    [formGroup]="filterForm"
+    class="mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow"
+  >
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+      <div>
+        <label
+          for="codigo"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+          >Código del Cupón</label
+        >
+        <input
+          type="text"
+          id="codigo"
+          formControlName="codigo"
+          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-200"
+          placeholder="Ej: VERANO20"
+        />
+      </div>
+      <div>
+        <label
+          for="tipo"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+          >Tipo</label
+        >
+        <select
+          id="tipo"
+          formControlName="tipo"
+          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-200"
+        >
+          @for(tipo of tiposCupon; track tipo.value) {
+          <option [value]="tipo.value">{{ tipo.label }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label
+          for="activo"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+          >Activo</label
+        >
+        <select
+          id="activo"
+          formControlName="activo"
+          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-200"
+        >
+          @for(estado of estadosActivo; track estado.value) {
+          <option [ngValue]="estado.value">{{ estado.label }}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label
+          for="estado_vigencia"
+          class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+          >Estado Vigencia</label
+        >
+        <select
+          id="estado_vigencia"
+          formControlName="estado_vigencia"
+          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-200"
+        >
+          @for(estado of estadosVigencia; track estado.value) {
+          <option [value]="estado.value">{{ estado.label }}</option>
+          }
+        </select>
+      </div>
+      <div class="col-span-full flex justify-end mt-2">
+        <button
+          type="button"
+          (click)="clearFilters()"
+          class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 font-semibold rounded-md shadow-sm transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50"
+        >
+          Limpiar Filtros
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Spinner de Carga -->
+  @if (isLoading()) {
+  <div class="flex justify-center items-center h-64">
+    <!-- <app-spinner></app-spinner> -->
+    <div
+      class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-500"
+    ></div>
+  </div>
+  }
+
+  <!-- Tabla de Cupones -->
+  @if (!isLoading() && !error() && cupones().length > 0) {
+  <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg">
+    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+      <thead class="bg-gray-50 dark:bg-gray-700">
+        <tr>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+          >
+            Código
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+          >
+            Descuento
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+          >
+            Tipo
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+          >
+            Vigencia
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+          >
+            Usos
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+          >
+            Activo
+          </th>
+          <th
+            scope="col"
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+          >
+            Acciones
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700"
+      >
+        @for (cupon of cupones(); track cupon.id) {
+        <tr
+          class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
+        >
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div
+              class="text-sm font-semibold text-indigo-600 dark:text-indigo-400"
+            >
+              {{ cupon.codigo }}
+            </div>
+            @if (cupon.descripcion) {
+            <div
+              class="text-xs text-gray-500 dark:text-gray-400 truncate max-w-xs"
+            >
+              {{ cupon.descripcion }}
+            </div>
+            }
+          </td>
+          <td
+            class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"
+          >
+            {{ cupon.descuento_formateado }}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span
+              class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+              [ngClass]="{
+                'bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-100':
+                  cupon.tipo === 'fijo',
+                'bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-blue-100':
+                  cupon.tipo === 'porcentaje'
+              }"
+            >
+              {{ cupon.tipo_detallado.nombre }}
+            </span>
+          </td>
+          <td
+            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400"
+          >
+            <div>
+              {{
+                cupon.fecha_inicio
+                  ? (cupon.fecha_inicio | date : "dd/MM/yyyy")
+                  : "N/A"
+              }}
+              -
+              {{
+                cupon.fecha_fin
+                  ? (cupon.fecha_fin | date : "dd/MM/yyyy")
+                  : "N/A"
+              }}
+            </div>
+            @if(cupon.esta_vigente) {
+            <span class="text-xs text-green-500"
+              >Vigente ({{ cupon.dias_restantes }} días restantes)</span
+            >
+            } @else if (isCuponExpirado(cupon)) {
+            <span class="text-xs text-red-500">Expirado</span>
+            } @else if (isCuponProximo(cupon)) {
+            <span class="text-xs text-yellow-500"
+              >Próximo (inicia
+              {{
+                cupon.fecha_inicio
+                  ? (cupon.fecha_inicio | date : "dd/MM/yyyy")
+                  : ""
+              }})</span
+            >
+            }
+          </td>
+          <td
+            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400"
+          >
+            {{ cupon.usos }} /
+            {{ cupon.limite_uso !== null ? cupon.limite_uso : "∞" }}
+            @if(cupon.porcentaje_uso !== null) {
+            <div
+              class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-1.5 mt-1"
+            >
+              <div
+                class="bg-blue-500 h-1.5 rounded-full"
+                [style.width.%]="cupon.porcentaje_uso"
+              ></div>
+            </div>
+            }
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span
+              class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+              [ngClass]="{
+                'bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-100':
+                  cupon.activo,
+                'bg-red-100 text-red-800 dark:bg-red-700 dark:text-red-100':
+                  !cupon.activo
+              }"
+            >
+              {{ cupon.activo ? "Sí" : "No" }}
+            </span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+            <div class="flex space-x-2">
+              <button
+                (click)="navigateToEdit(cupon.id)"
+                class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 transition duration-150 ease-in-out"
+                title="Editar"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"
+                  />
+                  <path
+                    fill-rule="evenodd"
+                    d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </button>
+              <button
+                (click)="confirmDeleteCupon(cupon.id)"
+                class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition duration-150 ease-in-out"
+                title="Eliminar"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+
+  <!-- Mensaje cuando no hay cupones -->
+  @if (!isLoading() && !error() && cupones().length === 0) {
+  <div class="text-center py-12">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="1"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M7.83 16.831A4.006 4.006 0 009.172 16.172a4 4 0 015.656 0A4.006 4.006 0 0016.17 16.831m-1.414-3.89A2 2 0 0113 12.018V12a2 2 0 11-4 0v.018a2 2 0 01-1.756.923"
+      />
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M15 19a2 2 0 11-4 0 2 2 0 014 0zM9 19a2 2 0 11-4 0 2 2 0 014 0z"
+      />
+    </svg>
+    <h3 class="mt-2 text-lg font-medium text-gray-900 dark:text-gray-100">
+      No se encontraron cupones
+    </h3>
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+      Intenta ajustar tus filtros o crea un nuevo cupón.
+    </p>
+    <div class="mt-6">
+      <button
+        (click)="navigateToCreate()"
+        type="button"
+        class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="-ml-1 mr-2 h-5 w-5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        Crear Cupón
+      </button>
+    </div>
+  </div>
+  }
+
+  <!-- Paginador -->
+  @if (!isLoading() && totalCupones() > 0) {
+  <!-- <app-paginator
+    [currentPage]="currentPage()"
+    [itemsPerPage]="itemsPerPage()"
+    [totalItems]="totalCupones()"
+    (pageChange)="onPageChange($event)"
+    (itemsPerPageChange)="onItemsPerPageChange($event)"
+  ></app-paginator> -->
+  <div class="mt-6 flex justify-between items-center">
+    <span class="text-sm text-gray-700 dark:text-gray-400">
+      Mostrando {{ cupones().length }} de {{ totalCupones() }} cupones. Página
+      {{ currentPage() }}.
+    </span>
+    <div>
+      <button
+        (click)="onPageChange(currentPage() - 1)"
+        [disabled]="currentPage() === 1 || isLoading()"
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Anterior
+      </button>
+      <button
+        (click)="onPageChange(currentPage() + 1)"
+        [disabled]="
+          currentPage() * itemsPerPage() >= totalCupones() || isLoading()
+        "
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border-t border-b border-r border-gray-300 rounded-r-md hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Siguiente
+      </button>
+    </div>
+  </div>
+  }
+</div>

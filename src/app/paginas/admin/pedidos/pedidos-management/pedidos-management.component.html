@@ -1,0 +1,455 @@
+<!-- Header principal con título y acciones -->
+<div class="bg-white shadow-sm border-b border-gray-200">
+  <div class="px-4 py-6 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">Gestión de Pedidos</h1>
+        <p class="mt-1 text-sm text-gray-500">
+          Administra todos los pedidos de tu tienda virtual
+        </p>
+      </div>
+      <div class="mt-4 sm:mt-0 flex flex-col sm:flex-row gap-3">
+        <button
+          type="button"
+          (click)="toggleKPIs()"
+          class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              [attr.d]="
+                showKPIs()
+                  ? 'M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21'
+                  : 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'
+              "
+            ></path>
+          </svg>
+          {{ showKPIs() ? "Ocultar" : "Mostrar" }} KPIs
+        </button>
+        <button
+          type="button"
+          (click)="refreshAll()"
+          [disabled]="refreshing()"
+          class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            [class.animate-spin]="refreshing()"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            ></path>
+          </svg>
+          {{ refreshing() ? "Actualizando..." : "Actualizar" }}
+        </button>
+        <button
+          type="button"
+          (click)="navigateToCreate()"
+          class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            ></path>
+          </svg>
+          Nuevo Pedido
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Panel de KPIs -->
+@if (showKPIs()) {
+<div class="bg-gray-50 border-b border-gray-200">
+  <div class="px-4 py-6 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      @for (kpi of estadosKPI; track trackByTabId($index, kpi)) {
+      <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="w-8 h-8 rounded-md flex items-center justify-center"
+              [ngClass]="kpi.color"
+            >
+              <svg
+                class="w-5 h-5 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  [attr.d]="kpi.icon"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">
+                {{ kpi.label }}
+              </dt>
+              <dd class="text-lg font-medium text-gray-900">
+                @if (kpi.estado === 'total') {
+                {{ kpi.value() }}
+                } @else {
+                {{ kpi.value() }}
+                }
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+
+    <!-- Valor total de pedidos -->
+    <div class="mt-6 bg-white rounded-lg shadow p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-medium text-gray-900">
+            Valor Total de Pedidos
+          </h3>
+          <p class="text-sm text-gray-500">
+            Suma total de todos los pedidos cargados
+          </p>
+        </div>
+        <div class="text-right">
+          <p class="text-2xl font-bold text-green-600">
+            {{ formatCurrency(valorTotalPedidos()) }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Navegación por tabs -->
+<div class="bg-white border-b border-gray-200">
+  <div class="px-4 sm:px-6 lg:px-8">
+    <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+      @for (tab of tabs; track trackByTabId($index, tab)) {
+      <button
+        type="button"
+        (click)="setActiveTab(tab.id)"
+        class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap focus:outline-none"
+        [ngClass]="{
+          'border-blue-500 text-blue-600': isTabActive(tab.id),
+          'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300':
+            !isTabActive(tab.id)
+        }"
+        [attr.aria-current]="isTabActive(tab.id) ? 'page' : null"
+      >
+        <div class="flex items-center">
+          <svg
+            class="w-5 h-5 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              [attr.d]="tab.icon"
+            ></path>
+          </svg>
+          {{ tab.label }}
+        </div>
+      </button>
+      }
+    </nav>
+  </div>
+</div>
+
+<!-- Contenido de los tabs -->
+<div class="flex-1 bg-gray-50">
+  <!-- Tab: Lista de Pedidos -->
+  @if (activeTab() === 'lista') {
+  <div class="p-4 sm:p-6 lg:p-8">
+    <div class="bg-white rounded-lg shadow">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-medium text-gray-900">Lista de Pedidos</h3>
+            <p class="mt-1 text-sm text-gray-500">
+              Gestiona todos los pedidos de tu tienda
+            </p>
+          </div>
+          <button
+            type="button"
+            (click)="navigateToCreate()"
+            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            <svg
+              class="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              ></path>
+            </svg>
+            Nuevo Pedido
+          </button>
+        </div>
+      </div>
+      <div class="p-6">
+        <app-pedidos-list
+          (pedidoSelected)="onPedidoSelected($event)"
+          (editPedido)="navigateToEdit($event)"
+        ></app-pedidos-list>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Tab: Crear/Editar Pedido -->
+  @if (activeTab() === 'crear') {
+  <div class="p-4 sm:p-6 lg:p-8">
+    <div class="bg-white rounded-lg shadow">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-medium text-gray-900">
+              {{ selectedPedidoId() ? "Editar Pedido" : "Crear Nuevo Pedido" }}
+            </h3>
+            <p class="mt-1 text-sm text-gray-500">
+              {{
+                selectedPedidoId()
+                  ? "Modifica los datos del pedido"
+                  : "Registra un nuevo pedido en el sistema"
+              }}
+            </p>
+          </div>
+          <button
+            type="button"
+            (click)="backToList()"
+            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            <svg
+              class="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              ></path>
+            </svg>
+            Volver a Lista
+          </button>
+        </div>
+      </div>
+      <div class="p-6">
+        <app-pedido-form
+          [pedidoId]="selectedPedidoId()"
+          (pedidoCreated)="onPedidoCreated($event)"
+          (pedidoUpdated)="onPedidoUpdated($event)"
+          (cancelled)="backToList()"
+        ></app-pedido-form>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Tab: Detalle de Pedido -->
+  @if (activeTab() === 'detalle' && selectedPedidoId()) {
+  <div class="p-4 sm:p-6 lg:p-8">
+    <div class="bg-white rounded-lg shadow">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-medium text-gray-900">
+              Detalle del Pedido #{{ selectedPedidoId() }}
+            </h3>
+            <p class="mt-1 text-sm text-gray-500">
+              Información completa y gestión del pedido
+            </p>
+          </div>
+          <div class="flex items-center space-x-3">
+            <button
+              type="button"
+              (click)="navigateToEdit(selectedPedidoId()!)"
+              class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              <svg
+                class="w-4 h-4 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                ></path>
+              </svg>
+              Editar
+            </button>
+            <button
+              type="button"
+              (click)="backToList()"
+              class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              <svg
+                class="w-4 h-4 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                ></path>
+              </svg>
+              Volver a Lista
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="p-6">
+        <app-pedido-detail
+          [pedidoId]="selectedPedidoId()!"
+          (pedidoUpdated)="onPedidoUpdated($event)"
+          (backToList)="backToList()"
+        ></app-pedido-detail>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Tab: Estadísticas -->
+  @if (activeTab() === 'estadisticas') {
+  <div class="p-4 sm:p-6 lg:p-8">
+    <app-pedidos-estadisticas></app-pedidos-estadisticas>
+  </div>
+  }
+
+  <!-- Tab: Reportes -->
+  @if (activeTab() === 'reportes') {
+  <div class="p-4 sm:p-6 lg:p-8">
+    <div class="bg-white rounded-lg shadow">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-lg font-medium text-gray-900">Reportes de Pedidos</h3>
+        <p class="mt-1 text-sm text-gray-500">
+          Genera reportes personalizados de pedidos
+        </p>
+      </div>
+      <div class="p-6">
+        <!-- Aquí se incluirá el componente de reportes -->
+        <div class="text-center py-12">
+          <svg
+            class="mx-auto h-12 w-12 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            ></path>
+          </svg>
+          <h3 class="mt-2 text-sm font-medium text-gray-900">
+            Generador de Reportes
+          </h3>
+          <p class="mt-1 text-sm text-gray-500">
+            El sistema de reportes se implementará próximamente.
+          </p>
+          <div class="mt-6">
+            <button
+              type="button"
+              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              <svg
+                class="w-4 h-4 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                ></path>
+              </svg>
+              Generar Reporte
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+</div>
+
+<!-- Loading overlay -->
+@if (refreshing()) {
+<div
+  class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center"
+>
+  <div class="bg-white p-6 rounded-lg shadow-lg">
+    <div class="flex items-center">
+      <svg
+        class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-600"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
+      </svg>
+      <span class="text-gray-900">Cargando pedidos...</span>
+    </div>
+  </div>
+</div>
+}

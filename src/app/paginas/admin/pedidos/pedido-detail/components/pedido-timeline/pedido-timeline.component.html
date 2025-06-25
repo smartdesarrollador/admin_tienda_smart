@@ -1,0 +1,193 @@
+<!-- Header del timeline -->
+<div class="bg-white shadow rounded-lg border border-gray-200">
+  <div class="px-6 py-4 border-b border-gray-200">
+    <div class="flex items-center justify-between">
+      <h3 class="text-lg font-medium text-gray-900 flex items-center">
+        <svg
+          class="w-5 h-5 mr-2 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+          ></path>
+        </svg>
+        Historial del Pedido
+      </h3>
+
+      <div class="text-sm text-gray-500">
+        {{ timelineEvents().length }} eventos registrados
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline content -->
+  <div class="px-6 py-6">
+    @if (timelineEvents().length > 0) {
+    <div class="flow-root">
+      <ul class="-mb-8">
+        @for (evento of timelineEvents(); track trackByEventId($index, evento);
+        let isLast = $last) {
+        <li>
+          <div class="relative pb-8">
+            <!-- Línea conectora -->
+            @if (!isLast) {
+            <span
+              class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
+              aria-hidden="true"
+            ></span>
+            }
+
+            <!-- Contenido del evento -->
+            <div class="relative flex space-x-3">
+              <!-- Icono del evento -->
+              <div>
+                <span
+                  class="h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white"
+                  [class]="evento.color"
+                >
+                  <svg
+                    class="w-4 h-4 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      [attr.d]="evento.icono"
+                    ></path>
+                  </svg>
+                </span>
+              </div>
+
+              <!-- Contenido del evento -->
+              <div class="min-w-0 flex-1 pt-1.5">
+                <div
+                  class="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:bg-gray-100 transition-colors duration-200"
+                >
+                  <!-- Header del evento -->
+                  <div class="flex items-start justify-between">
+                    <div class="flex-1">
+                      <p class="text-sm font-medium text-gray-900">
+                        {{ evento.titulo }}
+                      </p>
+                      <p class="text-sm text-gray-600 mt-1">
+                        {{ evento.descripcion }}
+                      </p>
+                    </div>
+
+                    <!-- Badge del tipo de evento -->
+                    <span
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ml-3"
+                      [class]="getEventTypeBadgeClass(evento.tipo)"
+                    >
+                      {{ getEventTypeLabel(evento.tipo) }}
+                    </span>
+                  </div>
+
+                  <!-- Información adicional -->
+                  <div
+                    class="mt-3 flex items-center justify-between text-xs text-gray-500"
+                  >
+                    <div class="flex items-center space-x-4">
+                      <!-- Fecha -->
+                      <span class="flex items-center">
+                        <svg
+                          class="w-3 h-3 mr-1"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          ></path>
+                        </svg>
+                        {{ formatDate(evento.fecha) }}
+                      </span>
+
+                      <!-- Fecha relativa -->
+                      <span class="text-gray-400">
+                        ({{ formatRelativeDate(evento.fecha) }})
+                      </span>
+
+                      <!-- Usuario si existe -->
+                      @if (evento.usuario) {
+                      <span class="flex items-center">
+                        <svg
+                          class="w-3 h-3 mr-1"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                          ></path>
+                        </svg>
+                        {{ evento.usuario }}
+                      </span>
+                      }
+                    </div>
+                  </div>
+
+                  <!-- Detalles adicionales -->
+                  @if (evento.detalles && hasEventDetails(evento.detalles)) {
+                  <div class="mt-3 pt-3 border-t border-gray-200">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                      @for (detail of getEventDetailsArray(evento.detalles);
+                      track detail.key) {
+                      <div class="flex justify-between">
+                        <span class="text-gray-500 capitalize"
+                          >{{ detail.label }}:</span
+                        >
+                        <span class="text-gray-700 font-medium">{{
+                          detail.value
+                        }}</span>
+                      </div>
+                      }
+                    </div>
+                  </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        }
+      </ul>
+    </div>
+    } @else {
+    <!-- Estado vacío -->
+    <div class="text-center py-12">
+      <svg
+        class="mx-auto h-12 w-12 text-gray-400"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+        ></path>
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900">Sin historial</h3>
+      <p class="mt-1 text-sm text-gray-500">
+        No hay eventos registrados para este pedido.
+      </p>
+    </div>
+    }
+  </div>
+</div>

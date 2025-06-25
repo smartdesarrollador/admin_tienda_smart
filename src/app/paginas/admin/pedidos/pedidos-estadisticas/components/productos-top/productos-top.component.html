@@ -1,0 +1,392 @@
+<!-- El template está incluido en el componente TypeScript -->
+
+<!-- Header del componente -->
+<div class="bg-white rounded-lg shadow-sm border border-gray-200">
+  <!-- Header con controles -->
+  <div class="px-6 py-4 border-b border-gray-200">
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900">
+          Análisis de Productos
+        </h3>
+        <p class="text-sm text-gray-500 mt-1">
+          Productos con mejor rendimiento y tendencias de venta
+        </p>
+      </div>
+
+      <!-- Controles de vista -->
+      <div class="flex items-center space-x-2">
+        <div class="flex bg-gray-100 rounded-lg p-1">
+          <button
+            type="button"
+            (click)="onViewChange('ventas')"
+            [class.bg-white]="activeView() === 'ventas'"
+            [class.shadow-sm]="activeView() === 'ventas'"
+            [class.text-gray-900]="activeView() === 'ventas'"
+            [class.text-gray-600]="activeView() !== 'ventas'"
+            class="px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 hover:text-gray-900"
+          >
+            Más Vendidos
+          </button>
+          <button
+            type="button"
+            (click)="onViewChange('ingresos')"
+            [class.bg-white]="activeView() === 'ingresos'"
+            [class.shadow-sm]="activeView() === 'ingresos'"
+            [class.text-gray-900]="activeView() === 'ingresos'"
+            [class.text-gray-600]="activeView() !== 'ingresos'"
+            class="px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 hover:text-gray-900"
+          >
+            Mayores Ingresos
+          </button>
+          <button
+            type="button"
+            (click)="onViewChange('margen')"
+            [class.bg-white]="activeView() === 'margen'"
+            [class.shadow-sm]="activeView() === 'margen'"
+            [class.text-gray-900]="activeView() === 'margen'"
+            [class.text-gray-600]="activeView() !== 'margen'"
+            class="px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 hover:text-gray-900"
+          >
+            Mejor Margen
+          </button>
+          <button
+            type="button"
+            (click)="onViewChange('tendencia')"
+            [class.bg-white]="activeView() === 'tendencia'"
+            [class.shadow-sm]="activeView() === 'tendencia'"
+            [class.text-gray-900]="activeView() === 'tendencia'"
+            [class.text-gray-600]="activeView() !== 'tendencia'"
+            class="px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 hover:text-gray-900"
+          >
+            Tendencia
+          </button>
+        </div>
+
+        <!-- Botón de actualizar -->
+        <button
+          type="button"
+          (click)="refreshData()"
+          [disabled]="isLoading()"
+          class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+        >
+          <svg
+            class="w-4 h-4"
+            [class.animate-spin]="isLoading()"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resumen de métricas -->
+  @if (productosData() && !isLoading()) {
+  <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- Total productos vendidos -->
+      <div class="text-center">
+        <div class="text-2xl font-bold text-gray-900">
+          {{ totalProductosVendidos() }}
+        </div>
+        <div class="text-xs text-gray-500">Productos Vendidos</div>
+      </div>
+
+      <!-- Ingresos productos top -->
+      <div class="text-center">
+        <div class="text-2xl font-bold text-green-600">
+          {{ ingresosProductosTop() }}
+        </div>
+        <div class="text-xs text-gray-500">Ingresos Top</div>
+      </div>
+
+      <!-- Margen promedio -->
+      <div class="text-center">
+        <div class="text-2xl font-bold text-blue-600">
+          {{ margenPromedioTop() }}
+        </div>
+        <div class="text-xs text-gray-500">Margen Promedio</div>
+      </div>
+
+      <!-- Productos agotados -->
+      <div class="text-center">
+        <div class="text-2xl font-bold text-red-600">
+          {{ productosAgotados() }}
+        </div>
+        <div class="text-xs text-gray-500">Productos Agotados</div>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Estado de carga -->
+  @if (isLoading()) {
+  <div class="flex items-center justify-center py-12">
+    <div class="flex items-center space-x-3">
+      <svg
+        class="animate-spin w-6 h-6 text-blue-600"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+        ></path>
+      </svg>
+      <span class="text-gray-600">Cargando productos...</span>
+    </div>
+  </div>
+  }
+
+  <!-- Error -->
+  @if (error()) {
+  <div class="p-6">
+    <div class="bg-red-50 border border-red-200 rounded-md p-4">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg
+            class="h-5 w-5 text-red-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+            ></path>
+          </svg>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800">
+            Error al cargar productos
+          </h3>
+          <div class="mt-2 text-sm text-red-700">
+            <p>{{ error() }}</p>
+          </div>
+          <div class="mt-4">
+            <button
+              type="button"
+              (click)="refreshData()"
+              class="bg-red-100 px-3 py-2 rounded-md text-sm font-medium text-red-800 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              Reintentar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Lista de productos -->
+  @if (!isLoading() && !error() && productosActivos().length > 0) {
+  <div class="divide-y divide-gray-200">
+    @for (producto of productosActivos(); track producto.id; let i = $index) {
+    <div class="p-6 hover:bg-gray-50 transition-colors duration-200">
+      <div class="flex items-center space-x-4">
+        <!-- Ranking -->
+        <div class="flex-shrink-0">
+          <div
+            class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
+            [class.bg-yellow-100]="i === 0"
+            [class.text-yellow-800]="i === 0"
+            [class.bg-gray-100]="i === 1"
+            [class.text-gray-800]="i === 1"
+            [class.bg-orange-100]="i === 2"
+            [class.text-orange-800]="i === 2"
+            [class.bg-blue-100]="i > 2"
+            [class.text-blue-800]="i > 2"
+          >
+            {{ i + 1 }}
+          </div>
+        </div>
+
+        <!-- Imagen del producto -->
+        <div class="flex-shrink-0">
+          <div class="w-12 h-12 bg-gray-200 rounded-lg overflow-hidden">
+            @if (producto.imagen_url) {
+            <img
+              [src]="producto.imagen_url"
+              [alt]="producto.nombre"
+              class="w-full h-full object-cover"
+              (error)="
+                handleImageError($event, '/assets/placeholder-product.png')
+              "
+            />
+            } @else {
+            <div
+              class="w-full h-full flex items-center justify-center text-gray-400"
+            >
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </div>
+            }
+          </div>
+        </div>
+
+        <!-- Información del producto -->
+        <div class="flex-1 min-w-0">
+          <div class="flex items-start justify-between">
+            <div class="flex-1">
+              <h4 class="text-sm font-medium text-gray-900 truncate">
+                {{ producto.nombre }}
+              </h4>
+              <p class="text-xs text-gray-500 mt-1">{{ producto.categoria }}</p>
+
+              <!-- Rating -->
+              <div class="flex items-center mt-2 space-x-1">
+                @for (star of getStars(producto.rating_promedio); track $index)
+                {
+                <svg
+                  class="w-3 h-3"
+                  [class.text-yellow-400]="star === 'full'"
+                  [class.text-gray-300]="star === 'empty'"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                  ></path>
+                </svg>
+                }
+                <span class="text-xs text-gray-500 ml-1">
+                  ({{ producto.total_reviews }})
+                </span>
+              </div>
+            </div>
+
+            <!-- Métricas principales -->
+            <div class="flex-shrink-0 text-right ml-4">
+              @if (activeView() === 'ventas') {
+              <div class="text-lg font-bold text-gray-900">
+                {{ formatNumber(producto.cantidad_vendida) }}
+              </div>
+              <div class="text-xs text-gray-500">unidades</div>
+              } @else if (activeView() === 'ingresos') {
+              <div class="text-lg font-bold text-green-600">
+                {{ formatCurrency(producto.ingresos_total) }}
+              </div>
+              <div class="text-xs text-gray-500">ingresos</div>
+              } @else if (activeView() === 'margen') {
+              <div class="text-lg font-bold text-blue-600">
+                {{ producto.margen_promedio.toFixed(1) }}%
+              </div>
+              <div class="text-xs text-gray-500">margen</div>
+              } @else if (activeView() === 'tendencia') {
+              <div
+                class="text-lg font-bold"
+                [class]="getTendenciaColor(producto.tendencia)"
+              >
+                {{ formatPercentage(producto.cambio_porcentual) }}
+              </div>
+              <div class="text-xs text-gray-500">cambio</div>
+              }
+            </div>
+          </div>
+
+          <!-- Métricas secundarias -->
+          <div class="flex items-center justify-between mt-3">
+            <div class="flex items-center space-x-4 text-xs text-gray-500">
+              <span
+                >Precio: {{ formatCurrency(producto.precio_promedio) }}</span
+              >
+              <span
+                >Vendidos: {{ formatNumber(producto.cantidad_vendida) }}</span
+              >
+              <span
+                >Ingresos: {{ formatCurrency(producto.ingresos_total) }}</span
+              >
+            </div>
+
+            <div class="flex items-center space-x-3">
+              <!-- Estado de stock -->
+              <span
+                class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+                [class]="getStockColor(producto.stock_actual)"
+              >
+                {{ getStockText(producto.stock_actual) }}
+                ({{ producto.stock_actual }})
+              </span>
+
+              <!-- Tendencia -->
+              <div class="flex items-center space-x-1">
+                <svg
+                  class="w-4 h-4"
+                  [class]="getTendenciaColor(producto.tendencia)"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    [attr.d]="getTendenciaIcon(producto.tendencia)"
+                  ></path>
+                </svg>
+                <span
+                  class="text-xs font-medium"
+                  [class]="getTendenciaColor(producto.tendencia)"
+                >
+                  {{ formatPercentage(producto.cambio_porcentual) }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+  }
+
+  <!-- Estado vacío -->
+  @if (!isLoading() && !error() && productosActivos().length === 0) {
+  <div class="text-center py-12">
+    <svg
+      class="mx-auto h-12 w-12 text-gray-400"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+      ></path>
+    </svg>
+    <h3 class="mt-2 text-sm font-medium text-gray-900">
+      No hay productos disponibles
+    </h3>
+    <p class="mt-1 text-sm text-gray-500">
+      No se encontraron productos para el período seleccionado.
+    </p>
+  </div>
+  }
+</div>

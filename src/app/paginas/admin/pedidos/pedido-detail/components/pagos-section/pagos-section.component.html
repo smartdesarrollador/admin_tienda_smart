@@ -1,0 +1,625 @@
+<!-- Header de la sección -->
+<div class="bg-white shadow rounded-lg border border-gray-200">
+  <div class="px-6 py-4 border-b border-gray-200">
+    <div class="flex items-center justify-between">
+      <h3 class="text-lg font-medium text-gray-900 flex items-center">
+        <svg
+          class="w-5 h-5 mr-2 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+          ></path>
+        </svg>
+        Gestión de Pagos
+      </h3>
+
+      @if (canAddPayment()) {
+      <button
+        type="button"
+        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+        (click)="openAddPaymentModal()"
+      >
+        <svg
+          class="w-4 h-4 mr-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+          ></path>
+        </svg>
+        Agregar Pago
+      </button>
+      }
+    </div>
+  </div>
+
+  <!-- Estadísticas de pagos -->
+  <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <!-- Total Pagado -->
+      <div class="bg-white rounded-lg p-4 border border-gray-200">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center"
+            >
+              <svg
+                class="w-4 h-4 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-gray-500">Total Pagado</p>
+            <p class="text-lg font-semibold text-gray-900">
+              {{ formatCurrency(estadisticasPagos().totalPagado) }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Pendiente -->
+      <div class="bg-white rounded-lg p-4 border border-gray-200">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center"
+            >
+              <svg
+                class="w-4 h-4 text-yellow-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-gray-500">Pendiente</p>
+            <p class="text-lg font-semibold text-gray-900">
+              {{ formatCurrency(estadisticasPagos().totalPendiente) }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Número de Pagos -->
+      <div class="bg-white rounded-lg p-4 border border-gray-200">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center"
+            >
+              <svg
+                class="w-4 h-4 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-gray-500">Número de Pagos</p>
+            <p class="text-lg font-semibold text-gray-900">
+              {{ estadisticasPagos().numeroPagos }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Porcentaje Pagado -->
+      <div class="bg-white rounded-lg p-4 border border-gray-200">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center"
+            >
+              <svg
+                class="w-4 h-4 text-purple-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-gray-500">% Pagado</p>
+            <p class="text-lg font-semibold text-gray-900">
+              {{ formatPercentage(estadisticasPagos().porcentajePagado) }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barra de progreso -->
+    <div class="mt-4">
+      <div class="flex justify-between text-sm text-gray-600 mb-1">
+        <span>Progreso de Pago</span>
+        <span>{{
+          formatPercentage(estadisticasPagos().porcentajePagado)
+        }}</span>
+      </div>
+      <div class="w-full bg-gray-200 rounded-full h-2">
+        <div
+          class="bg-green-600 h-2 rounded-full transition-all duration-300"
+          [style.width.%]="estadisticasPagos().porcentajePagado"
+        ></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de pagos -->
+  <div class="px-6 py-6">
+    @if (pagos().length > 0) {
+    <!-- Vista de tabla para pantallas grandes -->
+    <div class="hidden lg:block">
+      <div
+        class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg"
+      >
+        <table class="min-w-full divide-y divide-gray-300">
+          <thead class="bg-gray-50">
+            <tr>
+              <th
+                scope="col"
+                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+              >
+                Método
+              </th>
+              <th
+                scope="col"
+                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+              >
+                Monto
+              </th>
+              <th
+                scope="col"
+                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+              >
+                Estado
+              </th>
+              <th
+                scope="col"
+                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+              >
+                Fecha
+              </th>
+              <th
+                scope="col"
+                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+              >
+                Referencia
+              </th>
+              <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                <span class="sr-only">Acciones</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 bg-white">
+            @for (pago of pagos(); track trackByPagoId($index, pago)) {
+            <tr class="hover:bg-gray-50 transition-colors duration-200">
+              <!-- Método de Pago -->
+              <td class="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-6">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    <div
+                      class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                    >
+                      <svg
+                        class="w-4 h-4"
+                        [class]="getMetodoPagoInfo(pago.metodo).color"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          [attr.d]="getMetodoPagoInfo(pago.metodo).icon"
+                        ></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="ml-3">
+                    <div class="text-sm font-medium text-gray-900">
+                      {{ getMetodoPagoInfo(pago.metodo).label }}
+                    </div>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Monto -->
+              <td
+                class="whitespace-nowrap px-3 py-4 text-sm font-medium text-gray-900"
+              >
+                {{ formatCurrency(pago.monto) }}
+              </td>
+
+              <!-- Estado -->
+              <td class="whitespace-nowrap px-3 py-4 text-sm">
+                <span
+                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                  [class]="getEstadoPagoInfo(pago.estado).color"
+                >
+                  <svg
+                    class="w-3 h-3 mr-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      [attr.d]="getEstadoPagoInfo(pago.estado).icon"
+                    ></path>
+                  </svg>
+                  {{ getEstadoPagoInfo(pago.estado).label }}
+                </span>
+                @if (isPagoAtrasado(pago)) {
+                <div class="text-xs text-red-600 mt-1">
+                  {{ getDiasAtraso(pago) }} días de atraso
+                </div>
+                }
+              </td>
+
+              <!-- Fecha -->
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                <div>
+                  {{ formatDate(pago.fecha_pago || pedido.created_at) }}
+                </div>
+                @if (pago.fecha_pago) {
+                <div class="text-xs text-gray-400">
+                  Vence: {{ formatDate(pago.fecha_pago) }}
+                </div>
+                }
+              </td>
+
+              <!-- Referencia -->
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                @if (pago.referencia) {
+                <span class="font-mono">{{ pago.referencia }}</span>
+                } @else {
+                <span class="text-gray-400">-</span>
+                }
+              </td>
+
+              <!-- Acciones -->
+              <td
+                class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
+              >
+                <div class="flex items-center justify-end space-x-2">
+                  @if (canMarkAsPaid(pago)) {
+                  <button
+                    type="button"
+                    class="text-green-600 hover:text-green-900 transition-colors duration-200"
+                    (click)="markAsPaid(pago)"
+                    title="Marcar como pagado"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      ></path>
+                    </svg>
+                  </button>
+                  }
+
+                  <button
+                    type="button"
+                    class="text-blue-600 hover:text-blue-900 transition-colors duration-200"
+                    (click)="editPayment(pago)"
+                    title="Editar pago"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      ></path>
+                    </svg>
+                  </button>
+
+                  @if (canCancelPayment(pago)) {
+                  <button
+                    type="button"
+                    class="text-red-600 hover:text-red-900 transition-colors duration-200"
+                    (click)="cancelPayment(pago)"
+                    title="Cancelar pago"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      ></path>
+                    </svg>
+                  </button>
+                  }
+
+                  <button
+                    type="button"
+                    class="text-gray-600 hover:text-gray-900 transition-colors duration-200"
+                    (click)="deletePayment(pago)"
+                    title="Eliminar pago"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Vista de cards para pantallas pequeñas -->
+    <div class="lg:hidden space-y-4">
+      @for (pago of pagos(); track trackByPagoId($index, pago)) {
+      <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+        <div class="flex items-start justify-between">
+          <div class="flex items-start space-x-3">
+            <!-- Icono del método -->
+            <div class="flex-shrink-0">
+              <div
+                class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center"
+              >
+                <svg
+                  class="w-5 h-5"
+                  [class]="getMetodoPagoInfo(pago.metodo).color"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    [attr.d]="getMetodoPagoInfo(pago.metodo).icon"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Información del pago -->
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center space-x-2 mb-1">
+                <p class="text-sm font-medium text-gray-900">
+                  {{ getMetodoPagoInfo(pago.metodo).label }}
+                </p>
+                <span
+                  class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+                  [class]="getEstadoPagoInfo(pago.estado).color"
+                >
+                  {{ getEstadoPagoInfo(pago.estado).label }}
+                </span>
+              </div>
+
+              <p class="text-lg font-semibold text-gray-900 mb-2">
+                {{ formatCurrency(pago.monto) }}
+              </p>
+
+              <div class="text-xs text-gray-500 space-y-1">
+                <div>
+                  Fecha: {{ formatDate(pago.fecha_pago || pedido.created_at) }}
+                </div>
+                @if (pago.referencia) {
+                <div>
+                  Ref: <span class="font-mono">{{ pago.referencia }}</span>
+                </div>
+                } @if (isPagoAtrasado(pago)) {
+                <div class="text-red-600 font-medium">
+                  ⚠️ {{ getDiasAtraso(pago) }} días de atraso
+                </div>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Acciones móviles -->
+          <div class="flex flex-col space-y-1">
+            @if (canMarkAsPaid(pago)) {
+            <button
+              type="button"
+              class="p-1 text-green-600 hover:text-green-900"
+              (click)="markAsPaid(pago)"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+            </button>
+            }
+            <button
+              type="button"
+              class="p-1 text-blue-600 hover:text-blue-900"
+              (click)="editPayment(pago)"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+
+    } @else {
+    <!-- Estado vacío -->
+    <div class="text-center py-12">
+      <svg
+        class="mx-auto h-12 w-12 text-gray-400"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+        ></path>
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900">
+        Sin pagos registrados
+      </h3>
+      <p class="mt-1 text-sm text-gray-500">
+        No hay pagos asociados a este pedido.
+      </p>
+      @if (canAddPayment()) {
+      <div class="mt-6">
+        <button
+          type="button"
+          class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          (click)="openAddPaymentModal()"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            ></path>
+          </svg>
+          Agregar Primer Pago
+        </button>
+      </div>
+      }
+    </div>
+    }
+  </div>
+</div>
+
+<!-- Modal para agregar pago (placeholder) -->
+@if (showAddPaymentModal()) {
+<div class="fixed inset-0 z-50 overflow-y-auto">
+  <div
+    class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+  >
+    <div
+      class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+      (click)="closeAddPaymentModal()"
+    ></div>
+
+    <div
+      class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+    >
+      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+          Agregar Nuevo Pago
+        </h3>
+        <p class="text-sm text-gray-500">
+          Funcionalidad de agregar pago será implementada próximamente.
+        </p>
+      </div>
+      <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+        <button
+          type="button"
+          class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+          (click)="closeAddPaymentModal()"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}

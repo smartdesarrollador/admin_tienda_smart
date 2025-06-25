@@ -1,0 +1,372 @@
+<!-- Card principal del header -->
+<div class="bg-white shadow rounded-lg border border-gray-200">
+  <div class="px-6 py-6">
+    <!-- Fila superior: Estado y acciones rápidas -->
+    <div class="flex items-center justify-between mb-6">
+      <!-- Estado del pedido -->
+      <div class="flex items-center space-x-3">
+        <div class="flex items-center space-x-2">
+          <svg
+            class="w-5 h-5"
+            [class]="estadoInfo().color.split(' ')[1]"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              [attr.d]="estadoInfo().icon"
+            ></path>
+          </svg>
+          <span
+            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+            [class]="estadoInfo().color"
+          >
+            {{ estadoInfo().label }}
+          </span>
+        </div>
+
+        @if (pedido.codigo_rastreo) {
+        <div class="text-sm text-gray-500">
+          <span class="font-medium">Código:</span>
+          <span class="font-mono">{{ pedido.codigo_rastreo }}</span>
+        </div>
+        }
+      </div>
+
+      <!-- Acciones rápidas -->
+      <div class="flex items-center space-x-2">
+        @if (canPerformAction('aprobar')) {
+        <button
+          type="button"
+          (click)="emitAction('aprobar')"
+          class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200"
+        >
+          <svg
+            class="w-4 h-4 mr-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            ></path>
+          </svg>
+          Aprobar
+        </button>
+        } @if (canPerformAction('procesar')) {
+        <button
+          type="button"
+          (click)="emitAction('procesar')"
+          class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+        >
+          <svg
+            class="w-4 h-4 mr-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            ></path>
+          </svg>
+          Procesar
+        </button>
+        } @if (canPerformAction('enviar')) {
+        <button
+          type="button"
+          (click)="emitAction('enviar')"
+          class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors duration-200"
+        >
+          <svg
+            class="w-4 h-4 mr-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+            ></path>
+          </svg>
+          Enviar
+        </button>
+        } @if (canPerformAction('cancelar')) {
+        <button
+          type="button"
+          (click)="emitAction('cancelar')"
+          class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200"
+        >
+          <svg
+            class="w-4 h-4 mr-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+          Cancelar
+        </button>
+        }
+      </div>
+    </div>
+
+    <!-- Grid principal con información -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Información del cliente -->
+      <div class="lg:col-span-1">
+        <h3 class="text-sm font-medium text-gray-900 mb-3 flex items-center">
+          <svg
+            class="w-4 h-4 mr-2 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+            ></path>
+          </svg>
+          Información del Cliente
+        </h3>
+
+        @if (clienteInfo(); as cliente) {
+        <div class="bg-gray-50 rounded-lg p-4">
+          <div class="flex items-start space-x-3">
+            <!-- Avatar -->
+            <div class="flex-shrink-0">
+              <div
+                class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center"
+              >
+                <span class="text-sm font-semibold text-blue-600">
+                  {{ cliente.iniciales }}
+                </span>
+              </div>
+              @if (cliente.activo) {
+              <div class="mt-1 flex justify-center">
+                <svg
+                  class="w-4 h-4 text-green-500"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </div>
+              }
+            </div>
+
+            <!-- Información -->
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center space-x-2">
+                <p class="text-sm font-medium text-gray-900 truncate">
+                  {{ cliente.nombre }}
+                </p>
+                @if (cliente.activo) {
+                <span
+                  class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800"
+                >
+                  Activo
+                </span>
+                }
+              </div>
+
+              @if (cliente.email) {
+              <p class="text-sm text-gray-500 truncate">
+                {{ cliente.email }}
+              </p>
+              } @if (cliente.documento) {
+              <p class="text-sm text-gray-500">
+                <span class="font-medium">Documento:</span>
+                {{ cliente.documento }}
+              </p>
+              } @if (cliente.telefono) {
+              <p class="text-sm text-gray-500">
+                <span class="font-medium">Teléfono:</span>
+                {{ cliente.telefono }}
+              </p>
+              }
+            </div>
+          </div>
+        </div>
+        } @else {
+        <div class="bg-gray-50 rounded-lg p-4 text-center">
+          <p class="text-sm text-gray-500">Sin información del cliente</p>
+        </div>
+        }
+      </div>
+
+      <!-- Información del pedido -->
+      <div class="lg:col-span-1">
+        <h3 class="text-sm font-medium text-gray-900 mb-3 flex items-center">
+          <svg
+            class="w-4 h-4 mr-2 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            ></path>
+          </svg>
+          Detalles del Pedido
+        </h3>
+
+        <div class="bg-gray-50 rounded-lg p-4 space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-600">ID del Pedido:</span>
+            <span class="text-sm font-medium text-gray-900"
+              >#{{ pedido.id }}</span
+            >
+          </div>
+
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-600">Tipo de Pago:</span>
+            <span class="text-sm font-medium text-gray-900 capitalize">
+              {{ pedido.tipo_pago.replace("_", " ") }}
+            </span>
+          </div>
+
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-600">Canal de Venta:</span>
+            <span class="text-sm font-medium text-gray-900 capitalize">
+              {{ pedido.canal_venta.replace("_", " ") }}
+            </span>
+          </div>
+
+          @if (totalesInfo(); as totales) {
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-600">Número de Items:</span>
+            <span class="text-sm font-medium text-gray-900">
+              {{ totales.numeroItems }}
+            </span>
+          </div>
+          } @if (fechasInfo(); as fechas) {
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-600">Días desde pedido:</span>
+            <span class="text-sm font-medium text-gray-900">
+              {{ fechas.diasDesdePedido }} días
+            </span>
+          </div>
+          }
+        </div>
+      </div>
+
+      <!-- Resumen financiero -->
+      <div class="lg:col-span-1">
+        <h3 class="text-sm font-medium text-gray-900 mb-3 flex items-center">
+          <svg
+            class="w-4 h-4 mr-2 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+            ></path>
+          </svg>
+          Resumen Financiero
+        </h3>
+
+        @if (totalesInfo(); as totales) {
+        <div class="bg-gray-50 rounded-lg p-4 space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-600">Subtotal:</span>
+            <span class="text-sm font-medium text-gray-900">
+              {{ formatCurrency(totales.subtotal, totales.moneda) }}
+            </span>
+          </div>
+
+          @if (totales.descuento > 0) {
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-600">Descuento:</span>
+            <span class="text-sm font-medium text-red-600">
+              -{{ formatCurrency(totales.descuento, totales.moneda) }}
+            </span>
+          </div>
+          }
+
+          <div class="border-t border-gray-200 pt-3">
+            <div class="flex justify-between items-center">
+              <span class="text-base font-medium text-gray-900">Total:</span>
+              <span class="text-lg font-bold text-gray-900">
+                {{ formatCurrency(totales.total, totales.moneda) }}
+              </span>
+            </div>
+          </div>
+        </div>
+        } @else {
+        <div class="bg-gray-50 rounded-lg p-4 text-center">
+          <p class="text-sm text-gray-500">Sin información de totales</p>
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- Información de fechas -->
+    @if (fechasInfo(); as fechas) {
+    <div class="mt-6 pt-6 border-t border-gray-200">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+        <div>
+          <span class="text-gray-600">Creado:</span>
+          <span class="ml-2 font-medium text-gray-900">{{
+            fechas.creacion
+          }}</span>
+        </div>
+
+        @if (fechas.entrega) {
+        <div>
+          <span class="text-gray-600">Entrega estimada:</span>
+          <span class="ml-2 font-medium text-gray-900">{{
+            fechas.entrega
+          }}</span>
+        </div>
+        }
+
+        <div>
+          <span class="text-gray-600">Última actualización:</span>
+          <span class="ml-2 font-medium text-gray-900">{{
+            fechas.actualizacion
+          }}</span>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- Observaciones -->
+    @if (pedido.observaciones) {
+    <div class="mt-6 pt-6 border-t border-gray-200">
+      <h4 class="text-sm font-medium text-gray-900 mb-2">Observaciones</h4>
+      <div class="bg-blue-50 border border-blue-200 rounded-md p-3">
+        <p class="text-sm text-blue-800">{{ pedido.observaciones }}</p>
+      </div>
+    </div>
+    }
+  </div>
+</div>

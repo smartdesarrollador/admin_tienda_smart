@@ -1,0 +1,595 @@
+<!-- Dashboard Header -->
+<div class="bg-white shadow-sm border-b border-gray-200">
+  <div class="px-4 py-6 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+        <p class="mt-1 text-sm text-gray-500">
+          Bienvenido al panel de administración
+        </p>
+      </div>
+      <div class="mt-4 sm:mt-0">
+        <span
+          class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800"
+        >
+          Sistema Activo
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Dashboard Content -->
+<div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+  <!-- Quick Actions Grid -->
+  <div class="mb-8">
+    <h2 class="text-lg font-medium text-gray-900 mb-4">Accesos Rápidos</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Card: Usuarios -->
+      <a
+        routerLink="/admin/usuarios"
+        class="group relative bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md hover:border-blue-300 transition-all duration-200 cursor-pointer"
+      >
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white group-hover:bg-blue-600 transition-colors"
+            >
+              <svg
+                class="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h3
+              class="text-lg font-medium text-gray-900 group-hover:text-blue-600"
+            >
+              Usuarios
+            </h3>
+            <p class="text-sm text-gray-500">Gestión de usuarios</p>
+          </div>
+        </div>
+        <div class="absolute top-4 right-4">
+          <svg
+            class="h-5 w-5 text-gray-400 group-hover:text-blue-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            ></path>
+          </svg>
+        </div>
+      </a>
+
+      <!-- Card: Categorías -->
+      <a
+        routerLink="/admin/categorias"
+        class="group relative bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md hover:border-green-300 transition-all duration-200 cursor-pointer"
+      >
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="flex items-center justify-center h-12 w-12 rounded-md bg-green-500 text-white group-hover:bg-green-600 transition-colors"
+            >
+              <svg
+                class="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 11H5m14-7H5a2 2 0 00-2 2v12a2 2 0 002 2h14a2 2 0 002-2V6a2 2 0 00-2-2z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h3
+              class="text-lg font-medium text-gray-900 group-hover:text-green-600"
+            >
+              Categorías
+            </h3>
+            <p class="text-sm text-gray-500">Organizar productos</p>
+          </div>
+        </div>
+        <div class="absolute top-4 right-4">
+          <svg
+            class="h-5 w-5 text-gray-400 group-hover:text-green-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            ></path>
+          </svg>
+        </div>
+      </a>
+
+      <!-- Card: Atributos -->
+      <a
+        routerLink="/admin/atributos"
+        class="group relative bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md hover:border-purple-300 transition-all duration-200 cursor-pointer"
+      >
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="flex items-center justify-center h-12 w-12 rounded-md bg-purple-500 text-white group-hover:bg-purple-600 transition-colors"
+            >
+              <svg
+                class="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h3
+              class="text-lg font-medium text-gray-900 group-hover:text-purple-600"
+            >
+              Atributos
+            </h3>
+            <p class="text-sm text-gray-500">Propiedades de productos</p>
+          </div>
+        </div>
+        <div class="absolute top-4 right-4">
+          <svg
+            class="h-5 w-5 text-gray-400 group-hover:text-purple-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            ></path>
+          </svg>
+        </div>
+      </a>
+
+      <!-- Card: Cupones -->
+      <a
+        routerLink="/admin/cupones"
+        class="group relative bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md hover:border-yellow-300 transition-all duration-200 cursor-pointer"
+      >
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="flex items-center justify-center h-12 w-12 rounded-md bg-yellow-500 text-white group-hover:bg-yellow-600 transition-colors"
+            >
+              <svg
+                class="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h3
+              class="text-lg font-medium text-gray-900 group-hover:text-yellow-600"
+            >
+              Cupones
+            </h3>
+            <p class="text-sm text-gray-500">Descuentos y ofertas</p>
+          </div>
+        </div>
+        <div class="absolute top-4 right-4">
+          <svg
+            class="h-5 w-5 text-gray-400 group-hover:text-yellow-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            ></path>
+          </svg>
+        </div>
+      </a>
+
+      <!-- Card: Productos -->
+      <a
+        routerLink="/admin/productos"
+        class="group relative bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md hover:border-indigo-300 transition-all duration-200 cursor-pointer"
+      >
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white group-hover:bg-indigo-600 transition-colors"
+            >
+              <svg
+                class="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h3
+              class="text-lg font-medium text-gray-900 group-hover:text-indigo-600"
+            >
+              Productos
+            </h3>
+            <p class="text-sm text-gray-500">Catálogo de productos</p>
+          </div>
+        </div>
+        <div class="absolute top-4 right-4">
+          <svg
+            class="h-5 w-5 text-gray-400 group-hover:text-indigo-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            ></path>
+          </svg>
+        </div>
+      </a>
+
+      <!-- Card: Pedidos -->
+      <a
+        routerLink="/admin/pedidos"
+        class="group relative bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md hover:border-red-300 transition-all duration-200 cursor-pointer"
+      >
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="flex items-center justify-center h-12 w-12 rounded-md bg-red-500 text-white group-hover:bg-red-600 transition-colors"
+            >
+              <svg
+                class="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5H21M7 13v8a2 2 0 002 2h6a2 2 0 002-2v-8m-8 0V9a2 2 0 012-2h4a2 2 0 012 2v4.1"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h3
+              class="text-lg font-medium text-gray-900 group-hover:text-red-600"
+            >
+              Pedidos
+            </h3>
+            <p class="text-sm text-gray-500">Gestión de pedidos</p>
+          </div>
+        </div>
+        <div class="absolute top-4 right-4">
+          <svg
+            class="h-5 w-5 text-gray-400 group-hover:text-red-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            ></path>
+          </svg>
+        </div>
+      </a>
+
+      <!-- Card: Configuración -->
+      <a
+        routerLink="/admin/configuraciones"
+        class="group relative bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md hover:border-gray-400 transition-all duration-200 cursor-pointer"
+      >
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="flex items-center justify-center h-12 w-12 rounded-md bg-gray-500 text-white group-hover:bg-gray-600 transition-colors"
+            >
+              <svg
+                class="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h3
+              class="text-lg font-medium text-gray-900 group-hover:text-gray-600"
+            >
+              Configuración
+            </h3>
+            <p class="text-sm text-gray-500">Configuración del sistema</p>
+          </div>
+        </div>
+        <div class="absolute top-4 right-4">
+          <svg
+            class="h-5 w-5 text-gray-400 group-hover:text-gray-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            ></path>
+          </svg>
+        </div>
+      </a>
+
+      <!-- Card: Banners -->
+      <a
+        routerLink="/admin/banners"
+        class="group relative bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md hover:border-pink-300 transition-all duration-200 cursor-pointer"
+      >
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="flex items-center justify-center h-12 w-12 rounded-md bg-pink-500 text-white group-hover:bg-pink-600 transition-colors"
+            >
+              <svg
+                class="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-4">
+            <h3
+              class="text-lg font-medium text-gray-900 group-hover:text-pink-600"
+            >
+              Banners
+            </h3>
+            <p class="text-sm text-gray-500">Gestión de banners</p>
+          </div>
+        </div>
+        <div class="absolute top-4 right-4">
+          <svg
+            class="h-5 w-5 text-gray-400 group-hover:text-pink-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"
+            ></path>
+          </svg>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Quick Statistics (Optional Section) -->
+  <div class="mb-8">
+    <h2 class="text-lg font-medium text-gray-900 mb-4">Estadísticas Rápidas</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Stat Card: Total Productos -->
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="flex items-center justify-center h-8 w-8 rounded-md bg-blue-500 text-white"
+            >
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-500">Total Productos</p>
+            <p class="text-2xl font-semibold text-gray-900">-</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stat Card: Total Categorías -->
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="flex items-center justify-center h-8 w-8 rounded-md bg-green-500 text-white"
+            >
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 11H5m14-7H5a2 2 0 00-2 2v12a2 2 0 002 2h14a2 2 0 002-2V6a2 2 0 00-2-2z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-500">Total Categorías</p>
+            <p class="text-2xl font-semibold text-gray-900">-</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stat Card: Pedidos Pendientes -->
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="flex items-center justify-center h-8 w-8 rounded-md bg-yellow-500 text-white"
+            >
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-500">Pedidos Pendientes</p>
+            <p class="text-2xl font-semibold text-gray-900">-</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stat Card: Usuarios Activos -->
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <div
+              class="flex items-center justify-center h-8 w-8 rounded-md bg-purple-500 text-white"
+            >
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-500">Usuarios Activos</p>
+            <p class="text-2xl font-semibold text-gray-900">-</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity (Optional Section) -->
+  <div>
+    <h2 class="text-lg font-medium text-gray-900 mb-4">Actividad Reciente</h2>
+    <div class="bg-white shadow-sm rounded-lg border border-gray-200">
+      <div class="p-6">
+        <div class="text-center py-12">
+          <svg
+            class="mx-auto h-12 w-12 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+            ></path>
+          </svg>
+          <h3 class="mt-2 text-sm font-medium text-gray-900">
+            Sin actividad reciente
+          </h3>
+          <p class="mt-1 text-sm text-gray-500">
+            La actividad del sistema aparecerá aquí cuando esté disponible.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
