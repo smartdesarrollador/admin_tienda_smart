@@ -351,64 +351,17 @@
             </div>
           </a>
 
-          <!-- Dropdown de Productos (móvil) -->
-          <div class="relative">
-            <!-- Encabezado del dropdown -->
-            <button
-              (click)="toggleProductosDropdown(); $event.stopPropagation()"
-              class="w-full p-3 hover:bg-gray-700 transition-colors flex items-center justify-between"
-              [class.bg-gray-900]="productosDropdownOpen"
-            >
-              <div class="flex items-center">
-                <span class="material-icons mr-3">inventory</span>
-                <span>Productos</span>
-              </div>
-              <span class="material-icons text-sm">
-                {{
-                  productosDropdownOpen
-                    ? "keyboard_arrow_up"
-                    : "keyboard_arrow_down"
-                }}
-              </span>
-            </button>
-
-            <!-- Contenido del dropdown -->
-            <div
-              *ngIf="productosDropdownOpen"
-              class="bg-gray-700 py-1 overflow-hidden transition-all duration-300"
-            >
-              <a
-                routerLink="/admin/productos/listar"
-                routerLinkActive="bg-gray-600"
-                class="pl-10 pr-3 py-2 block hover:bg-gray-600 transition-colors"
-              >
-                <div class="flex items-center">
-                  <span class="material-icons mr-3 text-sm">list</span>
-                  <span>Listar</span>
-                </div>
-              </a>
-              <a
-                routerLink="/admin/productos/crear"
-                routerLinkActive="bg-gray-600"
-                class="pl-10 pr-3 py-2 block hover:bg-gray-600 transition-colors"
-              >
-                <div class="flex items-center">
-                  <span class="material-icons mr-3 text-sm">add</span>
-                  <span>Crear</span>
-                </div>
-              </a>
-              <a
-                routerLink="/admin/productos/editar"
-                routerLinkActive="bg-gray-600"
-                class="pl-10 pr-3 py-2 block hover:bg-gray-600 transition-colors"
-              >
-                <div class="flex items-center">
-                  <span class="material-icons mr-3 text-sm">edit</span>
-                  <span>Editar</span>
-                </div>
-              </a>
+          <a
+            routerLink="/admin/productos"
+            routerLinkActive="bg-gray-900"
+            class="p-3 hover:bg-gray-700 transition-colors"
+            appHasRole="administrador"
+          >
+            <div class="flex items-center">
+              <span class="material-icons mr-3">inventory</span>
+              <span>Productos</span>
             </div>
-          </div>
+          </a>
 
           <a
             routerLink="/admin/configuraciones"
